@@ -9,14 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/server": "^11.11.0",
+    "@fontsource-variable/montserrat": "^5.0.2",
+    "@mantine/core": "^6.0.11",
+    "@mantine/hooks": "^6.0.11",
+    "@mantine/next": "^6.0.11",
+    "@types/cookiejs": "^1.2.0",
+    "@types/crypto-js": "^4.1.1",
     "@types/node": "20.2.5",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
+    "cookiejs": "^2.1.2",
+    "crypto-js": "^4.1.1",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-query": "^3.39.3",
     "typescript": "5.0.4"
   },
   "devDependencies": {
