@@ -1,15 +1,16 @@
 import React from "react";
+import PageLayout from "./PageLayout";
 import { Box } from '@mantine/core'
 
 type Props = { children: React.ReactNode }
 
 const DashboardLayout: React.FC<Props> = ({ children }) => {
   return (
-    <React.Fragment>
+    <PageLayout>
       <Box>
         {children}
       </Box>
-    </React.Fragment>
+    </PageLayout>
   )
 }
 

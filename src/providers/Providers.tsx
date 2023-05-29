@@ -2,6 +2,7 @@ import React from "react";
 import '@fontsource-variable/montserrat';
 import { MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { RouterTransition } from "@/components/nav/RouterTransition";
 import AdminProvider from '@/providers/AdminProvider'
 
 type Props = { children: React.ReactNode }
@@ -21,6 +22,7 @@ const Providers: React.FC<Props> = ({ children }) => {
           }}
         >
           <AdminProvider>
+            <RouterTransition />
             {children}
           </AdminProvider>
         </MantineProvider>
