@@ -4,7 +4,9 @@ import { UseFormReturnType } from "@mantine/form";
 import Form from "../custom/Form";
 import Input from "../custom/Input";
 import Link from "next/link";
+import { UseMutationResult } from "react-query";
 import { SigninData } from '../../pages/auth/signin'
+import { Icon } from '@iconify/react'
 
 interface Props {
   form: UseFormReturnType<{
@@ -18,6 +20,7 @@ interface Props {
     password: string;
   }>, 
   checked: boolean,
+  mutation: UseMutationResult<any, any, any, unknown>,
   handleSignin: (values: SigninData) => void;
   setChecked: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -25,6 +28,7 @@ interface Props {
 const SigninForm: React.FC<Props> = ({
   form,
   checked,
+  mutation,
   setChecked,
   handleSignin
 }) => {
@@ -62,6 +66,15 @@ const SigninForm: React.FC<Props> = ({
 
       <Box className="space-y-4 mt-4">
         <Box>
+          <Link
+            href='/auth/forgot_password'
+            className="text-sm w-fit hover:underline hover:text-[#FAA61A]"
+          >
+            Forgot Password?
+          </Link>
+        </Box>
+
+        <Box>
           <Checkbox
             size='sm'
             color="yellow"
@@ -71,21 +84,22 @@ const SigninForm: React.FC<Props> = ({
           />
         </Box>
 
-        <Box>
-          <Link
-            href='/auth/forgot_password'
-            className="text-sm w-fit hover:underline hover:text-[#FAA61A]"
-          >
-            Forgot Password?
-          </Link>
-        </Box>
-
         <Box className="text-center mt-6">
           <UnstyledButton
+            disabled={mutation.isLoading}
             type="submit"
-            className="px-4 w-40 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+            className="px-4 w-40 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
           >
-            Sign In
+            {mutation.isLoading ?
+              <Icon
+                className={`animate-spin mx-auto`}
+                icon="icomoon-free:spinner2"
+                color="#white"
+                width="20"
+                height="20"
+              /> :
+              'Sign In'
+            }
           </UnstyledButton>
         </Box>
       </Box>

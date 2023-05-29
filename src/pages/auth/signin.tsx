@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Box } from "@mantine/core";
 import toast, { Toaster } from 'react-hot-toast';
 import AuthLayout from "@/layouts/AuthLayout";
@@ -7,6 +7,9 @@ import { useForm } from '@mantine/form';
 import { useMutation } from "react-query";
 import { signin } from "@/services/auth";
 import Head from "next/head";
+import Router from "next/router";
+import { AdminContext } from "@/contexts/AdminContext";
+import { setCookieItem } from "@/helpers/functions/cookie";
 
 export interface SigninData {
   email: string;
@@ -14,6 +17,7 @@ export interface SigninData {
 }
 
 const Signin = () => {
+  const { setAdmin } = useContext(AdminContext)
   const [checked, setChecked] = useState(false);
 
   const form = useForm({
@@ -40,9 +44,33 @@ const Signin = () => {
       })
     },
 
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const now = new Date()
+      const admin = data
+
+      admin.expiry = now.getTime() + 86400000 // 1 day
+
+      setCookieItem('learnbeta_admin', admin)
+      setAdmin(admin)
+
       form.reset();
-      toast.success('"Signin success!"')
+      toast.success('Signin success!')
+
+      const params = new URLSearchParams(window.location.search);
+
+      if (params.has("redirect")) {
+        const redirectUrl = params.get("redirect");
+
+        if (redirectUrl !== null) {
+          setTimeout(() => {
+            Router.push(redirectUrl)
+          }, 2000);
+        }
+      } else {
+        setTimeout(() => {
+          Router.push("/dashboard/overview");
+        }, 2000);
+      }
     },
   })
 
@@ -64,6 +92,7 @@ const Signin = () => {
       <Box>
         <SigninForm
           form={form}
+          mutation={mutation}
           checked={checked}
           setChecked={setChecked}
           handleSignin={handleSignin}

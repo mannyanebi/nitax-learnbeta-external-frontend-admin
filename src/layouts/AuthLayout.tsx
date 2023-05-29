@@ -12,7 +12,6 @@ const AuthLayout: React.FC<Props> = ({ children }) => {
       <Box>
         <Box className="hidden lg:block">
           <BackgroundImage src={kid_hero.src} className="w-[55%] h-[100vh] bg-cover bg-center bg-no-repeat fixed bg-[#F4F4F9]">
-
           </BackgroundImage>
         </Box>
 
