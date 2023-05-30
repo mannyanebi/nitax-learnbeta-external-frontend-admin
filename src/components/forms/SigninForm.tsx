@@ -49,6 +49,7 @@ const SigninForm: React.FC<Props> = ({
             type="email"
             error={form.errors.email}
             placeholder="Email"
+            disabled={mutation.isLoading}
             className={`w-full ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 rounded-sm text-[#555555] transition duration-75 delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
           />
         </Box>
@@ -59,6 +60,7 @@ const SigninForm: React.FC<Props> = ({
             type="password"
             error={form.errors.password}
             placeholder="Password"
+            disabled={mutation.isLoading}
             className={`w-full ${form.errors.password ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 rounded-sm text-[#555555] transition duration-75 delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
           />
         </Box>
@@ -79,6 +81,7 @@ const SigninForm: React.FC<Props> = ({
             size='sm'
             color="yellow"
             label="Remember me"
+            disabled={mutation.isLoading}
             checked={checked} 
             onChange={(event) => setChecked(event.currentTarget.checked)}
           />

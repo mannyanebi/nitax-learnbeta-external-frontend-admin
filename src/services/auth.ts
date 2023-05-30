@@ -16,4 +16,23 @@ const forgotPassword = async (payload: any) => {
   return res.data;
 };
 
-export { signin, forgotPassword }
+const verifyOTP = async (payload: any) => {
+  const verifyOTPURL = `${HOST}/`;
+  const res = await axios.post(verifyOTPURL, payload);
+
+  return res.data;
+};
+
+const resetPassword = async (payload: any) => {
+  const resetPasswordURL = `${HOST}/`;
+  const res = await axios.post(resetPasswordURL, payload);
+
+  return res.data;
+};
+
+export { 
+  signin, 
+  forgotPassword, 
+  verifyOTP, 
+  resetPassword
+}
