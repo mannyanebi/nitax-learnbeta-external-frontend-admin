@@ -2,15 +2,15 @@ import React from "react";
 import Head from "next/head";
 import DashboardLayout from "@/layouts/DashboardLayout";
 
-const Lessons = () => {
+const Analytics = () => {
   return (
     <DashboardLayout>
       <Head>
-        <title>Dashboard | Lessons</title>
+        <title>Dashboard | Analytics</title>
       </Head>
-      Lessons
+      Analytics
     </DashboardLayout>
   )
 }
 
-export default Lessons
+export default Analytics

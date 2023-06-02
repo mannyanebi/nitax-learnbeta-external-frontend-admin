@@ -16,8 +16,10 @@ const AuthLayout: React.FC<Props> = ({ children }) => {
         </Box>
 
         <Box className="lg:ml-[55%]">
-          <Box className="lg:flex hidden lg:block justify-end px-6 sm:px-10 py-6 w-full max-w-xl mx-auto">
-            <Logo />
+          <Box className="hidden lg:block">
+            <Box className="lg:flex justify-end px-6 sm:px-10 py-6 w-full max-w-xl mx-auto">
+              <Logo />
+            </Box>
           </Box>
 
           <Box className="px-6 sm:px-10 py-16 sm:py-20 w-full max-w-lg 2xl:max-w-[34rem] mx-auto">

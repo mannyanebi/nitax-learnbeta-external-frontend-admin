@@ -1,10 +1,15 @@
 import React from "react";
+import Head from "next/head";
+import DashboardLayout from "@/layouts/DashboardLayout";
 
 const Classes = () => {
   return (
-    <React.Fragment>
-
-    </React.Fragment>
+    <DashboardLayout>
+      <Head>
+        <title>Dashboard | Classes</title>
+      </Head>
+      Classes
+    </DashboardLayout>
   )
 }
 
