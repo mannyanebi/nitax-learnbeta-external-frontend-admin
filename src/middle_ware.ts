@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`/auth/signin`, request.url))
   }
 
-  if (request.nextUrl.pathname.startsWith('/dashboard') && !isLoggedIn) {
+  if (request.nextUrl.pathname.startsWith('/dashboard' || '/profile') && !isLoggedIn) {
     return NextResponse.redirect(new URL(`/auth/signin?redirect=${request.nextUrl.pathname}`, request.url))
   }
 
