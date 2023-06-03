@@ -1,8 +1,7 @@
 import React from "react";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import Head from "next/head";
-import hero_banner from '../../assets/svgs/hero_banner.svg'
-import { BackgroundImage, Box, Center, Flex, SimpleGrid, Text } from "@mantine/core";
+import { Box, Flex, Text } from "@mantine/core";
 import Image from "next/image";
 import users_group from '../../assets/svgs/users_group.svg'
 import users_green from '../../assets/svgs/users_group_green.svg'

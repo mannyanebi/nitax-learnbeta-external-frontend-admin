@@ -16,7 +16,7 @@ const DashboardLayout: React.FC<Props> = ({ children }) => {
       <Box className="md:ml-[14rem] lg:ml-[15rem]">
         <TopNav />
 
-        <Box>
+        <Box className="pb-20">
           {children}
         </Box>
       </Box>
