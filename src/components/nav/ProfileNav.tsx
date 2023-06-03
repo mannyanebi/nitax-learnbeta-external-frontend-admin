@@ -8,25 +8,23 @@ import { Box, Flex, Text, Burger } from "@mantine/core";
 import { SideNavDrawer } from "./SideNavDrawer";
 import Link from "next/link";
 
-const TopNav = () => {
+const ProfileNav = () => {
   const [opened, { toggle }] = useDisclosure(false);
 
   return (
     <React.Fragment>
       <NavElement className="w-full h-[70px] md:bg-[#F4F4F9] px-4 sm:px-6 lg:px-8">
-        <Flex className="items-center h-full justify-between md:justify-end">
-          <Box className="md:hidden">
-            <Link href='/dashboard/overview'>
-              <Logo />
-            </Link>
-          </Box>
+        <Flex className="items-center max-w-[97rem] mx-auto h-full justify-between">
+          <Link href='/dashboard/overview'>
+            <Logo />
+          </Link>
 
-          <Burger 
-            className="md:hidden" 
-            size='md' 
-            color="#FAA61A" 
-            opened={opened} 
-            onClick={toggle} 
+          <Burger
+            className="md:hidden"
+            size='md'
+            color="#FAA61A"
+            opened={opened}
+            onClick={toggle}
           />
 
           <Box className="hidden md:block">
@@ -52,4 +50,4 @@ const TopNav = () => {
   )
 }
 
-export default TopNav
+export default ProfileNav
