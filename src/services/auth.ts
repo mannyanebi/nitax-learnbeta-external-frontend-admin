@@ -30,9 +30,17 @@ const resetPassword = async (payload: any) => {
   return res.data;
 };
 
+const updatePassword = async (payload: any) => {
+  const updatePasswordURL = `${HOST}/`;
+  const res = await axios.post(updatePasswordURL, payload);
+
+  return res.data;
+};
+
 export { 
   signin, 
   forgotPassword, 
   verifyOTP, 
-  resetPassword
+  resetPassword,
+  updatePassword
 }
