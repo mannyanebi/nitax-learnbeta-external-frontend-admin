@@ -5,27 +5,27 @@ export const UserCardSkeleton = () => {
   return (
     <Box>
       <Grid>
-        <Grid.Col className="w-24" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[6rem]" span="auto">
           <Skeleton className="h-4 w-full rounded-xl" />
         </Grid.Col>
 
-        <Grid.Col className="w-56" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[14rem]" span="auto">
           <Skeleton className="h-4 w-full rounded-xl" />
         </Grid.Col>
 
-        <Grid.Col className="w-72" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[18rem]" span="auto">
           <Skeleton className="h-4 w-full rounded-xl" />
         </Grid.Col>
 
-        <Grid.Col className="w-52" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[13rem]" span="auto">
           <Skeleton className="h-4 w-full rounded-xl" />
         </Grid.Col>
 
-        <Grid.Col className="w-60" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[15rem]" span="auto">
           <Skeleton className="h-4 w-full rounded-xl" />
         </Grid.Col>
 
-        <Grid.Col className="w-24" span="auto">
+        <Grid.Col className="3xl:max-w-nonemax-w-[6rem]" span="auto">
           <Skeleton className="h-4 w-full rounded-xl" />
         </Grid.Col>
       </Grid>
@@ -37,37 +37,37 @@ const UserCard = () => {
   return (
     <Box>
       <Grid>
-        <Grid.Col className="w-24" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[6rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
             01
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="w-56" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[14rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
             Malachi Mark
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="w-72" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[18rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
             johndoe@gmail.com
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="w-52" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[13rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
             Akwa Ibom, Nigeria
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="w-60" span="content">
+        <Grid.Col className="3xl:max-w-none max-w-[15rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
             Premium Plan
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="w-24" span="auto">
+        <Grid.Col className="3xl:max-w-nonemax-w-[6rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
             Grade 5
           </Text>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Grid, Text, Flex, Radio, Popover, UnstyledButton, Center } from "@mantine/core";
+import { Box, Grid, Text, Flex, Radio, Pagination, Popover, UnstyledButton, Center } from "@mantine/core";
 import Image from "next/image";
 import filter_icon from '../../assets/svgs/filter.svg'
 import emptyState from '../../assets/svgs/empty_state.svg'
@@ -39,37 +39,37 @@ const UserTable = () => {
       <Box>
         <Box className="w-full min-w-[75rem]">
           <Grid className="bg-[#FFF6E8] rounded-lg py-2">
-            <Grid.Col className="w-24" span="content">
+            <Grid.Col className="3xl:max-w-none max-w-[6rem]" span="auto">
               <Text className='text-[#555555] font-semibold'>
                 S/N
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="w-56" span="content">
+            <Grid.Col className="3xl:max-w-none max-w-[14rem]" span="auto">
               <Text className='text-[#555555] font-semibold'>
                 Name
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="w-72" span="content">
+            <Grid.Col className="3xl:max-w-none max-w-[18rem]" span="auto">
               <Text className='text-[#555555] font-semibold'>
                 Email
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="w-52" span="content">
+            <Grid.Col className="3xl:max-w-none max-w-[13rem]" span="auto">
               <Text className='text-[#555555] font-semibold'>
                 Location
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="w-60" span="content">
+            <Grid.Col className="3xl:max-w-none max-w-[15rem]" span="auto">
               <Text className='text-[#555555] font-semibold'>
                 Subscription Plan
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="w-24" span="auto">
+            <Grid.Col className="3xl:max-w-nonemax-w-[6rem]" span="auto">
               <Flex className='justify-between mr-5'>
                 <Text className='text-[#555555] font-semibold'>
                   Class
@@ -169,6 +169,10 @@ const UserTable = () => {
           <UserCard />
           <UserCard />
         </Box>
+
+        <Flex className="2xl:justify-end mt-8">
+          <Pagination total={3} color="yellow" radius="xl" />
+        </Flex>
       </Box>
     </React.Fragment>
   )
