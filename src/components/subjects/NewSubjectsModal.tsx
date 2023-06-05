@@ -1,11 +1,12 @@
-import { Modal, Box, Text, Select, Group , useMantineTheme, rem, UnstyledButton } from '@mantine/core';
-import React from 'react';
+import { Modal, Box, Text, Select, Group, useMantineTheme, rem, UnstyledButton } from '@mantine/core';
+import React, { useState } from 'react';
 import Input from '../custom/Input';
 import TextArea from '../custom/TextArea';
 import Form from '../custom/Form';
-import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
-import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { IconUpload, IconX } from '@tabler/icons-react';
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import Image from 'next/image'
+import { Icon } from '@iconify/react';
 import upload_cloud from '../../assets/svgs/upload-cloud.svg'
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export default function NewSubjectsModal({ opened, close }: Props) {
+  const [file, setFile] = useState<FileWithPath[]>([])
   const theme = useMantineTheme();
 
   const labelStyles = {
@@ -56,48 +58,99 @@ export default function NewSubjectsModal({ opened, close }: Props) {
               <Dropzone
                 className='mt-[0.2rem] bg-[#F9F9F9]'
                 padding={7}
-                onDrop={(files) => console.log('accepted files', files)}
-                onReject={(files) => console.log('rejected files', files)}
+                maxFiles={1}
+                onDrop={(files) => setFile(files)}
+                onReject={() => null}
                 maxSize={3 * 1024 ** 2}
                 accept={IMAGE_MIME_TYPE}
-              // {...props}
               >
                 <Group position="center" spacing="xl" style={{ minHeight: rem(120), pointerEvents: 'none' }}>
                   <Dropzone.Accept>
-                    <IconUpload
-                      size="3.2rem"
-                      stroke={1.5}
-                      color={theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]}
-                    />
+                    <Box className='w-full'>
+                      <IconUpload
+                        size="3.2rem"
+                        stroke={1.5}
+                        color={theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]}
+                        className='mx-auto'
+                      />
+
+                      <Box className='text-center mt-4'>
+                        <Text 
+                          inline 
+                          color={theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]}
+                          className='font-semibold' 
+                          size="md"
+                        >
+                          Release to drop file
+                        </Text>
+                      </Box>
+                    </Box>
                   </Dropzone.Accept>
 
                   <Dropzone.Reject>
-                    <IconX
-                      size="3.2rem"
-                      stroke={1.5}
-                      color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
-                    />
+                    <Box className='w-full'>
+                      <IconX
+                        size="40px"
+                        stroke={1.5}
+                        color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
+                        className='mx-auto'
+                      />
+
+                      <Box className='text-center'>
+                        <Text className='font-semibold' size="lg">
+                          Invalid File
+                        </Text>
+
+                        <Text inline className='text-[#777777] mt-1 text-sm'>
+                          Unsupported or too large
+                        </Text>
+                      </Box>
+                    </Box>
                   </Dropzone.Reject>
                   
                   <Box>
                     <Dropzone.Idle>
-                      <Image
-                        alt='upload icon'
-                        src={upload_cloud}
-                        width={40}
-                        className='mx-auto'
-                      />
+                      {file.length > 0 ?
+                        <Box>
+                          <Icon 
+                            icon="teenyicons:tick-circle-solid" 
+                            color="#777777" 
+                            width="40" 
+                            height="40" 
+                            className='mx-auto' 
+                          />
+
+
+                          <Box className='mt-2'>
+                            <Text className='text-center text-[#777777] font-semibold' size="lg">
+                              File Selected
+                            </Text>
+
+                            <Text inline className='text-[#777777] text-center mt-1 truncate text-sm'>
+                              {file[0].path}
+                            </Text>
+                          </Box>
+                        </Box> :
+                        <Box>
+                          <Image
+                            alt='upload icon'
+                            src={upload_cloud}
+                            width={40}
+                            className='mx-auto'
+                          />
+
+                          <Box className='mt-2'>
+                            <Text className='font-semibold text-center' size="lg">
+                              Browse File
+                            </Text>
+
+                            <Text inline className='text-[#777777] mt-1 text-sm'>
+                              Drag and Drop File (1)
+                            </Text>
+                          </Box>
+                        </Box>
+                      }
                     </Dropzone.Idle>
-
-                    <Box className='mt-2'>
-                      <Text className='font-semibold text-center' size="lg">
-                        Browse File
-                      </Text>
-
-                      <Text inline className='text-[#777777] mt-1 text-sm'>
-                        Drag and Drop File
-                      </Text>
-                    </Box>
                   </Box>
                 </Group>
               </Dropzone>
@@ -155,7 +208,7 @@ export default function NewSubjectsModal({ opened, close }: Props) {
               <UnstyledButton
                 // disabled={mutation.isLoading}
                 type="submit"
-                className="px-10 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+                className="px-8 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
               >
                 {/* {mutation.isLoading ?
                   <Icon

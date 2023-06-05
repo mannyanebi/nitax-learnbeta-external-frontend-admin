@@ -1,12 +1,13 @@
 import React from "react";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import Head from "next/head";
-import { Box, Flex, Text, UnstyledButton } from "@mantine/core";
+import { Box, Flex, Text, UnstyledButton, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
 import record_icon from '../../assets/svgs/subjects_icon.svg'
 import plus_icon from '../../assets/svgs/plus_icon.svg'
 import NewSubjectsModal from "@/components/subjects/NewSubjectsModal";
+import SubjectCard from "@/components/subjects/SubjectCard";
 
 const Subjects = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -110,6 +111,31 @@ const Subjects = () => {
           close={close}
           opened={opened}
         />
+
+        <Divider 
+          className="mt-5 lg:mt-8"
+          my="xs" 
+          size='sm'
+          labelProps={{ 
+            style: { 
+              fontSize: '1.125rem',
+              fontWeight: 600
+            } 
+          }}
+          label="Subject" 
+        />
+
+        <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 sm:gap-4 max-w-[70rem] sm:grid-cols-2 xl:grid-cols-3">
+          <SubjectCard />
+          <SubjectCard />
+          <SubjectCard />
+          <SubjectCard />
+          <SubjectCard />
+          <SubjectCard />
+          <SubjectCard />
+          <SubjectCard />
+          <SubjectCard />
+        </Box>
       </Box>
     </DashboardLayout>
   )
