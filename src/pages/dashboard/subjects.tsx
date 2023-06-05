@@ -7,7 +7,7 @@ import Image from "next/image";
 import record_icon from '../../assets/svgs/subjects_icon.svg'
 import plus_icon from '../../assets/svgs/plus_icon.svg'
 import NewSubjectsModal from "@/components/subjects/NewSubjectsModal";
-import SubjectCard from "@/components/subjects/SubjectCard";
+import SubjectCard, { SubjectCardSkeleton } from "@/components/subjects/SubjectCard";
 
 const Subjects = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -132,9 +132,10 @@ const Subjects = () => {
           <SubjectCard />
           <SubjectCard />
           <SubjectCard />
-          <SubjectCard />
-          <SubjectCard />
-          <SubjectCard />
+
+          <SubjectCardSkeleton />
+          <SubjectCardSkeleton />
+          <SubjectCardSkeleton />
         </Box>
       </Box>
     </DashboardLayout>

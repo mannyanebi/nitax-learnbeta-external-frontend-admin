@@ -1,8 +1,28 @@
 import React from "react";
-import { Box, Flex, Text, UnstyledButton } from "@mantine/core";
+import { Box, Flex, Text, UnstyledButton, Skeleton } from "@mantine/core";
 import Image from "next/image";
 import dot_control from '../../assets/svgs/dot_control.svg'
 import subjectIcon from '../../assets/svgs/subject_icon.svg'
+
+export const SubjectCardSkeleton = () => {
+  return (
+    <Box className="border-2 rounded-xl border-[#E2E2E2] p-5 h-[18.5rem] flex flex-col">
+      <Box className="w-full h-[127px] rounded-xl overflow-hidden">
+        <Skeleton
+          className='w-full h-[127px] rounded-xl'
+        />
+      </Box>
+
+      <Skeleton className='h-4 w-40 mt-3' />
+      <Skeleton className='h-3 w-full mt-3' />
+      <Skeleton className='h-3 w-full mt-3' />
+
+      <Flex className="mt-auto justify-end">
+        <Skeleton className='rounded-full w-[32px] h-[32px] ' />
+      </Flex>
+    </Box>
+  );
+}
 
 const SubjectCard = () => {
   return (
