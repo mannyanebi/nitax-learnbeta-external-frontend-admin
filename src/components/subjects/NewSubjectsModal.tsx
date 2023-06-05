@@ -1,5 +1,5 @@
-import { Modal, Box, Text, Select, Group, useMantineTheme, rem, UnstyledButton } from '@mantine/core';
 import React, { useState } from 'react';
+import { Modal, Box, Text, Select, Group, useMantineTheme, rem, UnstyledButton } from '@mantine/core';
 import Input from '../custom/Input';
 import TextArea from '../custom/TextArea';
 import Form from '../custom/Form';
