@@ -6,6 +6,7 @@ import Image from "next/image";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import { useDisclosure } from "@mantine/hooks";
 import PlanCard, { PlanCardSkeleton, NoPlanCard } from "@/components/subscriptions/PlanCard";
+import NewPlanModal from "@/components/subscriptions/NewPlanModal";
 
 const Subscriptions = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -121,6 +122,11 @@ const Subscriptions = () => {
                 </Box>
               </UnstyledButton>
             </Box>
+
+            <NewPlanModal
+              close={close}
+              opened={opened}
+            />
           </Tabs.Panel>
 
           <Tabs.Panel value="vouchers" pt="xs">
