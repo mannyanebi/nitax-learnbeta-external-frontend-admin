@@ -6,6 +6,7 @@ import { BackgroundImage, Box, Center, Flex, SimpleGrid, Text } from "@mantine/c
 import Image from "next/image";
 import users_group from '../../assets/svgs/users_group.svg'
 import users_green from '../../assets/svgs/users_group_green.svg'
+import UserTable from "@/components/user/UserTable";
 import users_yellow from '../../assets/svgs/users_group_yellow.svg'
 
 const Overview = () => {
@@ -178,6 +179,10 @@ const Overview = () => {
               </Box>
             </Box>
           </Box>
+        </Box>
+
+        <Box className="mt-4 lg:mt-7 px-2 py-3 overflow-x-scroll w-full no-scrollbar">
+          <UserTable />
         </Box>
       </Box>
     </DashboardLayout>

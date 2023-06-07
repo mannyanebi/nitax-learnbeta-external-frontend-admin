@@ -5,6 +5,7 @@ import noProfile from '../../assets/imgs/no_profile.png'
 import Link from 'next/link'
 import NavLink from "./NavLink";
 import Image from 'next/image'
+import Logout from './Logout'
 
 type Props = { mobile?: boolean }
 
@@ -112,44 +113,50 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
 
   return (
     <Box className="w-full max-w-[14rem] lg:max-w-[15rem] h-[100vh] fixed overflow-y-auto bg-[#00433F]">
-      <Box className={`${mobile && 'hidden'}`}>
-        <Center className="w-full h-[70px]">
-          <Link href='/dashboard/overview'>
-            <Logo variant="white" />
-          </Link>
-        </Center>
-      </Box>
-
-      <Box className={`${mobile ? 'mt-6' : 'mt-16'} space-y-4`}>
-        {linkData.map((linkDatum, i) => (
-          <NavLink
-            key={i}
-            icon={linkDatum.icon}
-            text={linkDatum.text}
-            linkTarget={linkDatum.linkTarget}
-            activePage={linkDatum.activePage}
-          />
-        ))}
-
-        {mobile &&
-          <Box className="max-w-[8rem] !mt-10 w-full mx-auto">
-            <Link href='/profile'>
-              <Flex className="items-center space-x-[6px] font-bold">
-                <Image
-                  className="rounded-full"
-                  width={18}
-                  height={18}
-                  alt='profile icon'
-                  src={noProfile}
-                />
-
-                <Text className="truncate font-bold text-white">
-                  Emeka Felix Uzodinma
-                </Text>
-              </Flex>
+      <Box className="relative h-full">
+        <Box className={`${mobile && 'hidden'}`}>
+          <Center className="w-full h-[70px]">
+            <Link href='/dashboard/overview'>
+              <Logo variant="white" />
             </Link>
-          </Box>
-        }
+          </Center>
+        </Box>
+
+        <Box className={`${mobile ? 'mt-6' : 'mt-16'} space-y-4`}>
+          {linkData.map((linkDatum, i) => (
+            <NavLink
+              key={i}
+              icon={linkDatum.icon}
+              text={linkDatum.text}
+              linkTarget={linkDatum.linkTarget}
+              activePage={linkDatum.activePage}
+            />
+          ))}
+
+          {mobile &&
+            <Box className="max-w-[8rem] !mt-10 w-full mx-auto">
+              <Link href='/profile'>
+                <Flex className="items-center space-x-[6px] font-bold">
+                  <Image
+                    className="rounded-full"
+                    width={18}
+                    height={18}
+                    alt='profile icon'
+                    src={noProfile}
+                  />
+
+                  <Text className="truncate font-bold text-white">
+                    Emeka Felix Uzodinma
+                  </Text>
+                </Flex>
+              </Link>
+            </Box>
+          }
+        </Box>
+
+        <Box className="mt-4 absolute bottom-[15%] flex justify-center w-full">
+          <Logout />
+        </Box>
       </Box>
     </Box>
   )
