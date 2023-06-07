@@ -16,7 +16,6 @@ import { IconUpload, IconX } from '@tabler/icons-react';
 import { Icon } from '@iconify/react';
 import upload_cloud from '../../assets/svgs/upload-cloud.svg'
 
-
 export const SubjectCardSkeleton = () => {
   return (
     <Box className="border-2 rounded-xl border-[#E2E2E2] p-5 h-[18.5rem] flex flex-col">

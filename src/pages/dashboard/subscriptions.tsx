@@ -7,9 +7,12 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 import { useDisclosure } from "@mantine/hooks";
 import PlanCard, { PlanCardSkeleton, NoPlanCard } from "@/components/subscriptions/PlanCard";
 import NewPlanModal from "@/components/subscriptions/NewPlanModal";
+import NewVoucherModal from "@/components/subscriptions/NewVoucherModal";
+import VoucherCard, { VoucherCardSkeleton } from "@/components/subscriptions/VoucherCard";
 
 const Subscriptions = () => {
-  const [opened, { open, close }] = useDisclosure(false);
+  const [openedPlan, { open: openPlan, close: closePlan }] = useDisclosure(false);
+  const [openedVoucher, { open: openVoucher, close: closeVoucher }] = useDisclosure(false);
 
   return (
     <DashboardLayout>
@@ -64,12 +67,12 @@ const Subscriptions = () => {
 
           <Tabs.Panel className="mt-5 lg:mt-8" value="plans" pt="xs">
             <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:max-w-[50rem] mx-auto">
-              {/* {[1, 2, 4, 5, 6].map((item, index) => (
+              {[1, 2, 4, 5, 6].map((item, index) => (
                 <PlanCard
                   key={index}
                   style={{ order: index === 2 ? -1 : index }}
                 />
-              ))} */}
+              ))}
 
               {/* {[1, 2].map((item, index) => (
                 <PlanCardSkeleton 
@@ -77,7 +80,7 @@ const Subscriptions = () => {
                 />
               ))} */}
 
-              {[
+              {/* {[
                 {
                   color: 'purple',
                   header: 'Did you forget to add a plan?',
@@ -96,9 +99,9 @@ const Subscriptions = () => {
                    colorTheme={item.color}
                   />
                 ))
-              }
+              } */}
 
-              <UnstyledButton onClick={open} className="h-full">
+              <UnstyledButton onClick={openPlan} className="h-full">
                 <Box className="border-2 rounded-3xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
                   <Box className="w-full">
                     <Flex className="justify-center">
@@ -124,13 +127,79 @@ const Subscriptions = () => {
             </Box>
 
             <NewPlanModal
-              close={close}
-              opened={opened}
+              close={closePlan}
+              opened={openedPlan}
             />
           </Tabs.Panel>
 
-          <Tabs.Panel value="vouchers" pt="xs">
-            Messages tab content
+          <Tabs.Panel className="mt-5 lg:mt-8" value="vouchers" pt="xs">
+            <UnstyledButton onClick={openVoucher} className="h-full w-full sm:hidden">
+              <Box className="border-2 rounded-3xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
+                <Box className="w-full">
+                  <Flex className="justify-center">
+                    <Box>
+                      <Text className="text-[#777777] font-semibold">
+                        Create New Voucher
+                      </Text>
+
+                      <Flex className="justify-center mt-4">
+                        <Box className="h-[40px] w-[40px]">
+                          <Image
+                            alt='display icon'
+                            src={plus_icon}
+                            className='rounded-full h-[40px] w-[40px]'
+                          />
+                        </Box>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </Box>
+              </Box>
+            </UnstyledButton>
+
+            <Box className="grid grid-cols-1 sm:grid-cols-2 mt-6 sm:mt-0 gap-6 lg:max-w-[48rem] mx-auto">
+              {[1, 2, 4, 5, 6].map((item, index) => (
+                <VoucherCard
+                  key={index}
+                  style={{ order: index === 2 ? -1 : index + 1 }}
+                />
+              ))}
+
+              {/* {[1, 2].map((item, index) => (
+                <VoucherCardSkeleton
+                  key={index}
+                />
+              ))} */}
+
+              <UnstyledButton onClick={openVoucher} className="h-full hidden sm:block">
+                <Box className="border-2 rounded-3xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
+                  <Box className="w-full">
+                    <Flex className="justify-center">
+                      <Box>
+                        <Text className="text-[#777777] font-semibold">
+                          Create New Voucher
+                        </Text>
+
+                        <Flex className="justify-center mt-4">
+                          <Box className="h-[40px] w-[40px]">
+                            <Image
+                              alt='display icon'
+                              src={plus_icon}
+                              className='rounded-full h-[40px] w-[40px]'
+                            />
+                          </Box>
+                        </Flex>
+                      </Box>
+                    </Flex>
+                  </Box>
+                </Box>
+              </UnstyledButton>
+            </Box>
+
+            <NewVoucherModal
+              close={closeVoucher}
+              opened={openedVoucher}
+            />
           </Tabs.Panel>
         </Tabs>
       </Box>

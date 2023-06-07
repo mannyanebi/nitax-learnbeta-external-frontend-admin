@@ -6,7 +6,7 @@ import Image from 'next/image'
 import plus_icon from '../../assets/svgs/plus.svg'
 import minus_icon from '../../assets/svgs/minus.svg'
 
-function ItemCard({ item, items, setItems }: any) {
+export function ItemCard({ item, items, setItems }: any) {
   const handleRemoveItem = () => {
     const newItemsArray = items.filter((i: any) => i.id !== item.id);
     setItems(newItemsArray)
