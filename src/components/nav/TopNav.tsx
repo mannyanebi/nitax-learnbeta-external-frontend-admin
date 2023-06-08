@@ -13,7 +13,7 @@ const TopNav = () => {
 
   return (
     <React.Fragment>
-      <NavElement className="w-full h-[70px] md:bg-[#F4F4F9] px-4 sm:px-6 lg:px-8">
+      <NavElement className="w-full sticky bg-white top-0 h-[70px] md:bg-[#F4F4F9] px-4 sm:px-6 lg:px-8 border-b-2 border-[#E2E2E2]">
         <Flex className="items-center h-full justify-between md:justify-end">
           <Box className="md:hidden">
             <Link href='/dashboard/overview'>
