@@ -79,7 +79,7 @@ const ProfileBanner = () => {
                   className="object-cover object-center w-[10rem] h-[10rem] shadow-md rounded-full mx-auto"
                 />
 
-                <UnstyledButton
+                {/* <UnstyledButton
                   onClick={() => document.getElementById('fileInput')?.click()}
                   className="absolute flex justify-center p-3 bg-[#FEEDD1] hover:brightness-75 rounded-full bottom-4 right-[-4px] items-center z-10 transition duration-75 delay-75 ease-linear"
                 >
@@ -88,7 +88,7 @@ const ProfileBanner = () => {
                     alt='edit icon'
                     className="w-4 h-4"
                   />
-                </UnstyledButton>
+                </UnstyledButton> */}
 
                 <Box>
                   <Input
@@ -148,7 +148,7 @@ const ProfileBanner = () => {
                 className="object-cover object-center w-[6rem] h-[6rem] shadow-sm rounded-full mx-auto"
               />
 
-              <UnstyledButton
+              {/* <UnstyledButton
                 onClick={() => document.getElementById('fileInput')?.click()}
                 className="absolute flex justify-center p-2 bg-[#FEEDD1] hover:brightness-75 rounded-full bottom-2 right-[-4px] items-center z-10 transition duration-75 delay-75 ease-linear"
               >
@@ -157,7 +157,7 @@ const ProfileBanner = () => {
                   alt='edit icon'
                   className="w-3 h-3"
                 />
-              </UnstyledButton>
+              </UnstyledButton> */}
             </Box>
 
             {isTouched &&

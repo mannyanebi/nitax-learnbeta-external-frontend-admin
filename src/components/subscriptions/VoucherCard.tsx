@@ -29,7 +29,7 @@ const VoucherCard: React.FC<Props> = ({ style }) => {
     return colors[randomIndex];
   }
 
-  const color = getRandomColor()
+  const [color] = useState(getRandomColor())
 
   return (
     <Box style={style} className={`bg-${color}-900 h-52 py-4 px-5 overflow-x-hidden`}>
