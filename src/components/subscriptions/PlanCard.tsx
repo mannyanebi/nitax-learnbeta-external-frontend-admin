@@ -63,15 +63,7 @@ interface Props {
   style: any
 }
 
-export const colors = [
-  'red',
-  'yellow',
-  'green',
-  'blue',
-  'purple',
-];
-
-export function getRandomColor(colors: string[]) {
+function getRandomColor(colors: string[]) {
   const randomIndex = Math.floor(Math.random() * colors.length);
   return colors[randomIndex];
 }
@@ -90,7 +82,20 @@ const PlanCard: React.FC<Props> = ({ style }) => {
     setItemName('')
   }
 
-  const color = getRandomColor(colors)
+  const colors = [
+    'red',
+    'yellow',
+    'green',
+    'blue',
+    'purple',
+  ];
+
+  function getRandomColor() {
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
+  }
+
+  const color = getRandomColor()
 
   return (
     <React.Fragment>
