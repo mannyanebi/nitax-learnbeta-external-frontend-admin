@@ -174,6 +174,19 @@ const Lessons = () => {
                   />
                 ))}
               </Box>
+
+              <Text className='text-[#444444] mt-10 font-semibold text-lg'>
+                Archived Lessons
+              </Text>
+
+              <Box className="space-y-4 mt-7">
+                {activeLessons.lessons.map((lesson: any, index: number) => (
+                  <LessonsCard
+                    key={index}
+                    lesson={lesson}
+                  />
+                ))}
+              </Box>
             </Box>
           }
         </Modal>
@@ -216,6 +229,19 @@ const Lessons = () => {
                 <LessonsCardSkeleton />
                 <LessonsCardSkeleton />
 
+                {activeLessons.lessons.map((lesson: any, index: number) => (
+                  <LessonsCard
+                    key={index}
+                    lesson={lesson}
+                  />
+                ))}
+              </Box>
+
+              <Text className='text-[#444444] mt-10 font-semibold text-lg'>
+                Archived Lessons
+              </Text>
+
+              <Box className="space-y-4 mt-7">
                 {activeLessons.lessons.map((lesson: any, index: number) => (
                   <LessonsCard
                     key={index}

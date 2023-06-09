@@ -41,10 +41,12 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
     { open: openArchive, close: closeArchive }
   ] = useDisclosure(false);
 
+  const archive = false
+
   return (
     <React.Fragment>
       <Box>
-        <Box className='bg-[#FEEDD1] rounded-2xl p-5 border-2 border-[#FAA61A]'>
+        <Box className={`bg-[#FEEDD1] ${archive && 'opacity-50'} rounded-2xl p-5 border-2 border-[#FAA61A]`}>
           <Flex className='justify-between'>
             <Text className='font-semibold text-[#FAA61A] text-lg truncate'>
               {lesson.name}
