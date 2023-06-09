@@ -4,7 +4,6 @@ import Image from 'next/image'
 import logo_icon from '../../assets/svgs/learnBetaLogo.svg'
 import rotate_arrow from '../../assets/svgs/rotate_arrow.svg'
 import { useDisclosure } from '@mantine/hooks';
-import { colors, getRandomColor } from './PlanCard'
 
 export const VoucherCardSkeleton = () => {
   return <Skeleton className="h-52" />
@@ -15,9 +14,22 @@ interface Props {
 }
 
 const VoucherCard: React.FC<Props> = ({ style }) => {
-  colors.push('gray')
   const [opened, { toggle }] = useDisclosure(false);
-  const [color] = useState(getRandomColor(colors))
+  const colors = [
+    'red',
+    'yellow',
+    'green',
+    'blue',
+    'purple',
+    'gray'
+  ];
+
+  function getRandomColor() {
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
+  }
+
+  const [color] = useState(getRandomColor())
 
   return (
     <Box style={style} className={`bg-${color}-900 h-52 py-4 px-5 overflow-x-hidden`}>

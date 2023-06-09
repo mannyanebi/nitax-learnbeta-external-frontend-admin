@@ -154,7 +154,7 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
           }
         </Box>
 
-        <Box className="mt-4 absolute bottom-[15%] flex justify-center w-full">
+        <Box className="mt-4 absolute bottom-[10%] flex justify-center w-full">
           <Logout />
         </Box>
       </Box>

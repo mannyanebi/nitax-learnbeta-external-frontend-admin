@@ -78,7 +78,7 @@ const Classes = () => {
                     </Box>
 
                     <Text className="text-[#777777] font-semibold text-lg">
-                      Add New Lesson
+                      Add New Class
                     </Text>
                   </Flex>
                 </Box>
@@ -87,7 +87,7 @@ const Classes = () => {
                   <Flex className="justify-center">
                     <Box>
                       <Text className="text-[#777777] font-semibold">
-                        Add New Lesson
+                        Add New Class
                       </Text>
 
                       <Flex className="justify-center mt-2">
