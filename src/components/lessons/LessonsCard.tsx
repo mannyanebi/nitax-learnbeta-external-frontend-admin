@@ -14,7 +14,7 @@ export const LessonsCardSkeleton = () => {
     <Box>
       <Box className='rounded-2xl p-5 border-2 border-[#E2E2E2]'>
         <Flex className='justify-between items-center'>
-          <Skeleton className='w-72 h-3'/>
+          <Skeleton className='w-20 md:w-72 h-3'/>
           <Flex className='items-center space-x-2'>
             <Skeleton className='w-7 h-7 rounded-full' />
             <Skeleton className='w-7 h-7 rounded-full' />
@@ -25,7 +25,9 @@ export const LessonsCardSkeleton = () => {
   )
 }
 
-type Props = { lesson: any }
+type Props = { 
+  lesson: any
+}
 
 const LessonsCard: React.FC<Props> = ({ lesson }) => {
   const [opened, { toggle }] = useDisclosure(false);
