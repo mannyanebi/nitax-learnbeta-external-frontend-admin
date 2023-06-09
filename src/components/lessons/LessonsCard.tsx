@@ -9,6 +9,22 @@ import archive_icon from '../../assets/svgs/archive_icon.svg'
 import edit_icon from '../../assets/svgs/edit-2.svg'
 import trash_icon from '../../assets/svgs/trash-2.svg'
 
+export const LessonsCardSkeleton = () => {
+  return (
+    <Box>
+      <Box className='rounded-2xl p-5 border-2 border-[#E2E2E2]'>
+        <Flex className='justify-between items-center'>
+          <Skeleton className='w-72 h-3'/>
+          <Flex className='items-center space-x-2'>
+            <Skeleton className='w-7 h-7 rounded-full' />
+            <Skeleton className='w-7 h-7 rounded-full' />
+          </Flex>
+        </Flex>
+      </Box>
+    </Box>
+  )
+}
+
 type Props = { lesson: any }
 
 const LessonsCard: React.FC<Props> = ({ lesson }) => {

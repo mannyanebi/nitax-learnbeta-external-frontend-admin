@@ -8,7 +8,7 @@ import { SubjectControlSkeleton } from "@/components/lessons/SubjectControl";
 import Link from 'next/link'
 import Image from 'next/image'
 import plus_icon from '../../../assets/svgs/plus_icon.svg'
-import LessonsCard from "@/components/lessons/LessonsCard";
+import LessonsCard, { LessonsCardSkeleton } from "@/components/lessons/LessonsCard";
 
 const Lessons = () => {
   const [activeLessons, setActiveLessons] = useState<any>(null)
@@ -142,6 +142,9 @@ const Lessons = () => {
               </Box>
 
               <Box className="space-y-4 mt-7">
+                <LessonsCardSkeleton />
+                <LessonsCardSkeleton />
+
                 {activeLessons.lessons.map((lesson: any, index: number) => (
                   <LessonsCard
                     key={index}
