@@ -37,6 +37,8 @@ export default function NewVoucherModal({ opened, close }: Props) {
                   fontSize: theme.fontSizes.sm,
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '160px',
 
                   '&[data-active]': {
                     backgroundColor: 'white',

@@ -35,6 +35,8 @@ const Subscriptions = () => {
               fontSize: theme.fontSizes.sm,
               display: 'flex',
               alignItems: 'center',
+              width: '180px',
+              justifyContent: 'center',
 
               '&[data-active]': {
                 backgroundColor: 'white',
@@ -51,7 +53,7 @@ const Subscriptions = () => {
               backgroundColor: '#F4F4F4',
               borderRadius: '9999px',
               padding: '5px',
-              height: '60px'
+              height: '50px'
             },
           })}
         >
