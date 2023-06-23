@@ -126,18 +126,49 @@ const Classes = () => {
         />
 
         <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 sm:gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
-          <ClassCard />
+          {[
+            {
+              name: 'Primary 1'
+            },
+            {
+              name: 'Primary 2'
+            },
+            {
+              name: 'Primary 3'
+            },
+            {
+              name: 'Primary 4'
+            },
+            {
+              name: 'Primary 5'
+            },
+            {
+              name: 'Primary 6'
+            },
+            {
+              name: 'JSS 1'
+            },
+            {
+              name: 'JSS 2'
+            },
+            {
+              name: 'JSS 3'
+            },
+            {
+              name: 'SSS 1'
+            },
+            {
+              name: 'SSS 2'
+            },
+            {
+              name: 'SSS 3'
+            }
+           ].map((grade: any, index: number) => (
+            <ClassCard 
+              key={index}
+              name={grade.name}
+            />
+           ))}
 
           <ClassCardSkeleton />
           <ClassCardSkeleton />

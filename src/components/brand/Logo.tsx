@@ -14,7 +14,7 @@ export default function Logo({ variant }: Props) {
   return (
     <Box>
       <Image 
-        className="w-[169px] h-[55px]"
+        className="w-[139px] h-[45px]"
         alt="logo icon"
         src={logo}
       />

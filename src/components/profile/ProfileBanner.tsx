@@ -64,10 +64,10 @@ const ProfileBanner = () => {
   return (
     <Box className="mx-4 sm:mx-6 lg:px-8">
       <Box className="hidden lg:block">
-        <BackgroundImage className="rounded-xl px-16 h-32 xl:px-28 max-w-[85rem] mx-auto" src={yellowBg.src}>
+        <BackgroundImage className="rounded-xl px-16 h-32 xl:px-28 2xl:max-w-[75rem] max-w-[57rem] xl:max-w-[65rem] mx-auto" src={yellowBg.src}>
         </BackgroundImage>
 
-        <Box className="w-full max-w-[75rem] px-16 xl:px-0 mt-[-5.2rem] mx-auto">
+        <Box className="w-full 2xl:max-w-[65rem] xl:max-w-[55rem] max-w-[57rem] px-16 xl:px-0 mt-[-5.2rem] mx-auto">
           <Flex className="space-x-8">
             <Box>
               <Box className="relative w-fit">
