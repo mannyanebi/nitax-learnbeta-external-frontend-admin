@@ -18,7 +18,8 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
     subjects: false,
     classes: false,
     lessons: false,
-    subscriptions: false
+    subscriptions: false,
+    advertisment: false
   })
 
   useEffect(() => {
@@ -65,6 +66,13 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
         subscriptions: true,
       })
     }
+
+    if (page === "advertisment") {
+      setActivePage({
+        ...activePage,
+        advertisment: true,
+      })
+    }
   }, [])
 
   const linkData = [
@@ -108,6 +116,13 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
       linkTarget: '/dashboard/subscriptions',
       activePage: activePage.subscriptions,
       icon: 'mdi:dollar'
+    },
+
+    {
+      text: 'Advertisment',
+      linkTarget: '/dashboard/advertisment',
+      activePage: activePage.advertisment,
+      icon: 'ri:advertisement-line'
     }
   ]
 
@@ -115,7 +130,7 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
     <Box className="w-full max-w-[14rem] lg:max-w-[15rem] h-[100vh] fixed overflow-y-auto bg-[#00433F]">
       <Box className="relative h-full">
         <Box className={`${mobile && 'hidden'}`}>
-          <Center className="w-full h-[70px]">
+          <Center className="w-full h-[60px]">
             <Link href='/dashboard/overview'>
               <Logo variant="white" />
             </Link>
@@ -134,7 +149,7 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
           ))}
 
           {mobile &&
-            <Box className="max-w-[8rem] !mt-10 w-full mx-auto">
+            <Box className="max-w-[8rem] py-[12px] !mt-4 w-full mx-auto">
               <Link href='/profile'>
                 <Flex className="items-center space-x-[6px] font-bold">
                   <Image
@@ -154,7 +169,7 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
           }
         </Box>
 
-        <Box className="mt-4 absolute bottom-[10%] flex justify-center w-full">
+        <Box className="mt-4 flex justify-center w-full">
           <Logout />
         </Box>
       </Box>

@@ -10,6 +10,7 @@ export function NoSubjectSelected (){
         <Box>
           <Image
             alt='icon'
+            priority
             src={preview_subject}
             className='w-[20rem] mx-auto'
           />

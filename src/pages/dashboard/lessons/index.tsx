@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Text, Flex } from "@mantine/core";
+import { Box, Text, Flex, Modal } from "@mantine/core";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import { NoSubjectSelected } from "@/components/lessons/EmptyState";
 import SubjectControl from "@/components/lessons/SubjectControl";
 import { SubjectControlSkeleton } from "@/components/lessons/SubjectControl";
+import { useDisclosure, useViewportSize } from '@mantine/hooks';
 import Link from 'next/link'
 import Image from 'next/image'
 import plus_icon from '../../../assets/svgs/plus_icon.svg'
 import LessonsCard, { LessonsCardSkeleton } from "@/components/lessons/LessonsCard";
 
 const Lessons = () => {
+  const { width } = useViewportSize();
   const [activeLessons, setActiveLessons] = useState<any>(null)
+  const [
+    openedMobile,
+    { open: openMobile, close: closeMobile }
+  ] = useDisclosure(false);
+
+  useEffect(() => {
+    width > 1024 && closeMobile()
+    activeLessons && width < 1024 && openMobile()
+  }, [width])
 
   const subjectsArray = [
     {
@@ -98,6 +109,7 @@ const Lessons = () => {
               key={item.id}
               setActiveLessons={setActiveLessons}
               activeLessons={activeLessons}
+              openMobile={openMobile}
               item={item}
             />
           ))}
@@ -107,6 +119,78 @@ const Lessons = () => {
           <SubjectControlSkeleton />
           <SubjectControlSkeleton />
         </Box>
+
+        {/* Preview Lessons Mobile Modal start */}
+        <Modal
+          fullScreen
+          opened={openedMobile}
+          onClose={() => {
+            closeMobile()
+            setActiveLessons(null)
+          }}
+          size='lg'
+          radius={12}
+        >
+          {activeLessons &&
+            <Box>
+              <Box className='w-fit mx-auto mt-4'>
+                <Link href='/dashboard/lessons/new'>
+                  <Box className="border-2 w-[285px] rounded-2xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
+                    <Box className="w-full">
+                      <Flex className="justify-center">
+                        <Box>
+                          <Text className="text-[#777777] font-semibold">
+                            Add New Lesson
+                          </Text>
+
+                          <Flex className="justify-center mt-4">
+                            <Box className="h-[40px] w-[40px]">
+                              <Image
+                                alt='display icon'
+                                src={plus_icon}
+                                className='rounded-full h-[40px] w-[40px]'
+                              />
+                            </Box>
+                          </Flex>
+                        </Box>
+                      </Flex>
+                    </Box>
+                  </Box>
+                </Link>
+              </Box>
+
+              <Text className='text-[#444444] mt-7 font-semibold text-lg'>
+                Lessons
+              </Text>
+
+              <Box className="space-y-4 mt-7">
+                <LessonsCardSkeleton />
+                <LessonsCardSkeleton />
+
+                {activeLessons.lessons.map((lesson: any, index: number) => (
+                  <LessonsCard
+                    key={index}
+                    lesson={lesson}
+                  />
+                ))}
+              </Box>
+
+              <Text className='text-[#444444] mt-10 font-semibold text-lg'>
+                Archived Lessons
+              </Text>
+
+              <Box className="space-y-4 mt-7">
+                {activeLessons.lessons.map((lesson: any, index: number) => (
+                  <LessonsCard
+                    key={index}
+                    lesson={lesson}
+                  />
+                ))}
+              </Box>
+            </Box>
+          }
+        </Modal>
+        {/* Preview Lessons Mobile Modal end */}
 
         <Box className="ml-[15rem] hidden lg:block px-4 space-y-8 pt-5 max-w-[70rem]">
           {activeLessons &&
@@ -145,6 +229,19 @@ const Lessons = () => {
                 <LessonsCardSkeleton />
                 <LessonsCardSkeleton />
 
+                {activeLessons.lessons.map((lesson: any, index: number) => (
+                  <LessonsCard
+                    key={index}
+                    lesson={lesson}
+                  />
+                ))}
+              </Box>
+
+              <Text className='text-[#444444] mt-10 font-semibold text-lg'>
+                Archived Lessons
+              </Text>
+
+              <Box className="space-y-4 mt-7">
                 {activeLessons.lessons.map((lesson: any, index: number) => (
                   <LessonsCard
                     key={index}

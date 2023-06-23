@@ -42,7 +42,7 @@ const ResetPasswordForm: React.FC<Props> = ({
           </Text> : null
         }
 
-        <List className="mt-5" withPadding>
+        <List className="mt-5 list-disc" withPadding>
           {resetPasswordForm.values.new_password.length < 8 &&
             <List.Item>
               <Text className='text-[#777777]'>

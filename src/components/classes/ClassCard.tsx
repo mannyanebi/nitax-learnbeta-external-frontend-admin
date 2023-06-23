@@ -16,7 +16,11 @@ export const ClassCardSkeleton = () => {
   );
 }
 
-const ClassCard = () => {
+interface Props {
+  name: string
+}
+
+const ClassCard: React.FC<Props> = ({ name }) => {
   const [popoverOpened, setPopoverOpened] = useState(false);
 
   const [
@@ -29,7 +33,7 @@ const ClassCard = () => {
       <Box className="border-2 rounded-xl border-[#E2E2E2] p-5">
         <Flex className="justify-between items-center space-x-4">
           <Text className="text-[#888888] text-sm truncate w-full font-semibold mt-1">
-            Primary 1
+            {name}
           </Text>
 
           <Popover

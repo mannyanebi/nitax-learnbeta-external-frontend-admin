@@ -166,7 +166,6 @@ const SubjectCard = () => {
               </Box>
             </Popover.Dropdown>
           </Popover>
-
         </Flex>
       </Box>
 
