@@ -61,7 +61,7 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
       })
     }
 
-    if (page === "subscriptions" || (url && url.includes(page || ""))) {
+    if (page === "subscriptions" || url.includes('subscriptions')) {
       setActivePage({
         ...activePage,
         subscriptions: true,
