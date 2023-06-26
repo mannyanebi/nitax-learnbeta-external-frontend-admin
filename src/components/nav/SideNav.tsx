@@ -24,6 +24,7 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
 
   useEffect(() => {
     const page = window.location.href.split("/").pop()
+    const url = window.location.href.split("/")
 
     if (page === "overview") {
       setActivePage({
@@ -60,7 +61,7 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
       })
     }
 
-    if (page === "subscriptions") {
+    if (page === "subscriptions" || (url && url.includes(page || ""))) {
       setActivePage({
         ...activePage,
         subscriptions: true,
