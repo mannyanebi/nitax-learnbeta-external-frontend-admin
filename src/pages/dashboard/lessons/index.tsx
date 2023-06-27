@@ -6,7 +6,6 @@ import { NoSubjectSelected } from "@/components/lessons/EmptyState";
 import SubjectControl from "@/components/lessons/SubjectControl";
 import { SubjectControlSkeleton } from "@/components/lessons/SubjectControl";
 import { useDisclosure, useViewportSize } from '@mantine/hooks';
-import Link from 'next/link'
 import Image from 'next/image'
 import plus_icon from '../../../assets/svgs/plus_icon.svg'
 import LessonsCard, { LessonsCardSkeleton } from "@/components/lessons/LessonsCard";

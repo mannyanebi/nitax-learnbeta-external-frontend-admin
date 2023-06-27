@@ -31,7 +31,7 @@ export default function NewLessonModal({ opened, close }: Props) {
                 placeholder="Lesson title"
                 // disabled={mutation.isLoading}
                 // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                className={`w-full border-2 px-3 py-5 text-[#555555] font-sans transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
