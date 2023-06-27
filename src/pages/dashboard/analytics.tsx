@@ -13,6 +13,7 @@ import tel_phone from '../../assets/svgs/airtime-billing.svg'
 import renewals from '../../assets/svgs/renewals-icon.svg'
 import dropoff_icon from '../../assets/svgs/drop-off.svg'
 import users_group from '../../assets/svgs/users_group_yellow.svg'
+import LineChart from "@/components/analytics/Chart";
 
 const Analytics = () => {
   return (
@@ -447,8 +448,8 @@ const Analytics = () => {
               </Box>
             </Flex>
 
-            <Box className="mt-5 px-4 ">
-
+            <Box className="py-4 px-4 ">
+              <LineChart />
             </Box>
           </Box>
         </Box>
