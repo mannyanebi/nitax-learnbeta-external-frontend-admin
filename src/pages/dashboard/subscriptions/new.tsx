@@ -1,16 +1,18 @@
 import React from "react";
 import Head from "next/head";
-import { Box, Tabs, Text, Flex, UnstyledButton } from "@mantine/core";
-import plus_icon from '../../assets/svgs/plus_icon.svg'
+import { Box, Tabs, Text, Flex, UnstyledButton, Center } from "@mantine/core";
+import plus_icon from '../../../assets/svgs/plus_icon.svg'
 import Image from "next/image";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import { useDisclosure } from "@mantine/hooks";
 import PlanCard, { PlanCardSkeleton, NoPlanCard } from "@/components/subscriptions/PlanCard";
 import NewPlanModal from "@/components/subscriptions/NewPlanModal";
 import NewVoucherModal from "@/components/subscriptions/NewVoucherModal";
+import backArrow from '../../../assets/svgs/backarrow_icon.svg'
+import Link from "next/link";
 import VoucherCard, { VoucherCardSkeleton } from "@/components/subscriptions/VoucherCard";
 
-const Subscriptions = () => {
+const NewSubscriptions = () => {
   const [openedPlan, { open: openPlan, close: closePlan }] = useDisclosure(false);
   const [openedVoucher, { open: openVoucher, close: closeVoucher }] = useDisclosure(false);
 
@@ -21,8 +23,8 @@ const Subscriptions = () => {
       </Head>
 
       <Box className="px-4 sm:px-6 lg:px-8 mt-5 lg:mt-8">
-        <Tabs 
-          unstyled 
+        <Tabs
+          unstyled
           defaultValue="plans"
           styles={(theme) => ({
             tab: {
@@ -57,7 +59,23 @@ const Subscriptions = () => {
             },
           })}
         >
-          <Box className="p-1 w-fit mx-auto">
+          <Box className="w-fit">
+            <Link href='/dashboard/subscriptions'>
+              <Flex className=" mx-auto space-x-2">
+                <Center className="bg-[#FEEDD1] rounded-full p-2">
+                  <Image
+                    src={backArrow}
+                    alt='back icon'
+                    className="w-2 h-2"
+                  />
+                </Center>
+
+                <Text className="font-bold">Back</Text>
+              </Flex>
+            </Link>
+          </Box>
+
+          <Box className="p-1 w-fit mx-auto mt-3">
             <Tabs.List>
               <Tabs.Tab value="plans">
                 Subscription Plans
@@ -209,4 +227,4 @@ const Subscriptions = () => {
   )
 }
 
-export default Subscriptions
+export default NewSubscriptions

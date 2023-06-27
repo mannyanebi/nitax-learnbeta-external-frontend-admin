@@ -16,7 +16,8 @@ export default function NewVoucherModal({ opened, close }: Props) {
         radius={12}
         opened={opened}
         onClose={close}
-        centered>
+        centered
+      >
         <Box className='px-2 sm:px-8 md:px-10'>
           <Text className='font-semibold text-center text-lg'>
             Create Voucher
