@@ -4,6 +4,10 @@ import Link from 'next/link'
 import { Box, Skeleton, Collapse, Popover, Modal,  Flex, Text, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks';
 import yellow_arrow from '../../assets/svgs/yellow_arrow_up.svg'
+import { Icon } from '@iconify/react';
+import Input from '../custom/Input';
+import TextArea from '../custom/TextArea';
+import Form from '../custom/Form';
 import three_dot from '../../assets/svgs/dot_control.svg'
 import archive_icon from '../../assets/svgs/archive_icon.svg'
 import edit_icon from '../../assets/svgs/edit-2.svg'
@@ -35,6 +39,10 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
   const [
     openedDelete,
     { open: openDelete, close: closeDelete }
+  ] = useDisclosure(false);
+  const [
+    openedEdit,
+    { open: openEdit, close: closeEdit }
   ] = useDisclosure(false);
   const [
     openedArchive,
@@ -83,23 +91,60 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
 
                 <Popover.Dropdown className="!px-0 py-3">
                   <Box>
-                    <Link href={`/dashboard/lessons/${lesson.id}`}>
+                    <Link href={`/dashboard/lessons/${lesson.id}/topics/new`}>
                       <UnstyledButton className="hover:bg-[#D9D9D9] py-2 px-4 w-full transition duration-75 delay-75 ease-linear">
                         <Flex className='items-center space-x-2'>
                           <Box>
-                            <Image
-                              alt="control icon"
-                              src={edit_icon}
-                              className='h-[16px] w-[16px]'
-                            />
+                            <Icon icon="ic:round-plus" color="#666" width="18" height="18" />
+
                           </Box>
 
                           <Text className="text- font-semibold text-[#666666]">
-                            Edit Lesson
+                            Add Topics
                           </Text>
                         </Flex>
                       </UnstyledButton>
                     </Link>
+                  </Box>
+
+                  <Box>
+                    <Link href={`/dashboard/lessons/${lesson.id}/topics/edit`}>
+                      <UnstyledButton className="hover:bg-[#D9D9D9] py-2 px-4 w-full transition duration-75 delay-75 ease-linear">
+                        <Flex className='items-center space-x-2'>
+                          <Box>
+                            <Icon icon="lucide:edit" color="#666" width="16" height="16" />
+                          </Box>
+
+                          <Text className="text- font-semibold text-[#666666]">
+                            Edit Topics
+                          </Text>
+                        </Flex>
+                      </UnstyledButton>
+                    </Link>
+                  </Box>
+
+                  <Box>
+                    <UnstyledButton 
+                      onClick={() => {
+                        openEdit()
+                        setPopoverOpened(false)
+                      }}
+                      className="hover:bg-[#D9D9D9] py-2 px-4 w-full transition duration-75 delay-75 ease-linear"
+                    >
+                      <Flex className='items-center space-x-2'>
+                        <Box>
+                          <Image
+                            alt="control icon"
+                            src={edit_icon}
+                            className='h-[16px] w-[16px]'
+                          />
+                        </Box>
+
+                        <Text className="text- font-semibold text-[#666666]">
+                          Edit Lesson
+                        </Text>
+                      </Flex>
+                    </UnstyledButton>
                   </Box>
 
                   <Box>
@@ -185,6 +230,67 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
           </Collapse>
         </Box>
       </Box>
+
+      {/* Edit lesson modal start */}
+      <Modal
+        size='lg'
+        radius={12}
+        opened={openedEdit}
+        onClose={closeEdit}
+        centered>
+        <Box className='px-2 sm:px-8 md:px-10'>
+          <Text className='font-semibold text-center text-lg'>
+            Edit Lesson
+          </Text>
+
+          <Form className='my-10'>
+            <Box>
+              <Input
+                type="text"
+                // error={form.errors.email}
+                label='Enter Lesson Title'
+                placeholder="Lesson title"
+                // disabled={mutation.isLoading}
+                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
+                className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+              />
+            </Box>
+
+            <Box className='mt-5'>
+              <TextArea
+                maxLength={80}
+                // error={form.errors.email}
+                label='Brief description of lesson'
+                placeholder="Enter lesson description"
+                // disabled={mutation.isLoading}
+                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
+                className={`w-full min-h-[5rem] resize-none border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+              />
+            </Box>
+
+            <Box className="text-center mt-8">
+              <UnstyledButton
+                // disabled={mutation.isLoading}
+                type="submit"
+                className="px-8 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+              >
+                {/* {mutation.isLoading ?
+                  <Icon
+                    className={`animate-spin mx-auto`}
+                    icon="icomoon-free:spinner2"
+                    color="#white"
+                    width="20"
+                    height="20"
+                  /> :
+                  'Sign In'
+                } */}
+                Save changes
+              </UnstyledButton>
+            </Box>
+          </Form>
+        </Box>
+      </Modal>
+      {/* Edit lesson modal start */}
 
       {/* Delete lesson modal start */}
       <Modal

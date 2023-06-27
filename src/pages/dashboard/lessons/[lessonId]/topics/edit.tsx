@@ -11,7 +11,7 @@ export default function Performance() {
     <PageLayout>
       <Head>
         <title>
-          Edit Lesson: {router.query.id}
+          Edit Topics
         </title>
       </Head>
 
