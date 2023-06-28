@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Text, Flex, Modal } from "@mantine/core";
+import { Box, Text, Flex, Modal, UnstyledButton } from "@mantine/core";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import { NoSubjectSelected } from "@/components/lessons/EmptyState";
 import SubjectControl from "@/components/lessons/SubjectControl";
 import { SubjectControlSkeleton } from "@/components/lessons/SubjectControl";
 import { useDisclosure, useViewportSize } from '@mantine/hooks';
-import Link from 'next/link'
 import Image from 'next/image'
 import plus_icon from '../../../assets/svgs/plus_icon.svg'
 import LessonsCard, { LessonsCardSkeleton } from "@/components/lessons/LessonsCard";
+import NewLessonModal from "@/components/lessons/NewLessonModal";
 
 const Lessons = () => {
   const { width } = useViewportSize();
@@ -17,6 +17,10 @@ const Lessons = () => {
   const [
     openedMobile,
     { open: openMobile, close: closeMobile }
+  ] = useDisclosure(false);
+  const [
+    openedNewLessonModal,
+    { open: openNewLessonModal, close: closeNewLessonModal }
   ] = useDisclosure(false);
 
   useEffect(() => {
@@ -134,7 +138,7 @@ const Lessons = () => {
           {activeLessons &&
             <Box>
               <Box className='w-fit mx-auto mt-4'>
-                <Link href='/dashboard/lessons/new'>
+                <UnstyledButton onClick={openNewLessonModal}>
                   <Box className="border-2 w-[285px] rounded-2xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
                     <Box className="w-full">
                       <Flex className="justify-center">
@@ -156,7 +160,7 @@ const Lessons = () => {
                       </Flex>
                     </Box>
                   </Box>
-                </Link>
+                </UnstyledButton>
               </Box>
 
               <Text className='text-[#444444] mt-7 font-semibold text-lg'>
@@ -200,7 +204,7 @@ const Lessons = () => {
               </Text>
 
               <Box className='w-fit mx-auto mt-4'>
-                <Link href='/dashboard/lessons/new'>
+                <UnstyledButton onClick={openNewLessonModal}>
                   <Box className="border-2 w-[285px] rounded-2xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
                     <Box className="w-full">
                       <Flex className="justify-center">
@@ -222,7 +226,7 @@ const Lessons = () => {
                       </Flex>
                     </Box>
                   </Box>
-                </Link>
+                </UnstyledButton>
               </Box>
 
               <Box className="space-y-4 mt-7">
@@ -259,6 +263,11 @@ const Lessons = () => {
           }
         </Box>
       </Box>
+
+      <NewLessonModal 
+        opened={openedNewLessonModal} 
+        close={closeNewLessonModal} 
+      />
     </DashboardLayout>
   )
 }
