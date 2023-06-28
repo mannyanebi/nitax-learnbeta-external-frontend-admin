@@ -268,7 +268,7 @@ const Analytics = () => {
 
             <Box className="px-4 py-4">
               <Text className="font-semibold text-sm text-center">
-                Total: ₦5,230,200
+                Total: &#x20A6;5,230,200
               </Text>
 
               <Box className="w-fit mx-auto">
@@ -277,7 +277,7 @@ const Analytics = () => {
                   thickness={35}
                   sections={[
                     { value: 40, color: '#73B6F4', tooltip: 'Operators' },
-                    { value: 60, color: '#FCDE6B', tooltip: 'Aggregators' },
+                    { value: 60, color: '#FCDE6B', tooltip: 'LearnBeta' },
                   ]}
                 />
               </Box>
@@ -291,7 +291,7 @@ const Analytics = () => {
                     </Text>
 
                     <Text className="text-[#555555] font-semibold">
-                      ₦1,270,760
+                      &#x20A6; 1,270,760
                     </Text>
                   </Box>
                 </Flex>
@@ -300,11 +300,11 @@ const Analytics = () => {
                   <Box className="w-2 h-2 bg-[#FCDE6B] rounded-full" />
                   <Box className="text-xs">
                     <Text className="text-[#555555]">
-                      Aggregators
+                      LearnBeta
                     </Text>
 
                     <Text className="text-[#555555] font-semibold">
-                      ₦1,270,760
+                      &#x20A6; 1,270,760
                     </Text>
                   </Box>
                 </Flex>

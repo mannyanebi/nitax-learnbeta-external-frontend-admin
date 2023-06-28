@@ -95,7 +95,7 @@ const Subscriptions = () => {
               placeholder='Billing Type'
               data={[
                 { value: 'airtime', label: 'Airtime' },
-                { value: 'card', label: 'Card' },
+                { value: 'psp', label: 'PSP' },
               ]}
               styles={() => ({
                 input: {
