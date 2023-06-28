@@ -266,7 +266,8 @@ const Lessons = () => {
 
       <NewLessonModal 
         opened={openedNewLessonModal} 
-        close={closeNewLessonModal} />
+        close={closeNewLessonModal} 
+      />
     </DashboardLayout>
   )
 }

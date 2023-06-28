@@ -111,7 +111,7 @@ const AddTopics = () => {
 
           <Box className='max-w-[20rem] mt-10 mx-auto'>
             <UnstyledButton
-              disabled={!title || !videoLink || !transcript}
+              disabled={!title || !videoLink || transcript.length < 8}
               onClick={handleNewTopic}
               className="h-full w-full disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed rounded-lg border-[#777777] border-2 border-dashed"
             >
