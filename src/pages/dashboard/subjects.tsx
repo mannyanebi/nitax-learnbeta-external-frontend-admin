@@ -19,7 +19,7 @@ const Subjects = () => {
       </Head>
       
       <Box className="px-4 sm:px-8 md:pl-8 md:pr-14 lg:pr-20 mt-5 lg:mt-8">
-        <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 sm:gap-4 max-w-[60rem] 2xl:max-w-[67rem] xl:grid-cols-3">
+        <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 sm:gap-4 max-w-[57.5rem] xl:grid-cols-3">
           <Box className="hidden xl:block" />
 
           <Box className="border-2 rounded-xl border-[#E2E2E2] p-5">
@@ -125,7 +125,7 @@ const Subjects = () => {
           label="Subject" 
         />
 
-        <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-6 sm:gap-4 max-w-[60rem] 2xl:max-w-[67rem] sm:grid-cols-2 xl:grid-cols-3">
+        <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-6 sm:gap-4 max-w-[57.5rem] sm:grid-cols-2 xl:grid-cols-3">
           <SubjectCard />
           <SubjectCard />
           <SubjectCard />
