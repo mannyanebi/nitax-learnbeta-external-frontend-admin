@@ -128,17 +128,17 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
   ]
 
   return (
-    <Box className="w-full max-w-[14rem] h-[100vh] fixed overflow-y-auto bg-[#00433F]">
+    <Box className="w-full max-w-[12.6rem] h-[100vh] fixed overflow-y-auto bg-[#00433F]">
       <Box className="relative h-full">
         <Box className={`${mobile && 'hidden'}`}>
-          <Center className="w-full h-[60px]">
+          <Center className="w-full h-[56px]">
             <Link href='/dashboard/overview'>
               <Logo variant="white" />
             </Link>
           </Center>
         </Box>
 
-        <Box className={`${mobile ? 'mt-6' : 'mt-16'} space-y-4`}>
+        <Box className={`${mobile ? 'mt-6' : 'mt-14'} space-y-4`}>
           {linkData.map((linkDatum, i) => (
             <NavLink
               key={i}

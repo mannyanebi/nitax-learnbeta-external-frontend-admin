@@ -53,7 +53,7 @@ const Overview = () => {
         </BackgroundImage>
 
         <Box className="mt-5 lg:mt-8">
-          <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 sm:gap-4 max-w-[60rem] sm:grid-cols-2 xl:grid-cols-3">
+          <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 sm:gap-4 max-w-[57.5rem] sm:grid-cols-2 xl:grid-cols-3">
             <Box className="border-2 rounded-xl border-[#E2E2E2] p-5">
               <Flex className="h-full xl:hidden items-center justify-between">
                 <Flex className="items-center space-x-3">
@@ -76,7 +76,7 @@ const Overview = () => {
               </Flex>
 
               <Box className="hidden xl:block">
-                <Flex className="items-center space-x-10">
+                <Flex className="items-center space-x-8">
                   <Box className="h-[40px] w-[40px]">
                     <Image
                       alt='display icon'
@@ -122,7 +122,7 @@ const Overview = () => {
               </Flex>
 
               <Box className="hidden xl:block">
-                <Flex className="items-center space-x-10">
+                <Flex className="items-center space-x-8">
                   <Box className="h-[40px] w-[40px]">
                     <Image
                       alt='display icon'
@@ -164,7 +164,7 @@ const Overview = () => {
               </Flex>
 
               <Box className="hidden xl:block">
-                <Flex className="items-center space-x-10">
+                <Flex className="items-center space-x-8">
                   <Box className="h-[40px] w-[40px]">
                     <Image
                       alt='display icon'

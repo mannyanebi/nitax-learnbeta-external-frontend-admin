@@ -105,7 +105,7 @@ const Lessons = () => {
       </Head>
 
       <Box>
-        <Box className="w-full lg:h-[100%] lg:max-w-[14rem] lg:fixed no-scrollbar overflow-y-auto">
+        <Box className="w-full lg:h-[100%] lg:max-w-[12.6rem] lg:fixed no-scrollbar overflow-y-auto">
           <Box className="pb-20 lg:pb-40 px-4 sm:px-8 md:pl-6 md:pr-14 lg:pr-6 space-y-4 w-full lg:border-r-2 border-[#E2E2E2] pt-5">
             <Text className='text-[#444444] font-semibold text-lg'>Subjects</Text>
 
@@ -201,7 +201,7 @@ const Lessons = () => {
         </Modal>
         {/* Preview Lessons Mobile Modal end */}
 
-        <Box className="ml-[14rem] hidden lg:block px-4 sm:px-8 md:pl-8 md:pr-14 lg:pr-20 space-y-8 pt-5">
+        <Box className="ml-[12.6rem] hidden lg:block px-4 sm:px-8 md:pl-8 md:pr-14 lg:pr-20 space-y-8 pt-5">
           {activeLessons &&
             <Box>
               <Text className='text-[#444444] font-semibold text-lg'>

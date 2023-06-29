@@ -33,7 +33,7 @@ export default function SubjectControl({
           setActiveLessons(item)
           width < 1024 && openMobile()
         }}
-        className={`py-4 w-full px-3 text-[#777777] truncate ${activeLessons?.id === item.id && 'text-[#00433F] bg-[#BFD0CF]'} font-semibold hover:text-[#00433F] rounded-md hover:bg-[#BFD0CF] transform duration-75 delay-[50ms] ease-linear`}
+        className={`py-4 w-full px-3 text-[#777777] truncate ${activeLessons?.id === item.id && 'text-[#00433F] bg-[#BFD0CF]'} font-semibold hover:text-[#00433F] text-sm rounded-md hover:bg-[#BFD0CF] transform duration-75 delay-[50ms] ease-linear`}
       >
         {item.name}
       </UnstyledButton>

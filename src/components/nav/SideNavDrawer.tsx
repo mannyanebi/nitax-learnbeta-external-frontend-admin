@@ -14,7 +14,7 @@ export function SideNavDrawer({ opened, close }: Props) {
         opened={opened}
         onClose={close}
         position="right"
-        size='14rem' 
+        size='12.6rem' 
         padding={0}
         withCloseButton={false}
       >
