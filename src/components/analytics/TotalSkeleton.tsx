@@ -13,7 +13,7 @@ export function TotalSkeleton (){
       </Flex>
 
       <Box className="hidden xl:block">
-        <Flex className="items-center space-x-10">
+        <Flex className="items-center space-x-5">
           <Skeleton className="rounded-full h-[40px] w-[40px]" />
           <Skeleton className="rounded-full h-4 w-48" />
         </Flex>

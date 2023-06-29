@@ -62,12 +62,12 @@ const ProfileBanner = () => {
   })
 
   return (
-    <Box className="mx-4 sm:mx-6 lg:px-8">
+    <Box className="px-4 sm:px-8 md:px-10">
       <Box className="hidden lg:block">
-        <BackgroundImage className="rounded-xl px-16 h-32 xl:px-28 2xl:max-w-[75rem] max-w-[57rem] xl:max-w-[65rem] mx-auto" src={yellowBg.src}>
+        <BackgroundImage className="rounded-xl px-16 h-32 xl:px-28 2xl:max-w-[75rem] max-w-[55rem] xl:max-w-[65rem] mx-auto" src={yellowBg.src}>
         </BackgroundImage>
 
-        <Box className="w-full 2xl:max-w-[65rem] xl:max-w-[55rem] max-w-[57rem] px-16 xl:px-0 mt-[-5.2rem] mx-auto">
+        <Box className="w-full 2xl:max-w-[65rem] xl:max-w-[55rem] max-w-[55rem] px-16 xl:px-0 mt-[-5.2rem] mx-auto">
           <Flex className="space-x-8">
             <Box>
               <Box className="relative w-fit">
@@ -131,7 +131,7 @@ const ProfileBanner = () => {
       </Box>
 
       <Box className="lg:hidden">
-        <BackgroundImage className="rounded-xl py-6 px-4 max-w-[85rem] mx-auto" src={yellowBg.src}>
+        <BackgroundImage className="rounded-xl py-6 px-4 max-w-[40rem] lg:max-w-[62rem] xl:max-w-[75rem] 2xl:max-w-[85rem] mx-auto" src={yellowBg.src}>
           <Text className="font-bold text-white text-3xl">
             Emeka Francis
           </Text>

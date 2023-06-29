@@ -91,8 +91,8 @@ const UpdatePassword = () => {
 
       <ProfileNav />
 
-      <Box className="w-full px-4 sm:px-6 lg:px-8 mt-4 hidden lg:block">
-        <Box className='w-full max-w-[63rem] xl:max-w-[75rem] 2xl:max-w-[85rem] mx-auto'>
+      <Box className="w-full px-4 sm:px-8 md:px-10 mt-4 hidden lg:block">
+        <Box className='w-full max-w-[40rem] lg:max-w-[62rem] xl:max-w-[75rem] 2xl:max-w-[85rem] mx-auto'>
           <Box className="w-fit">
             <Link href='/profile'>
               <Flex className=" mx-auto space-x-2">

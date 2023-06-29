@@ -18,11 +18,9 @@ const Classes = () => {
         <title>Dashboard | Classes</title>
       </Head>
       
-      <Box className="px-4 sm:px-6 lg:px-8 mt-5 lg:mt-8">
-        <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 sm:gap-4 max-w-[70rem] sm:grid-cols-2 xl:grid-cols-3">
-          <Box className="hidden xl:block" />
-
-          <Box className="border-2 rounded-xl border-[#E2E2E2] p-5">
+      <Box className="px-4 sm:px-8 md:pl-8 md:pr-14 lg:pr-20 mt-5 lg:mt-8">
+        <Box className="lg:flex lg:justify-between space-y-3 lg:space-y-0 lg:space-x-6 sm:space-y-4 xl:max-w-[45rem] mx-auto">
+          <Box className="border-2 w-full rounded-xl border-[#E2E2E2] p-5">
             <Flex className="h-full xl:hidden items-center justify-between">
               <Flex className="items-center space-x-3">
                 <Box className="h-[40px] w-[40px]">
@@ -64,7 +62,7 @@ const Classes = () => {
             </Box>
           </Box>
 
-          <UnstyledButton onClick={open} className="h-full">
+          <UnstyledButton onClick={open} className="h-full w-full">
             <Box className="border-2 rounded-xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
               <Box className="w-full">
                 <Box className="h-full xl:hidden">

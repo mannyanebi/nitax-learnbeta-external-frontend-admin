@@ -14,7 +14,7 @@ const Profile = () => {
 
       <ProfileNav />
 
-      <Box className='mt-5 lg:mt-8'>
+      <Box className='mt-5 lg:mt-8 pb-20'>
         <ProfileBanner />
       </Box>
     </PageLayout>

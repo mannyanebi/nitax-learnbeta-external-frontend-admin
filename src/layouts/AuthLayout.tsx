@@ -22,7 +22,7 @@ const AuthLayout: React.FC<Props> = ({ children }) => {
             </Box>
           </Box>
 
-          <Box className="px-6 sm:px-10 py-16 sm:py-20 w-full max-w-lg 2xl:max-w-[34rem] mx-auto">
+          <Box className="px-6 sm:px-8 md:px-10 py-16 sm:py-20 w-full max-w-lg 2xl:max-w-[34rem] mx-auto">
             {children}
           </Box>
         </Box>

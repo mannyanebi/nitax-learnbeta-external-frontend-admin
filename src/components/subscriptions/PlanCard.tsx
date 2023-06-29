@@ -105,7 +105,7 @@ const PlanCard: React.FC<Props> = ({ style }) => {
         </Text>
 
         <Text className="font-bold text-[#666666] text-2xl">
-          #5,000
+          &#x20A6;5,000
         </Text>
 
         <Box className={`h-3 w-3 bg-${color}-500 rounded-full mx-auto`} />

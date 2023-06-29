@@ -5,7 +5,7 @@ import preview_subject from '../../assets/svgs/preview_subjects.svg'
 
 export function NoSubjectSelected (){
   return (
-    <Box className="xl:mx-10">
+    <Box>
       <Center className='h-[35rem] bg-gradient-to-br from-[#FAAB2E] to-[#d9f3f1] rounded-2xl'>
         <Box>
           <Image

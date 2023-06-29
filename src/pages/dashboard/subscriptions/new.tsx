@@ -22,7 +22,7 @@ const NewSubscriptions = () => {
         <title>Dashboard | Subscriptions</title>
       </Head>
 
-      <Box className="px-4 sm:px-6 lg:px-8 mt-5 lg:mt-8">
+      <Box className="px-4 sm:px-8 md:pl-8 md:pr-14 lg:pr-20 mt-5 lg:mt-8">
         <Tabs
           unstyled
           defaultValue="plans"

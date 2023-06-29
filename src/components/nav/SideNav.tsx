@@ -128,7 +128,7 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
   ]
 
   return (
-    <Box className="w-full max-w-[14rem] lg:max-w-[15rem] h-[100vh] fixed overflow-y-auto bg-[#00433F]">
+    <Box className="w-full max-w-[14rem] h-[100vh] fixed overflow-y-auto bg-[#00433F]">
       <Box className="relative h-full">
         <Box className={`${mobile && 'hidden'}`}>
           <Center className="w-full h-[60px]">

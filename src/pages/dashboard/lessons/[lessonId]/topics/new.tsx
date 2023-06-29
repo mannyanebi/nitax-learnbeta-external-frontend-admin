@@ -70,8 +70,8 @@ const AddTopics = () => {
 
       <ProfileNav />
 
-      <Box className="w-full px-4 sm:px-6 lg:px-8 mt-4">
-        <Box className='w-full max-w-[63rem] xl:max-w-[75rem] 2xl:max-w-[85rem] mx-auto pb-20'>
+      <Box className="w-full px-4 sm:px-8 md:px-10 mt-4">
+        <Box className='w-full max-w-[40rem] lg:max-w-[62rem] xl:max-w-[75rem] 2xl:max-w-[85rem] mx-auto pb-20'>
           <Box className="w-fit">
             <NextLink href='/dashboard/lessons'>
               <Flex className=" mx-auto space-x-2">
