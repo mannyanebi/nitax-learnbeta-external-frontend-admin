@@ -46,27 +46,29 @@ export default function Performance (){
 
       <ProfileNav />
 
-      <Box className="w-full px-4 sm:px-6 lg:px-8 mt-4">
-        <Box className='w-fit'>
-          <Link href='/dashboard/lessons'>
-            <Flex className="max-w-[97rem] mx-auto space-x-2">
-              <Center className="bg-[#FEEDD1] rounded-full p-2">
-                <Image
-                  src={backArrow}
-                  alt='back icon'
-                  className="w-2 h-2"
-                />
-              </Center>
+      <Box className="w-full px-4 sm:px-8 md:px-10 mt-4">
+        <Box className="max-w-[40rem] lg:max-w-[62rem] xl:max-w-[75rem] 2xl:max-w-[85rem] mx-auto">
+          <Box className='w-fit'>
+            <Link href='/dashboard/lessons'>
+              <Flex className="max-w-[97rem] mx-auto space-x-2">
+                <Center className="bg-[#FEEDD1] rounded-full p-2">
+                  <Image
+                    src={backArrow}
+                    alt='back icon'
+                    className="w-2 h-2"
+                  />
+                </Center>
 
-              <Text className="font-bold">
-                Back
-              </Text>
-            </Flex>
-          </Link>
+                <Text className="font-bold">
+                  Back
+                </Text>
+              </Flex>
+            </Link>
+          </Box>
         </Box>
       </Box>
 
-      <Box className="w-full px-4 sm:px-6 lg:px-8 my-10">
+      <Box className="w-full px-4 sm:px-8 md:px-10 my-10">
         <Text className="text-4xl font-bold text-center">
           {/* {router.query.id} */}
           65%
@@ -76,7 +78,7 @@ export default function Performance (){
           Average Assessment Score
         </Text>
 
-        <Box className="mt-10 w-full mx-auto max-w-[75rem] py-2 rounded-lg border border-[#E2E2E2]">
+        <Box className="mt-10 w-full mx-auto max-w-[40rem] lg:max-w-[62rem] xl:max-w-[75rem] 2xl:max-w-[85rem] py-2 rounded-lg border border-[#E2E2E2]">
           <Grid className="bg-[#FFF6E8] lg:px-8 w-full rounded-t-lg mx-auto py-2">
             <Grid.Col span="auto">
               <Text className='text-[#555555] font-semibold'>

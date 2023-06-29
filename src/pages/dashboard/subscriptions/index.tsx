@@ -16,7 +16,7 @@ const Subscriptions = () => {
         <title>Dashboard | Subscriptions</title>
       </Head>
 
-      <Box className="px-4 sm:px-6 lg:px-8 mt-5 lg:mt-8">
+      <Box className="px-4 sm:px-8 md:pl-8 md:pr-14 lg:pr-20 mt-5 lg:mt-8">
         <Flex className="items-center flex-col sm:flex-row justify-center text-center sm:justify-start sm:space-x-6">
           <Flex className="items-center sm:space-x-2">
             <Text className="font-semibold text-sm sm:text-base">
@@ -89,7 +89,7 @@ const Subscriptions = () => {
           </Link>
         </Flex>
 
-        <Flex className="mt-4 justify-end space-x-4 items-center">
+        <Flex className="mt-4 justify-end space-x-4 md:space-x-1 lg:space-x-4 items-center">
           <Box>
             <Select
               placeholder='Billing Type'

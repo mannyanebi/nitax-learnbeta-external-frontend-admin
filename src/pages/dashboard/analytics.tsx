@@ -22,7 +22,7 @@ const Analytics = () => {
         <title>Dashboard | Analytics</title>
       </Head>
 
-      <Box className="px-4 sm:px-6 lg:px-8 mt-5 lg:mt-6">
+      <Box className="px-4 sm:px-8 md:pl-8 md:pr-14 lg:pr-20 mt-5 lg:mt-6">
         <Flex className="justify-end">
           <UnstyledButton className="bg-[#E0E8E8] hover:bg-[#e0e8e8ac] px-5 rounded-lg py-3 transition duration-75 delay-75 ease-linear hover:shadow-sm">
             <Flex className="items-center space-x-2">

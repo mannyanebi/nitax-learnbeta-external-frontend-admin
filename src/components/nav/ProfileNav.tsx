@@ -13,8 +13,8 @@ const ProfileNav = () => {
 
   return (
     <React.Fragment>
-      <NavElement className="w-full border-b-2 border-[#E2E2E2] h-[70px] md:bg-[#F4F4F9] px-4 sm:px-6 lg:px-8">
-        <Flex className="items-center max-w-[63rem] xl:max-w-[75rem] 2xl:max-w-[85rem] mx-auto h-full justify-between">
+      <NavElement className="w-full border-b-2 border-[#E2E2E2] z-50 sticky top-0 bg-white h-[70px] md:bg-[#F4F4F9] px-4 sm:px-8 md:px-10">
+        <Flex className="items-center max-w-[40rem] lg:max-w-[62rem] xl:max-w-[75rem] 2xl:max-w-[85rem] mx-auto h-full justify-between">
           <Link href='/dashboard/overview'>
             <Logo />
           </Link>
