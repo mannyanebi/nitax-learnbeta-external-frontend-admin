@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { Box, Text, Flex, Modal, UnstyledButton } from "@mantine/core";
 import DashboardLayout from "@/layouts/DashboardLayout";
-import { NoSubjectSelected } from "@/components/lessons/EmptyState";
+import { EmptyState } from "@/components/lessons/EmptyState";
 import SubjectControl from "@/components/lessons/SubjectControl";
 import { SubjectControlSkeleton } from "@/components/lessons/SubjectControl";
 import { useDisclosure, useViewportSize } from '@mantine/hooks';
@@ -263,7 +263,9 @@ const Lessons = () => {
 
           {!activeLessons &&
             <Box className="mt-10">
-              <NoSubjectSelected />
+              <EmptyState 
+                message="Select a Subject and the Lessons will appear here"
+              />
             </Box>
           }
         </Box>

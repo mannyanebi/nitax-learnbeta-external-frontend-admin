@@ -4,19 +4,29 @@ import { Box } from "@mantine/core";
 import PageLayout from "@/layouts/PageLayout";
 import ProfileNav from "@/components/nav/ProfileNav";
 import ProfileBanner from "@/components/profile/ProfileBanner";
+import AppLayout from "@/layouts/AppLayout";
+import { Toaster } from 'react-hot-toast';
+
 
 const Profile = () => {
   return (
     <PageLayout>
-      <Head>
-        <title>Profile</title>
-      </Head>
+      <AppLayout>
+        <Head>
+          <title>Profile</title>
+        </Head>
 
-      <ProfileNav />
+        <Toaster
+          position="bottom-right"
+          reverseOrder={false}
+        />
 
-      <Box className='mt-5 lg:mt-8 pb-20'>
-        <ProfileBanner />
-      </Box>
+        <ProfileNav />
+
+        <Box className='mt-5 lg:mt-8 pb-20'>
+          <ProfileBanner />
+        </Box>
+      </AppLayout>
     </PageLayout>
   )
 }

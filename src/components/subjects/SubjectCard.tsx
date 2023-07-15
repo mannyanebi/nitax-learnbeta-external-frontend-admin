@@ -15,6 +15,7 @@ import Form from '../custom/Form';
 import { IconUpload, IconX } from '@tabler/icons-react';
 import { Icon } from '@iconify/react';
 import upload_cloud from '../../assets/svgs/upload-cloud.svg'
+import { SubjectType } from '@/pages/dashboard/subjects';
 
 export const SubjectCardSkeleton = () => {
   return (
@@ -30,7 +31,9 @@ export const SubjectCardSkeleton = () => {
   );
 }
 
-const SubjectCard = () => {
+type SubjectDataType = { subject: SubjectType }
+
+const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
   const [
     openedDelete, 
     { open: openDelete, close: closeDelete }
@@ -63,7 +66,7 @@ const SubjectCard = () => {
         </Box>
 
         <Text className='font-semibold text-lg mt-3'>
-          Health Science
+          {subject.name}
         </Text>
 
         <Text
@@ -76,7 +79,7 @@ const SubjectCard = () => {
           }}
           className="text-[#888888] text-sm font-semibold mt-1"
         >
-          The study of healthy living. study of healthy living study of healthy living study of healthy living study of healthy living study of healthy living
+          {subject.description}
         </Text>
 
         <Flex className="mt-auto justify-end">
@@ -146,7 +149,7 @@ const SubjectCard = () => {
               </Box>
 
               <Box>
-                <Link href='/dashboard/lessons'>
+                <Link href={`/dashboard/lessons?subjectId=${subject.id}`}>
                   <UnstyledButton className="hover:bg-[#D9D9D9] py-2 px-4 w-full transition duration-75 delay-75 ease-linear">
                     <Flex className='items-center space-x-2'>
                       <Box>

@@ -64,7 +64,7 @@ const ProfileBanner = () => {
   return (
     <Box className="px-4 sm:px-8 md:px-10">
       <Box className="hidden lg:block">
-        <BackgroundImage className="rounded-xl px-16 h-32 xl:px-28 6xl:max-w-[75rem] max-w-[54.5rem] l:max-w-[65rem] mx-auto" src={yellowBg.src}>
+        <BackgroundImage className="rounded-xl px-16 h-32 xl:px-28 max-w-[54.5rem] mx-auto" src={yellowBg.src}>
         </BackgroundImage>
 
         <Box className="w-full max-w-[55rem] xl:max-w-[47.5rem] px-16 xl:px-0 mt-[-4.5rem] mx-auto">

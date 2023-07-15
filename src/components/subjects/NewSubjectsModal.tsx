@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Modal, Box, Text, Select, Group, useMantineTheme, rem, UnstyledButton } from '@mantine/core';
 import Input from '../custom/Input';
+import { useMutation } from 'react-query';
 import TextArea from '../custom/TextArea';
 import Form from '../custom/Form';
 import { IconUpload, IconX } from '@tabler/icons-react';
@@ -8,21 +9,103 @@ import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import Image from 'next/image'
 import { Icon } from '@iconify/react';
 import upload_cloud from '../../assets/svgs/upload-cloud.svg'
+import { AdminContext } from '@/contexts/AdminContext';
+import toast from 'react-hot-toast';
+import { addSubject } from '@/services/subjects'
 
 interface Props {
   opened: boolean,
   close: () => void
 }
 
+type ErrorStateType = {
+  name: string | null;
+  description: string | null;
+  class: string | null;
+  bannerImg: string | null;
+};
+
+type ValueType = {
+  name: string
+  description: string
+  class: string | null
+};
+
 export default function NewSubjectsModal({ opened, close }: Props) {
-  const [file, setFile] = useState<FileWithPath[]>([])
   const theme = useMantineTheme();
+  const { admin } = useContext(AdminContext)
+  const token = `bearer ${admin?.data?.access_token}`
+  const [file, setFile] = useState<FileWithPath[]>([])
+  const [error, setError] = useState<ErrorStateType>({
+    name: null,
+    description: null,
+    class: null,
+    bannerImg: null
+  });
+  const [value, setValue] = useState<ValueType>({
+    name: '',
+    description: '',
+    class: ''
+  });
 
   const labelStyles = {
     color: '#343434',
     fontSize: '0.875rem',
     fontWeight: 400
   };
+
+  const mutation = useMutation((data: any) => addSubject(data, token), {
+    onError: () => {
+      toast.error('Failed to add new subject')
+    },
+
+    onSuccess: () => {
+      toast.success('Subject added successfully')
+
+      setFile([])
+      setValue({
+        name: '',
+        description: '',
+        class: ''
+      })
+    },
+  })
+
+  const handleAddSubject = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (!value.name){
+      setError({
+        ...error,
+        name: 'Subject title is required'
+      })
+    } else if (file.length < 1) {
+      setError({
+        ...error,
+        bannerImg: 'Subject header image is required'
+      })
+    } else if (!value.description) {
+      setError({
+        ...error,
+        description: 'Subject description is required'
+      })
+    } else if (!value.class) {
+      setError({
+        ...error,
+        class: 'Subject class is required'
+      })
+    } else {      
+      const data = {
+        name: value.name,
+        img: file,
+        description: value.description,
+        grade_level_id: Number(value.class)
+      }
+
+      mutation.mutate(data)
+    }
+  }
+
 
   return (
     <React.Fragment>
@@ -31,22 +114,33 @@ export default function NewSubjectsModal({ opened, close }: Props) {
         radius={12}
         opened={opened} 
         onClose={close} 
-        centered>
+        centered
+      >
         <Box className='px-2 sm:px-8 md:px-10'>
           <Text className='font-semibold text-center text-lg'>
             Add New Subject
           </Text>
 
-          <Form className='my-10'>
+          <Form className='my-10' onSubmit={handleAddSubject}>
             <Box>
               <Input
                 type="text"
-                // error={form.errors.email}
+                error={error.name}
+                value={value.name}
+                onChange={({ target }) => {
+                  setError({
+                    ...error,
+                    name: null
+                  })
+                  setValue({
+                    ...value,
+                    name: target.value
+                  })
+                }}
                 label='Enter Subject Title'
                 placeholder="Subject title"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                disabled={mutation.isLoading}
+                className={`w-full border-2 px-3 py-5 ${error.name ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} font-sans text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
@@ -56,10 +150,17 @@ export default function NewSubjectsModal({ opened, close }: Props) {
               </Text>
 
               <Dropzone
-                className='mt-[0.2rem] bg-[#F9F9F9]'
+                className={`mt-[0.2rem] bg-[#F9F9F9] ${error.bannerImg && 'border-red-500'}`}
                 padding={7}
+                disabled={mutation.isLoading}
                 maxFiles={1}
-                onDrop={(files) => setFile(files)}
+                onDrop={(files) => {
+                  setError({
+                    ...error,
+                    bannerImg: null
+                  })
+                  setFile(files)}
+                }
                 onReject={() => null}
                 maxSize={3 * 1024 ** 2}
                 accept={IMAGE_MIME_TYPE}
@@ -154,25 +255,62 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                   </Box>
                 </Group>
               </Dropzone>
+
+              <Box className="mt-[0.3rem]">
+                {error.bannerImg &&
+                  <Text className="text-red-500 font-sans text-sm">
+                    {error.bannerImg}
+                  </Text>
+                }
+              </Box>
             </Box>
 
             <Box className='mt-5'>
               <TextArea
                 maxLength={80}
-                // error={form.errors.email}
+                disabled={mutation.isLoading}
+                value={value.description}
+                onChange={({ target }) => {
+                  setError({
+                    ...error,
+                    description: null
+                  })
+                  setValue({
+                    ...value,
+                    description: target.value
+                  })
+                }}
                 label='Brief description of subject'
                 placeholder="Enter subject description"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full min-h-[5rem] resize-none border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                className={`w-full min-h-[5rem] ${error.description ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} font-sans resize-none border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
+
+              <Box className="mt-[-0.3rem]">
+                {error.description &&
+                  <Text className="text-red-500 font-sans text-sm">
+                    {error.description}
+                  </Text>
+                }
+              </Box>
             </Box>
 
             <Box>
               <Select
                 size='xl'
                 radius={8}
+                disabled={mutation.isLoading}
                 placeholder='Select class'
+                value={value.class}
+                onChange={(val) => {
+                  setError({
+                    ...error,
+                    class: null
+                  })
+                  setValue({
+                    ...value,
+                    class: val
+                  })
+                }}
                 data={[
                   { value: '1', label: 'Grade 1' },
                   { value: '2', label: 'Grade 2' },
@@ -186,9 +324,9 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                 }
                 styles={() => ({
                   input: {
-                    border: '2px solid #E2E2E2',
+                    border: error.class ? '2px solid red' : '2px solid #E2E2E2',
                     '&:focus-within': {
-                      borderColor: '#FAA61A',
+                      borderColor: error.class ? 'red' : '#FAA61A',
                     },
                     color: '#555555'
                   },
@@ -202,15 +340,23 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                   },
                 })}
               />
+
+              <Box className="mt-[0.3rem]">
+                {error.class &&
+                  <Text className="text-red-500 font-sans text-sm">
+                    {error.class}
+                  </Text>
+                }
+              </Box>
             </Box>
 
             <Box className="text-center mt-8">
               <UnstyledButton
-                // disabled={mutation.isLoading}
+                disabled={mutation.isLoading}
                 type="submit"
-                className="px-8 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+                className="px-8 h-14 disabled:opacity-50 w-60 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
               >
-                {/* {mutation.isLoading ?
+                {mutation.isLoading ? 
                   <Icon
                     className={`animate-spin mx-auto`}
                     icon="icomoon-free:spinner2"
@@ -218,9 +364,8 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                     width="20"
                     height="20"
                   /> :
-                  'Sign In'
-                } */}
-                Create new subject
+                  'Create new subject'
+                }
               </UnstyledButton>
             </Box>
           </Form>

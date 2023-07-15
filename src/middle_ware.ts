@@ -9,12 +9,12 @@ export function middleware(request: NextRequest) {
     isLoggedIn = true
   }
 
-  if (request.nextUrl.pathname === '/' && isLoggedIn) {
-    return NextResponse.redirect(new URL(`/dashboard/overview`, request.url))
-  }
-
-  if (request.nextUrl.pathname === '/' && !isLoggedIn) {
-    return NextResponse.redirect(new URL(`/auth/signin`, request.url))
+  if (request.nextUrl.pathname === '/') {
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL(`/dashboard/overview`, request.url))
+    } else {
+      return NextResponse.redirect(new URL(`/auth/signin`, request.url))
+    }
   }
 
   if (request.nextUrl.pathname.startsWith('/dashboard' || '/profile') && !isLoggedIn) {

@@ -2,7 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    HOST: process.env.HOST
+    HOST: process.env.HOST,
+    ENCRYPTION_KEY: process.env.ENCRYPTION_KEY
   }
 }
 
