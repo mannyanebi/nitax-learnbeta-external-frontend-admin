@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Modal, Box, Text, Select, Group, useMantineTheme, rem, UnstyledButton } from '@mantine/core';
 import Input from '../custom/Input';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import TextArea from '../custom/TextArea';
 import Form from '../custom/Form';
 import { IconUpload, IconX } from '@tabler/icons-react';
@@ -34,6 +34,7 @@ type ValueType = {
 export default function NewSubjectsModal({ opened, close }: Props) {
   const theme = useMantineTheme();
   const { admin } = useContext(AdminContext)
+  const queryClient = useQueryClient();
   const token = `bearer ${admin?.data?.access_token}`
   const [file, setFile] = useState<FileWithPath[]>([])
   const [error, setError] = useState<ErrorStateType>({
@@ -61,6 +62,8 @@ export default function NewSubjectsModal({ opened, close }: Props) {
 
     onSuccess: () => {
       toast.success('Subject added successfully')
+
+      queryClient.invalidateQueries('subjects');
 
       setFile([])
       setValue({

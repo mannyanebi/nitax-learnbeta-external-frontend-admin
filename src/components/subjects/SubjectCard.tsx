@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Flex, Text, UnstyledButton, Select, Popover, Group, Skeleton, Modal, rem, useMantineTheme } from "@mantine/core";
+import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from 'react-query';
 import TextArea from '../custom/TextArea';
 import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { deleteSubject, editSubject } from '@/services/subjects';
 import Link from 'next/link';
 import Input from '../custom/Input';
 import dot_control from '../../assets/svgs/dot_control.svg'
@@ -16,6 +19,7 @@ import { IconUpload, IconX } from '@tabler/icons-react';
 import { Icon } from '@iconify/react';
 import upload_cloud from '../../assets/svgs/upload-cloud.svg'
 import { SubjectType } from '@/pages/dashboard/subjects';
+import { AdminContext } from '@/contexts/AdminContext';
 
 export const SubjectCardSkeleton = () => {
   return (
@@ -33,7 +37,21 @@ export const SubjectCardSkeleton = () => {
 
 type SubjectDataType = { subject: SubjectType }
 
+type ErrorStateType = {
+  name: string | null;
+  description: string | null;
+  bannerImg: string | null;
+};
+
+type ValueType = {
+  name: string
+  description: string
+};
+
 const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
+  const { admin } = useContext(AdminContext)
+  const queryClient = useQueryClient();
+  const token = `beearer ${admin?.data?.access_token}`
   const [
     openedDelete, 
     { open: openDelete, close: closeDelete }
@@ -45,6 +63,15 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
   ] = useDisclosure(false);
 
   const [file, setFile] = useState<FileWithPath[]>([])
+  const [error, setError] = useState<ErrorStateType>({
+    name: null,
+    description: null,
+    bannerImg: null
+  });
+  const [value, setValue] = useState<ValueType>({
+    name: subject.name,
+    description: subject.description,
+  });
   const [popoverOpened, setPopoverOpened] = useState(false);
   const theme = useMantineTheme();
 
@@ -53,6 +80,65 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
     fontSize: '0.875rem',
     fontWeight: 400
   };
+
+  const editMutation = useMutation((data: any) => editSubject(data, token), {
+    onError: () => {
+      toast.error('Failed to edit subject')
+    },
+
+    onSuccess: () => {
+      toast.success('Subject editted successfully')
+
+      closeEdit()
+    },
+  })
+
+  const deleteMutation = useMutation((id: any) => deleteSubject(id, token), {
+    onError: () => {
+      toast.error('Failed to delete subject')
+    },
+
+    onSuccess: () => {
+      toast.success('Subject deleted')
+
+      queryClient.invalidateQueries('subjects');
+
+      closeDelete()
+    }
+  })
+
+  const handleSubjectDelete = () => {
+    deleteMutation.mutate(subject.id)
+  }
+
+  const handleEditSubject = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (!value.name) {
+      setError({
+        ...error,
+        name: 'Subject title is required'
+      })
+    } else if (file.length < 1) {
+      setError({
+        ...error,
+        bannerImg: 'Subject header image is required'
+      })
+    } else if (!value.description) {
+      setError({
+        ...error,
+        description: 'Subject description is required'
+      })
+    } else {
+      const data = {
+        name: value.name,
+        img: file,
+        description: value.description,
+      }
+
+      editMutation.mutate(data)
+    }
+  }
 
   return (
     <React.Fragment>
@@ -190,9 +276,20 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
 
           <Flex className="justify-between space-y-3 my-10 sm:space-y-0 sm:space-x-4 sm:flex-row flex-col">
             <UnstyledButton
-              className="px-8 h-12 text-center font-bold transition duration-75 w-full delay-75 ease-linear hover:bg-red-500 rounded-full py-3 bg-[#E2E2E2] text-[#888888] hover:text-white"
+              onClick={handleSubjectDelete}
+              disabled={deleteMutation.isLoading}
+              className="px-8 h-12 w-full  text-center font-bold transition disabled:opacity-50 duration-75 delay-75 ease-linear hover:bg-red-500 rounded-full py-3 bg-[#E2E2E2] text-[#888888] hover:text-white"
             >
-              Delete Subject
+              {deleteMutation.isLoading ?
+                <Icon
+                  className={`animate-spin mx-auto`}
+                  icon="icomoon-free:spinner2"
+                  color="#white"
+                  width="20"
+                  height="20"
+                /> :
+                'Delete Subject'
+              }
             </UnstyledButton>
 
             <UnstyledButton
@@ -218,16 +315,26 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
             Edit Subject
           </Text>
 
-          <Form className='my-10'>
+          <Form className='my-10' onSubmit={handleEditSubject}>
             <Box>
               <Input
                 type="text"
-                // error={form.errors.email}
+                error={error.name}
+                disabled={editMutation.isLoading}
+                value={value.name}
+                onChange={({ target }) => {
+                  setError({
+                    ...error,
+                    name: null
+                  })
+                  setValue({
+                    ...value,
+                    name: target.value
+                  })
+                }}
                 label='Enter Subject Title'
                 placeholder="Subject title"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                className={`w-full font-sans border-2 ${error.name ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
@@ -237,10 +344,18 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
               </Text>
 
               <Dropzone
-                className='mt-[0.2rem] bg-[#F9F9F9]'
+                className={`mt-[0.2rem] bg-[#F9F9F9] ${error.bannerImg && 'border-red-500'}`}
                 padding={7}
+                disabled={editMutation.isLoading}
                 maxFiles={1}
-                onDrop={(files) => setFile(files)}
+                onDrop={(files) => {
+                  setError({
+                    ...error,
+                    bannerImg: null
+                  })
+                  setFile(files)
+                }
+                }
                 onReject={() => null}
                 maxSize={3 * 1024 ** 2}
                 accept={IMAGE_MIME_TYPE}
@@ -335,30 +450,57 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
                   </Box>
                 </Group>
               </Dropzone>
+
+              <Box className="mt-[0.3rem]">
+                {error.bannerImg &&
+                  <Text className="text-red-500 font-sans text-sm">
+                    {error.bannerImg}
+                  </Text>
+                }
+              </Box>
             </Box>
 
             <Box className='mt-5'>
               <TextArea
                 maxLength={80}
-                // error={form.errors.email}
+                disabled={editMutation.isLoading}
+                value={value.description}
+                onChange={({ target }) => {
+                  setError({
+                    ...error,
+                    description: null
+                  })
+                  setValue({
+                    ...value,
+                    description: target.value
+                  })
+                }}
                 label='Brief description of subject'
                 placeholder="Enter subject description"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full min-h-[5rem] resize-none border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                className={`w-full min-h-[5rem] ${error.description ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} resize-none border-2 px-3 font-sans py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
+
+              <Box className="mt-[-0.3rem]">
+                {error.description &&
+                  <Text className="text-red-500 font-sans text-sm">
+                    {error.description}
+                  </Text>
+                }
+              </Box>
             </Box>
 
             <Box>
               <Select
                 size='xl'
                 radius={8}
+                disabled={true}
                 placeholder='Select class'
+                value={subject.grade_level_name}
                 data={[
-                  { value: '1', label: 'Grade 1' },
-                  { value: '2', label: 'Grade 2' },
-                  { value: '3', label: 'Grade 3' },
-                  { value: '4', label: 'Grade 4' },
+                  { 
+                    value: subject.grade_level_name, 
+                    label: subject.grade_level_name 
+                  }
                 ]}
                 label={
                   <span style={labelStyles}>
@@ -387,11 +529,11 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
 
             <Box className="text-center mt-8">
               <UnstyledButton
-                // disabled={mutation.isLoading}
+                disabled={editMutation.isLoading}
                 type="submit"
-                className="px-8 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+                className="px-8 h-14 w-56 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
               >
-                {/* {mutation.isLoading ?
+                {editMutation.isLoading ?
                   <Icon
                     className={`animate-spin mx-auto`}
                     icon="icomoon-free:spinner2"
@@ -399,9 +541,8 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
                     width="20"
                     height="20"
                   /> :
-                  'Sign In'
-                } */}
-                Update subject
+                  'Update subject'
+                }
               </UnstyledButton>
             </Box>
           </Form>
