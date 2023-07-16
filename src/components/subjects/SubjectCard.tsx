@@ -89,6 +89,8 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
     onSuccess: () => {
       toast.success('Subject editted successfully')
 
+      queryClient.invalidateQueries('subjects');
+
       closeEdit()
     },
   })

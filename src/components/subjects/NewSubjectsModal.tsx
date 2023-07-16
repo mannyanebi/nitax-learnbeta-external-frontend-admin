@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { Modal, Box, Text, Select, Group, useMantineTheme, rem, UnstyledButton } from '@mantine/core';
+import { Modal, Box, Text, Flex, Select, Group, useMantineTheme, rem, UnstyledButton } from '@mantine/core';
 import Input from '../custom/Input';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient, useQuery } from 'react-query';
 import TextArea from '../custom/TextArea';
 import Form from '../custom/Form';
 import { IconUpload, IconX } from '@tabler/icons-react';
@@ -12,6 +12,7 @@ import upload_cloud from '../../assets/svgs/upload-cloud.svg'
 import { AdminContext } from '@/contexts/AdminContext';
 import toast from 'react-hot-toast';
 import { addSubject } from '@/services/subjects'
+import { getGradeLevels } from '@/services/grades'
 
 interface Props {
   opened: boolean,
@@ -36,6 +37,9 @@ export default function NewSubjectsModal({ opened, close }: Props) {
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
   const token = `bearer ${admin?.data?.access_token}`
+
+  const gradeLevels = useQuery('gradeLevels', () => getGradeLevels(token))
+
   const [file, setFile] = useState<FileWithPath[]>([])
   const [error, setError] = useState<ErrorStateType>({
     name: null,
@@ -109,6 +113,10 @@ export default function NewSubjectsModal({ opened, close }: Props) {
     }
   }
 
+  const gradeLevelsState = gradeLevels?.data?.data.map((level: any) => ({
+      value: level.id.toString(),
+      label: level.name
+  })) || []
 
   return (
     <React.Fragment>
@@ -314,12 +322,7 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                     class: val
                   })
                 }}
-                data={[
-                  { value: '1', label: 'Grade 1' },
-                  { value: '2', label: 'Grade 2' },
-                  { value: '3', label: 'Grade 3' },
-                  { value: '4', label: 'Grade 4' },
-                ]}
+                data={gradeLevelsState}
                 label={
                   <span style={labelStyles}>
                     Select class for this subject
@@ -343,6 +346,30 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                   },
                 })}
               />
+
+              <Box className="mt-[0.3rem]">
+                {gradeLevels.isError &&
+                  <Flex className='space-x-1'>
+                    <Text className="text-orange-800 animate-pulse font-sans text-sm">
+                      Failed to fetch classes.
+                    </Text>
+
+                    <Text onClick={() => gradeLevels.refetch()} className="text-orange-800 hover:underline hover:cursor-pointer animate-pulse font-sans text-sm">
+                      Retry
+                    </Text>
+                  </Flex>
+                }
+
+                {gradeLevels.isLoading &&
+                  <Flex className='animate-pulse items-center space-x-1'>
+                    <Icon icon="eos-icons:loading" color="#555555" width="18" height="18" />
+
+                    <Text className="text-[#555555] font-sans text-sm">
+                      Loading
+                    </Text>
+                  </Flex>
+                }
+              </Box>
 
               <Box className="mt-[0.3rem]">
                 {error.class &&
