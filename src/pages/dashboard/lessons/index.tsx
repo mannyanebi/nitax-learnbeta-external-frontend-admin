@@ -159,6 +159,7 @@ const Lessons = () => {
                   {lessons.data &&
                     lessons.data.data.filter((l: any) => (l.is_archived === false)).map((l: any) => (
                       <LessonsCard
+                        subjectId={Number(subjectId)}
                         key={l.id}
                         lesson={l}
                       />
@@ -203,6 +204,7 @@ const Lessons = () => {
                       {lessons.data &&
                         lessons.data.data.filter((l: any) => (l.is_archived === true)).map((l: any) => (
                           <LessonsCard
+                            subjectId={Number(subjectId)}
                             key={l.id}
                             lesson={l}
                           />
@@ -258,6 +260,28 @@ const Lessons = () => {
               </Box>
 
               <Box className="space-y-4 mt-7">
+                <LessonsCard
+                  subjectId={Number(subjectId)}
+                  lesson={{
+                    id: 2,
+                    title: "Addition",
+                    description: "Addition is one of the four basic operations of arithmetic, the other three being subtraction, multiplication and division.",
+                    subject_name: "Mathematics",
+                    is_archived: true
+                  }}
+                />
+
+                <LessonsCard
+                  subjectId={Number(subjectId)}
+                  lesson={{
+                    id: 2,
+                    title: "Addition",
+                    description: "Addition is one of the four basic operations of arithmetic, the other three being subtraction, multiplication and division.",
+                    subject_name: "Mathematics",
+                    is_archived: false
+                  }}
+                />
+
                 {lessons.isLoading &&
                   [1, 2, 3, 4].map((lesson: number) => (
                     <LessonsCardSkeleton key={lesson} />
@@ -267,6 +291,7 @@ const Lessons = () => {
                 {lessons.data &&
                   lessons.data.data.filter((l: any) => (l.is_archived === false)).map((l: any) => (
                     <LessonsCard 
+                      subjectId={Number(subjectId)}
                       key={l.id}
                       lesson={l}
                     />
@@ -311,6 +336,7 @@ const Lessons = () => {
                     {lessons.data &&
                       lessons.data.data.filter((l: any) => (l.is_archived === true)).map((l: any) => (
                         <LessonsCard
+                          subjectId={Number(subjectId)}
                           key={l.id}
                           lesson={l}
                         />
@@ -340,6 +366,7 @@ const Lessons = () => {
       </Box>
 
       <NewLessonModal 
+        subjectId={Number(subjectId)}
         opened={openedNewLessonModal} 
         close={closeNewLessonModal} 
       />

@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Box, Skeleton, Collapse, Popover, Modal,  Flex, Text, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks';
 import yellow_arrow from '../../assets/svgs/yellow_arrow_up.svg'
+import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from 'react-query';
 import { Icon } from '@iconify/react';
 import Input from '../custom/Input';
 import TextArea from '../custom/TextArea';
@@ -12,6 +14,8 @@ import three_dot from '../../assets/svgs/dot_control.svg'
 import archive_icon from '../../assets/svgs/archive_icon.svg'
 import edit_icon from '../../assets/svgs/edit-2.svg'
 import trash_icon from '../../assets/svgs/trash-2.svg'
+import { editLesson } from '@/services/lessons';
+import { AdminContext } from '@/contexts/AdminContext';
 
 export const LessonsCardSkeleton = () => {
   return (
@@ -29,9 +33,13 @@ export const LessonsCardSkeleton = () => {
   )
 }
 
-type Props = { lesson: any }
+type Props = { lesson: any, subjectId: number }
 
-const LessonsCard: React.FC<Props> = ({ lesson }) => {
+const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
+  const { admin } = useContext(AdminContext)
+  const queryClient = useQueryClient();
+  const token =  `bearer ${admin?.data?.access_token}`
+
   const [opened, { toggle }] = useDisclosure(false);
   const [popoverOpened, setPopoverOpened] = useState(false);
   const [
@@ -46,13 +54,33 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
     openedArchive,
     { open: openArchive, close: closeArchive }
   ] = useDisclosure(false);
+  const [archived, setArchived] = useState(lesson.is_archived)
 
-  const archive = false
+  const archiveMutation = useMutation((data: any) => editLesson(subjectId, lesson.id, data, token), {
+    onError: () => {
+      toast.error('Failed to update archive status')
+    },
 
+    onSuccess: () => {
+      toast.success('Successfully updated archive status')
+
+      queryClient.invalidateQueries('lessons');
+
+      closeArchive()
+    }
+  })
+
+  const handleArchive = (status: boolean) => {
+    const payload = {
+      is_archived: status
+    }
+
+    archiveMutation.mutate(payload)
+  }
   return (
     <React.Fragment>
       <Box>
-        <Box className={`bg-[#FEEDD1] ${archive && 'opacity-50'} rounded-2xl p-5 border-2 border-[#FAA61A]`}>
+        <Box className={`bg-[#FEEDD1] ${archived && 'opacity-50'} rounded-2xl p-5 border-2 border-[#FAA61A]`}>
           <Flex className='justify-between'>
             <Text className='font-semibold text-[#FAA61A] text-lg truncate'>
               {lesson.title}
@@ -73,11 +101,19 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
                 position="bottom"
                 withArrow
                 opened={popoverOpened}
-                onChange={setPopoverOpened}
+                onChange={() => {
+                  setPopoverOpened((v) => !v)
+                  lesson.is_archived === true && setArchived(true)
+                }}
                 shadow="md"
               >
                 <Popover.Target>
-                  <UnstyledButton onClick={() => setPopoverOpened((v: any) => !v)}>
+                  <UnstyledButton 
+                    onClick={() => {
+                      setPopoverOpened((v: any) => !v)
+                      lesson.is_archived === true && setArchived(!archived)
+                    }}               
+                  >
                     <Image
                       alt="icon"
                       src={three_dot}
@@ -126,6 +162,7 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
                       onClick={() => {
                         openEdit()
                         setPopoverOpened(false)
+                        lesson.is_archived === true && setArchived(true)
                       }}
                       className="hover:bg-[#D9D9D9] py-2 px-4 w-full transition duration-75 delay-75 ease-linear"
                     >
@@ -150,6 +187,7 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
                       onClick={() => {
                         openDelete()
                         setPopoverOpened(false)
+                        lesson.is_archived === true && setArchived(true)
                       }}
                       className="hover:bg-[#ffd7d7] text-[#FF0000] py-2 px-4 w-full transition duration-75 delay-75 ease-linear">
                       <Flex className='items-center space-x-2'>
@@ -173,6 +211,7 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
                       onClick={() => {
                         openArchive()
                         setPopoverOpened(false)
+                        lesson.is_archived === true && setArchived(true)
                       }}
                       className="hover:bg-[#D9D9D9] py-2 px-4 w-full transition duration-75 delay-75 ease-linear"
                     >
@@ -185,9 +224,14 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
                           />
                         </Box>
 
-                        <Text className="text- font-semibold text-[#666666]">
-                          Archive Lesson
-                        </Text>
+                        {lesson.is_archived ?
+                          <Text className="text- font-semibold text-[#666666]">
+                            Unarchive
+                          </Text> : 
+                          <Text className="text- font-semibold text-[#666666]">
+                            Archive Lesson
+                          </Text>
+                        }
                       </Flex>
                     </UnstyledButton>
                   </Box>
@@ -325,19 +369,54 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
       >
         <Box className='px-2 sm:px-8 md:px-10'>
           <Text className='font-semibold text-center text-lg'>
-            Archive Lesson
+            {lesson.is_archived ? 
+              'Unarchive Lesson' : 
+              'Archive Lesson'
+            }
           </Text>
 
           <Text className="text-center mt-10">
-            This Lesson will be and all content in it will be unavailable to students that offer the subject till it is unarchived by the Admin
+            {lesson.is_archived ?
+              'This Lesson will be and all content in it will be available to students that offer the subject till it is archived again by the Admin' :
+              'This Lesson will be and all content in it will be unavailable to students that offer the subject till it is unarchived by the Admin'
+            }
           </Text>
 
           <Flex className="justify-between space-y-3 my-10 sm:space-y-0 sm:space-x-4 sm:flex-row flex-col">
-            <UnstyledButton
-              className="px-8 h-12 text-center font-bold transition duration-75 w-full delay-75 ease-linear hover:bg-[#FAA61A] text-[#888888] rounded-full py-3 bg-[#E2E2E2] hover:text-white"
-            >
-              Archive Lesson
-            </UnstyledButton>
+            {lesson.is_archived ?
+              <UnstyledButton
+                disabled={archiveMutation.isLoading}
+                onClick={() => handleArchive(false)}
+                className="px-8 disabled:opacity-50 h-12 text-center font-bold transition duration-75 w-full delay-75 ease-linear hover:bg-[#FAA61A] text-[#888888] rounded-full py-3 bg-[#E2E2E2] hover:text-white"
+              >
+                {archiveMutation.isLoading ?
+                  <Icon
+                    className={`animate-spin mx-auto`}
+                    icon="icomoon-free:spinner2"
+                    color="#white"
+                    width="20"
+                    height="20"
+                  /> :
+                  'Unarchive Lesson'
+                }
+              </UnstyledButton> :
+              <UnstyledButton
+                disabled={archiveMutation.isLoading}
+                onClick={() => handleArchive(true)}
+                className="px-8 disabled:opacity-50 h-12 text-center font-bold transition duration-75 w-full delay-75 ease-linear hover:bg-[#FAA61A] text-[#888888] rounded-full py-3 bg-[#E2E2E2] hover:text-white"
+              >
+                {archiveMutation.isLoading ?
+                  <Icon
+                    className={`animate-spin mx-auto`}
+                    icon="icomoon-free:spinner2"
+                    color="#white"
+                    width="20"
+                    height="20"
+                  /> :
+                  'Archive Lesson'
+                }
+              </UnstyledButton>
+            }
 
             <UnstyledButton
               onClick={closeArchive}

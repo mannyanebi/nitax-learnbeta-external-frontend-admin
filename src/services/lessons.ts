@@ -13,8 +13,8 @@ const getSubjectLessons = async (subjectId: string, token: any) => {
   return res.data;
 };
 
-const addLesson = async (payload: any, token: any) => {
-  const addLessonsURL = `${HOST}/api/v1/admin/subjects`;
+const addLesson = async (subjectId: string, payload: any, token: any) => {
+  const addLessonsURL = `${HOST}/api/v1/admin/subjects/${subjectId}/lessons`;
   const config = {
     headers: { Authorization: token }
   }
@@ -35,13 +35,13 @@ const deleteSubject = async (id: any, token: any) => {
   return res.data;
 };
 
-const editLesson = async (id: any, token: any) => {
-  const deleteSubjectsURL = `${HOST}/api/v1/admin/subjects/${id}`;
+const editLesson = async (subjectId: any, lessonId: any, payload: any, token: any) => {
+  const editLessonURL = `${HOST}/api/v1/admin/subjects/${subjectId}/lessons/${lessonId}`;
   const config = {
     headers: { Authorization: token }
   }
 
-  const res = await axios.put(deleteSubjectsURL, config);
+  const res = await axios.put(editLessonURL, payload, config);
 
   return res.data;
 };
