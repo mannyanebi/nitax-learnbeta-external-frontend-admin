@@ -88,28 +88,10 @@ const SigninForm: React.FC<Props> = ({
         </Box>
 
         <Box className="text-center mt-6">
-          <Link href='/dashboard/overview'>
-            <UnstyledButton
-              disabled={mutation.isLoading}
-              type="submit"
-              className="px-4 w-40 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
-            >
-              {mutation.isLoading ?
-                <Icon
-                  className={`animate-spin mx-auto`}
-                  icon="icomoon-free:spinner2"
-                  color="#white"
-                  width="20"
-                  height="20"
-                /> :
-                'Sign In'
-              }
-            </UnstyledButton>
-          </Link>
-          {/* <UnstyledButton
+          <UnstyledButton
             disabled={mutation.isLoading}
             type="submit"
-            className="px-4 w-40 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+            className="px-4 w-40 h-14 disabled:opacity-50 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
           >
             {mutation.isLoading ?
               <Icon
@@ -121,7 +103,7 @@ const SigninForm: React.FC<Props> = ({
               /> :
               'Sign In'
             }
-          </UnstyledButton> */}
+          </UnstyledButton>
         </Box>
       </Box>
     </Form>

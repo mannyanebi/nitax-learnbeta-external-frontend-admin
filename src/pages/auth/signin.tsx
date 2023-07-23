@@ -38,9 +38,9 @@ const Signin = () => {
   });
 
   const mutation = useMutation((data: any) => signin(data), {
-    onError: (error: any) => {
+    onError: (error: any) => {      
       form.setErrors({
-        email: error.response.data.message
+        email: error.response.data.message // update error object path
       })
     },
 
@@ -48,13 +48,17 @@ const Signin = () => {
       const now = new Date()
       const admin = data
 
-      admin.expiry = now.getTime() + 86400000 // 1 day
-
+      if (checked){
+        admin.expiry = now.getTime() + 86400000 // 1 day
+      } else {
+        admin.expiry = now.getTime() + 21600000 // 6 hrs
+      }
+        
       setCookieItem('learnbeta_admin', admin)
       setAdmin(admin)
 
       form.reset();
-      toast.success('Signin success!')
+      toast.success('Signin successful')
 
       const params = new URLSearchParams(window.location.search);
 

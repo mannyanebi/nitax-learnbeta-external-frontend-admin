@@ -11,7 +11,6 @@ export default function PageLayout({ children }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/assets/imgs/favicon.png" />
       </Head>
-
       {children}
     </React.Fragment>
   )

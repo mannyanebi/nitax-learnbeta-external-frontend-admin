@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Box, Flex, Text, UnstyledButton, Popover, Skeleton, Modal } from "@mantine/core";
+import { AdminContext } from '@/contexts/AdminContext';
+import { Icon } from '@iconify/react';
 import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
+import { deleteGradeLevel } from '@/services/grades';
 import dot_control from '../../assets/svgs/dot_control.svg'
 import trash_icon from '../../assets/svgs/trash-2.svg'
+import { useMutation, useQueryClient } from 'react-query';
+import toast from 'react-hot-toast';
 
 export const ClassCardSkeleton = () => {
   return (
@@ -17,10 +22,16 @@ export const ClassCardSkeleton = () => {
 }
 
 interface Props {
-  name: string
+  gradeLevel: {
+    id: number,
+    name: string
+  }
 }
 
-const ClassCard: React.FC<Props> = ({ name }) => {
+const ClassCard: React.FC<Props> = ({ gradeLevel }) => {
+  const { admin } = useContext(AdminContext)
+  const token = `beearer ${admin?.data?.access_token}`
+  const queryClient = useQueryClient();
   const [popoverOpened, setPopoverOpened] = useState(false);
 
   const [
@@ -28,12 +39,30 @@ const ClassCard: React.FC<Props> = ({ name }) => {
     { open: openDelete, close: closeDelete }
   ] = useDisclosure(false);
 
+  const deleteMutation = useMutation((id: any) => deleteGradeLevel(id, token), {
+    onError: () => {
+      toast.error('Failed to delete class')
+    },
+
+    onSuccess: () => {
+      toast.success('Class deleted')
+
+      queryClient.invalidateQueries('gradeLevels');
+
+      closeDelete()
+    }
+  })
+
+  const handleClassDelete = () => {
+    deleteMutation.mutate(gradeLevel.id)
+  }
+
   return (
     <React.Fragment>
       <Box className="border-2 rounded-xl border-[#E2E2E2] p-5">
         <Flex className="justify-between items-center space-x-4">
           <Text className="text-[#888888] text-sm truncate w-full font-semibold mt-1">
-            {name}
+            {gradeLevel.name}
           </Text>
 
           <Popover
@@ -102,9 +131,20 @@ const ClassCard: React.FC<Props> = ({ name }) => {
 
           <Flex className="justify-between space-y-3 my-10 sm:space-y-0 sm:space-x-4 sm:flex-row flex-col">
             <UnstyledButton
-              className="px-8 h-12 text-center font-bold transition duration-75 w-full delay-75 ease-linear hover:bg-red-500 rounded-full py-3 bg-[#E2E2E2] text-[#888888] hover:text-white"
+              onClick={handleClassDelete}
+              disabled={deleteMutation.isLoading}
+              className="px-8 h-12 w-full  text-center font-bold transition disabled:opacity-50 duration-75 delay-75 ease-linear hover:bg-red-500 rounded-full py-3 bg-[#E2E2E2] text-[#888888] hover:text-white"
             >
-              Delete Class
+              {deleteMutation.isLoading ?
+                <Icon
+                  className={`animate-spin mx-auto`}
+                  icon="icomoon-free:spinner2"
+                  color="#white"
+                  width="20"
+                  height="20"
+                /> :
+                'Delete Class'
+              }
             </UnstyledButton>
 
             <UnstyledButton

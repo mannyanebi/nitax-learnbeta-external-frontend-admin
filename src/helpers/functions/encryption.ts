@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js';
 
-const KEY = process.env.REACT_APP_ENCRYPTION_KEY;
+const KEY = process.env.ENCRYPTION_KEY;
 
 export function encryptData(data: any): string {
   const dataString: string = JSON.stringify(data);

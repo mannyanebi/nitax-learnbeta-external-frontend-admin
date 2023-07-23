@@ -23,8 +23,9 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
   })
 
   useEffect(() => {
-    const page = window.location.href.split("/").pop()
+    const page = window.location.href.split("?")[0].split("/").pop()
     const url = window.location.href.split("/")
+    console.log(page)
 
     if (page === "overview") {
       setActivePage({

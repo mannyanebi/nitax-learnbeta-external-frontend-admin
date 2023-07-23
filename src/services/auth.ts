@@ -3,7 +3,7 @@ import axios from "axios";
 const HOST = process.env.HOST;
 
 const signin = async (payload: any) => {
-  const signinURL = `${HOST}/`;
+  const signinURL = `${HOST}/api/v1/admin/auth/login`;
   const res = await axios.post(signinURL, payload);
 
   return res.data;
@@ -37,10 +37,34 @@ const updatePassword = async (payload: any) => {
   return res.data;
 };
 
+const verifyOldPassword = async (payload: any) => {
+  const verifyOldPasswordURL = `${HOST}/`;
+  const res = await axios.post(verifyOldPasswordURL, payload);
+
+  return res.data;
+};
+
+const refreshToken = async (token: any) => {
+  const refreshTokenURL = `${HOST}/api/v1/admin/auth/refresh-token`;
+  const res = await axios.post(refreshTokenURL, token);
+
+  return res.data;
+};
+
+const logoutAdmin = async (payload: any) => {
+  const logoutURL = `${HOST}/api/v1/auth/logout`;
+  const res = await axios.post(logoutURL, payload);
+
+  return res.data;
+};
+
 export { 
   signin, 
+  verifyOldPassword,
   forgotPassword, 
   verifyOTP, 
   resetPassword,
-  updatePassword
+  updatePassword,
+  refreshToken,
+  logoutAdmin
 }
