@@ -1,3 +1,4 @@
+import { SubjectType } from "@/pages/dashboard/subjects";
 import { UnstyledButton, Box, Skeleton } from "@mantine/core";
 import { useViewportSize } from '@mantine/hooks';
 import React from "react";
@@ -11,17 +12,17 @@ export function SubjectControlSkeleton (){
 }
 
 interface Props {
-  setActiveLessons: React.Dispatch<any>,
-  activeLessons: any,
+  setActiveSubject: React.Dispatch<any>,
+  activeSubject: any,
   openMobile: () => void,
-  item: any
+  subject: SubjectType
 }
 
 export default function SubjectControl({ 
-  setActiveLessons, 
-  activeLessons,
+  setActiveSubject, 
+  activeSubject,
   openMobile,
-  item
+  subject
 }: Props){
   const { width } = useViewportSize();
 
@@ -30,12 +31,12 @@ export default function SubjectControl({
       <UnstyledButton
         style={{ border: '1px solid #BFD0CF' }}
         onClick={() => {
-          setActiveLessons(item)
+          setActiveSubject(subject)
           width < 1024 && openMobile()
         }}
-        className={`py-4 w-full px-3 text-[#777777] truncate ${activeLessons?.id === item.id && 'text-[#00433F] bg-[#BFD0CF]'} font-semibold hover:text-[#00433F] text-sm rounded-md hover:bg-[#BFD0CF] transform duration-75 delay-[50ms] ease-linear`}
+        className={`py-4 w-full px-3 text-[#777777] truncate ${activeSubject?.id === subject.id && 'text-[#00433F] bg-[#BFD0CF]'} font-semibold hover:text-[#00433F] text-sm rounded-md hover:bg-[#BFD0CF] transform duration-75 delay-[50ms] ease-linear`}
       >
-        {item.name}
+        {subject.name}
       </UnstyledButton>
     </Box>
   )

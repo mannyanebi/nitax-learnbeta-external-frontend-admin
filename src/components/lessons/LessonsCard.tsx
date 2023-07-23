@@ -29,9 +29,7 @@ export const LessonsCardSkeleton = () => {
   )
 }
 
-type Props = { 
-  lesson: any
-}
+type Props = { lesson: any }
 
 const LessonsCard: React.FC<Props> = ({ lesson }) => {
   const [opened, { toggle }] = useDisclosure(false);
@@ -57,7 +55,7 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
         <Box className={`bg-[#FEEDD1] ${archive && 'opacity-50'} rounded-2xl p-5 border-2 border-[#FAA61A]`}>
           <Flex className='justify-between'>
             <Text className='font-semibold text-[#FAA61A] text-lg truncate'>
-              {lesson.name}
+              {lesson.title}
             </Text>
 
             <Flex className='items-center space-x-2'>
@@ -205,28 +203,20 @@ const LessonsCard: React.FC<Props> = ({ lesson }) => {
             transitionTimingFunction="linear"
           >
             <Box>
-              <Text>
-                What is {lesson.name}?
+              <Text className='font-[500] truncate'>
+                Lesson Description
               </Text>
 
-              <Text>
-                What is {lesson.name}?
-              </Text>
-
-              <Text>
-                What is {lesson.name}?
-              </Text>
-
-              <Text>
-                What is {lesson.name}?
+              <Text className='mt-2'>
+                {lesson.description}
               </Text>
             </Box>
 
-            <Box className='mt-10'>
+            <Flex className='mt-10 justify-end'>
               <Link className='text-[#444444] hover:underline font-semibold text-sm' href={`/dashboard/lessons/${lesson.id}/performance`}>
                 View students’ performance
               </Link>
-            </Box>
+            </Flex>
           </Collapse>
         </Box>
       </Box>

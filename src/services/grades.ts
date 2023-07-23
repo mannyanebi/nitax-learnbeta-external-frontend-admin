@@ -13,42 +13,30 @@ const getGradeLevels = async (token: any) => {
   return res.data;
 };
 
-// const addGradeLevel = async (payload: any, token: any) => {
-//   const addGradeLevelsURL = `${HOST}/api/v1/admin/GradeLevels`;
-//   const config = {
-//     headers: { Authorization: token }
-//   }
+const addGradeLevel = async (payload: any, token: any) => {
+  const addGradeLevelsURL = `${HOST}/api/v1/admin/grade-levels`;
+  const config = {
+    headers: { Authorization: token }
+  }
 
-//   const res = await axios.post(addGradeLevelsURL, payload, config);
+  const res = await axios.post(addGradeLevelsURL, payload, config);
 
-//   return res.data;
-// };
+  return res.data;
+};
 
-// const deleteGradeLevel = async (id: any, token: any) => {
-//   const deleteGradeLevelsURL = `${HOST}/api/v1/admin/GradeLevels/${id}`;
-//   const config = {
-//     headers: { Authorization: token }
-//   }
+const deleteGradeLevel = async (id: any, token: any) => {
+  const deleteGradeLevelURL = `${HOST}/api/v1/admin/grade-levels/${id}`;
+  const config = {
+    headers: { Authorization: token }
+  }
 
-//   const res = await axios.delete(deleteGradeLevelsURL, config);
+  const res = await axios.delete(deleteGradeLevelURL, config);
 
-//   return res.data;
-// };
-
-// const editGradeLevel = async (id: any, token: any) => {
-//   const deleteGradeLevelsURL = `${HOST}/api/v1/admin/GradeLevels/${id}`;
-//   const config = {
-//     headers: { Authorization: token }
-//   }
-
-//   const res = await axios.put(deleteGradeLevelsURL, config);
-
-//   return res.data;
-// };
+  return res.data;
+};
 
 export {
   getGradeLevels,
-  // addGradeLevel,
-  // deleteGradeLevel,
-  // editGradeLevel
+  addGradeLevel,
+  deleteGradeLevel,
 }
