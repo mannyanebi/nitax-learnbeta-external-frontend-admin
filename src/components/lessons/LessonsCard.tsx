@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Box, Skeleton, Collapse, Popover, Modal,  Flex, Text, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks';
 import yellow_arrow from '../../assets/svgs/yellow_arrow_up.svg'
+import { useForm } from '@mantine/form';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 import { Icon } from '@iconify/react';
@@ -14,7 +15,7 @@ import three_dot from '../../assets/svgs/dot_control.svg'
 import archive_icon from '../../assets/svgs/archive_icon.svg'
 import edit_icon from '../../assets/svgs/edit-2.svg'
 import trash_icon from '../../assets/svgs/trash-2.svg'
-import { editLesson } from '@/services/lessons';
+import { deleteLesson, editLesson } from '@/services/lessons';
 import { AdminContext } from '@/contexts/AdminContext';
 
 export const LessonsCardSkeleton = () => {
@@ -56,6 +57,38 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   ] = useDisclosure(false);
   const [archived, setArchived] = useState(lesson.is_archived)
 
+  const editForm = useForm({
+    initialValues: {
+      title: lesson.title,
+      description: lesson.description
+    },
+
+    validate: {
+      title: (value) => (
+        !value ? 'Lesson title is required' : null
+      ),
+      description: (value) => (
+        !value ? 'Lesson description is required' : null
+      )
+    },
+  });
+
+  const editMutation = useMutation((data: any) => editLesson(subjectId.toString(), lesson.id, data, token), {
+    onError: () => {
+      toast.error('Failed to update new lesson')
+    },
+
+    onSuccess: () => {
+      toast.success('Lesson updated successfully')
+
+      queryClient.invalidateQueries('lessons');
+
+      editForm.reset()
+
+      closeEdit()
+    },
+  })
+
   const archiveMutation = useMutation((data: any) => editLesson(subjectId, lesson.id, data, token), {
     onError: () => {
       toast.error('Failed to update archive status')
@@ -70,12 +103,36 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
     }
   })
 
+  const deleteMutation = useMutation(() => deleteLesson(subjectId, lesson.id, token), {
+    onError: () => {
+      toast.error('Failed to delete lesson')
+    },
+
+    onSuccess: () => {
+      toast.success('Lesson deleted')
+
+      queryClient.invalidateQueries('lessons');
+
+      closeDelete()
+    }
+  })
+
+  const handleEditLesson = async (values: any) => {
+    // values.subject_id = subjectId
+
+    editMutation.mutate(values)
+  }
+
   const handleArchive = (status: boolean) => {
     const payload = {
       is_archived: status
     }
 
     archiveMutation.mutate(payload)
+  }
+
+  const handleLessonDelete = () => {
+    deleteMutation.mutate()
   }
   return (
     <React.Fragment>
@@ -277,38 +334,41 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
             Edit Lesson
           </Text>
 
-          <Form className='my-10'>
+          <Form 
+            onSubmit={editForm.onSubmit((values) => handleEditLesson(values))}
+            className='my-10'
+          >
             <Box>
               <Input
                 type="text"
-                // error={form.errors.email}
+                {...editForm.getInputProps('title')}
+                error={editForm.errors.title}
                 label='Enter Lesson Title'
                 placeholder="Lesson title"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                disabled={editMutation.isLoading}
+                className={`w-full ${editForm.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
             <Box className='mt-5'>
               <TextArea
                 maxLength={80}
-                // error={form.errors.email}
+                {...editForm.getInputProps('description')}
+                error={editForm.errors.description}
                 label='Brief description of lesson'
                 placeholder="Enter lesson description"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full min-h-[5rem] resize-none border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                disabled={editMutation.isLoading}
+                className={`w-full ${editForm.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} min-h-[5rem] resize-none border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
             <Box className="text-center mt-8">
               <UnstyledButton
-                // disabled={mutation.isLoading}
+                disabled={editMutation.isLoading}
                 type="submit"
-                className="px-8 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+                className="px-8 h-14 w-56 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
               >
-                {/* {mutation.isLoading ?
+                {editMutation.isLoading ?
                   <Icon
                     className={`animate-spin mx-auto`}
                     icon="icomoon-free:spinner2"
@@ -316,9 +376,8 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
                     width="20"
                     height="20"
                   /> :
-                  'Sign In'
-                } */}
-                Save changes
+                  'Save changes'
+                }
               </UnstyledButton>
             </Box>
           </Form>
@@ -344,9 +403,20 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
 
           <Flex className="justify-between space-y-3 my-10 sm:space-y-0 sm:space-x-4 sm:flex-row flex-col">
             <UnstyledButton
-              className="px-8 h-12 text-center font-bold transition duration-75 w-full delay-75 ease-linear hover:bg-red-500 rounded-full py-3 bg-[#E2E2E2] text-[#888888] hover:text-white"
+              onClick={handleLessonDelete}
+              disabled={deleteMutation.isLoading}
+              className="px-8 h-12 disabled:opacity-50 text-center font-bold transition duration-75 w-full delay-75 ease-linear hover:bg-red-500 rounded-full py-3 bg-[#E2E2E2] text-[#888888] hover:text-white"
             >
-              Delete Lesson
+              {deleteMutation.isLoading ?
+                <Icon
+                  className={`animate-spin mx-auto`}
+                  icon="icomoon-free:spinner2"
+                  color="#white"
+                  width="20"
+                  height="20"
+                /> :
+                'Delete Lesson'
+              }
             </UnstyledButton>
 
             <UnstyledButton

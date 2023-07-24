@@ -24,8 +24,8 @@ const addLesson = async (subjectId: string, payload: any, token: any) => {
   return res.data;
 };
 
-const deleteSubject = async (id: any, token: any) => {
-  const deleteSubjectsURL = `${HOST}/api/v1/admin/subjects/${id}`;
+const deleteLesson = async (subjectId: any, lessonId: any, token: any) => {
+  const deleteSubjectsURL = `${HOST}/api/v1/admin/subjects/${subjectId}/lessons/${lessonId}`;
   const config = {
     headers: { Authorization: token }
   }
@@ -49,6 +49,6 @@ const editLesson = async (subjectId: any, lessonId: any, payload: any, token: an
 export {
   getSubjectLessons,
   addLesson,
-  deleteSubject,
+  deleteLesson,
   editLesson
 }
