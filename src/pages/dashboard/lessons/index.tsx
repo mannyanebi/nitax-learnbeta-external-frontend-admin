@@ -41,6 +41,28 @@ const Lessons = () => {
     activeSubject && width < 1024 && openMobile()
   }, [width])
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has("subjectId")) {
+      const subjId = params.get("subjectId");
+
+      if (subjId !== null) {
+        const active = {
+          id: Number(subjId),
+          name: '',
+          description:'',
+          grade_level_name:'',
+          created_at:'',
+          updated_at:'',
+        }
+
+        setActiveSubject(active)
+      }
+    }
+    
+  }, [subjects])
+
   return (
     <DashboardLayout>
       <Head>

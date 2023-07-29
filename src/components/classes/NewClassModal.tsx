@@ -40,9 +40,7 @@ export default function NewClassModal({ opened, close }: Props) {
     if (!newClass) {
       setError('Class title is required')
     } else {
-      const data = {
-        name: newClass
-      }
+      const data = { name: newClass }
 
       mutation.mutate(data)
     }

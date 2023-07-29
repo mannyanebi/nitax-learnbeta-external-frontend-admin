@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import NavElement from '../custom/NavElement'
 import Logo from "../brand/Logo";
 import Image from "next/image";
@@ -7,8 +7,16 @@ import { useDisclosure } from '@mantine/hooks';
 import { Box, Flex, Text, Burger } from "@mantine/core";
 import { SideNavDrawer } from "./SideNavDrawer";
 import Link from "next/link";
+import { useQuery } from "react-query";
+import { getAdminProfile } from "@/services/admin";
+import { AdminContext } from "@/contexts/AdminContext";
 
 const ProfileNav = () => {
+  const { admin } = useContext(AdminContext)
+  const token = `bearer ${admin?.data?.access_token}`
+
+  const adminProfile = useQuery('adminProfile', () => getAdminProfile(token))
+
   const [opened, { toggle }] = useDisclosure(false);
 
   return (
@@ -39,7 +47,18 @@ const ProfileNav = () => {
                 />
               </Link>
 
-              <Text>Emeka Felix</Text>
+              <Text>
+                {adminProfile.data &&
+                  adminProfile.data.data.name
+                }
+
+                {adminProfile.isLoading &&
+                  'Admin'
+                }
+
+                {adminProfile.isError && adminProfile.refetch()
+                }
+              </Text>
             </Flex>
           </Box>
         </Flex>

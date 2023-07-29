@@ -51,9 +51,13 @@ const refreshToken = async (token: any) => {
   return res.data;
 };
 
-const logoutAdmin = async (payload: any) => {
+const logoutAdmin = async (token: any) => {
   const logoutURL = `${HOST}/api/v1/auth/logout`;
-  const res = await axios.post(logoutURL, payload);
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.post(logoutURL, token);
 
   return res.data;
 };

@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Box, Skeleton, Collapse, Popover, Modal,  Flex, Text, UnstyledButton } from '@mantine/core'
+import { Box, Skeleton, Collapse, Popover, Modal,  Flex, Text, UnstyledButton, List } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks';
 import yellow_arrow from '../../assets/svgs/yellow_arrow_up.svg'
+import { useQuery } from 'react-query';
 import { useForm } from '@mantine/form';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
@@ -17,6 +18,7 @@ import edit_icon from '../../assets/svgs/edit-2.svg'
 import trash_icon from '../../assets/svgs/trash-2.svg'
 import { deleteLesson, editLesson } from '@/services/lessons';
 import { AdminContext } from '@/contexts/AdminContext';
+import { getLessonTopics } from '@/services/topics';
 
 export const LessonsCardSkeleton = () => {
   return (
@@ -40,6 +42,8 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
   const token =  `bearer ${admin?.data?.access_token}`
+
+  const topics = useQuery(['topics', lesson.id], () => getLessonTopics(lesson.id.toString(), token))
 
   const [opened, { toggle }] = useDisclosure(false);
   const [popoverOpened, setPopoverOpened] = useState(false);
@@ -118,15 +122,11 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   })
 
   const handleEditLesson = async (values: any) => {
-    // values.subject_id = subjectId
-
     editMutation.mutate(values)
   }
 
   const handleArchive = (status: boolean) => {
-    const payload = {
-      is_archived: status
-    }
+    const payload = { is_archived: status }
 
     archiveMutation.mutate(payload)
   }
@@ -134,6 +134,7 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   const handleLessonDelete = () => {
     deleteMutation.mutate()
   }
+  
   return (
     <React.Fragment>
       <Box>
@@ -304,7 +305,20 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
             transitionTimingFunction="linear"
           >
             <Box>
-              <Text className='font-[500] truncate'>
+              {topics.data &&
+                <List className='list-disc'>
+                  {topics.data.data.map((topic: any, index: number) => (
+                    <List.Item key={index}>
+                      <Text className='font-[450] truncate'>
+                        Lesson Topic
+                      </Text>
+                    </List.Item>
+                  ))
+                  }
+                </List>
+              }
+
+              <Text className='font-[500] mt-5 truncate'>
                 Lesson Description
               </Text>
 

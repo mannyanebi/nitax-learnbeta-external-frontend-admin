@@ -1,15 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Box, Center, Flex, Text } from "@mantine/core";
 import Logo from "../brand/Logo";
 import noProfile from '../../assets/imgs/no_profile.png'
 import Link from 'next/link'
 import NavLink from "./NavLink";
 import Image from 'next/image'
+import { useQuery } from "react-query";
 import Logout from './Logout'
+import { AdminContext } from "@/contexts/AdminContext";
+import { getAdminProfile } from "@/services/admin";
 
 type Props = { mobile?: boolean }
 
 const SideNav: React.FC<Props> = ({ mobile }) => {
+  const { admin } = useContext(AdminContext)
+  const token = `bearer ${admin?.data?.access_token}`
+
+  const adminProfile = useQuery('adminProfile', () => getAdminProfile(token))
+  
   mobile = mobile ? mobile : false
 
   const [activePage, setActivePage] = useState({
@@ -163,7 +171,16 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
                   />
 
                   <Text className="truncate font-bold text-white">
-                    Emeka Felix Uzodinma
+                    {adminProfile.data &&
+                      adminProfile.data.data.name
+                    }
+
+                    {adminProfile.isLoading &&
+                      'Admin'
+                    }
+
+                    {adminProfile.isError && adminProfile.refetch()
+                    }
                   </Text>
                 </Flex>
               </Link>
