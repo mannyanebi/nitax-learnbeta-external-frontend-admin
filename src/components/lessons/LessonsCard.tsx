@@ -38,6 +38,13 @@ export const LessonsCardSkeleton = () => {
 
 type Props = { lesson: any, subjectId: number }
 
+export type TopicObjType = {
+  id: number;
+  title: string;
+  content: string;
+  video_url: string;
+};
+
 const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
@@ -134,13 +141,6 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   const handleLessonDelete = () => {
     deleteMutation.mutate()
   }
-
-  type TopicObjType = {
-    id: number;
-    title: string;
-    content: string;
-    video_url: string;
-  };
   
   return (
     <React.Fragment>
@@ -199,7 +199,7 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
                           </Box>
 
                           <Text className="text- font-semibold text-[#666666]">
-                            Add Topics
+                            Add Topic
                           </Text>
                         </Flex>
                       </UnstyledButton>

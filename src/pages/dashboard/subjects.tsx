@@ -216,9 +216,9 @@ const Subjects = () => {
 
         {subjects.data &&
           subjects.data.data.length < 1 &&
-          <EmptyState
-            message="No subjects available"
-          />
+            <EmptyState
+              message="No subjects available"
+            />
         }
 
         {subjects.isError &&

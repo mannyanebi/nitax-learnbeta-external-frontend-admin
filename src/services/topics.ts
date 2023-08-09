@@ -31,7 +31,19 @@ const addNewTopic = async (lessonId: string, token: string, payload: TopicPayloa
   return res.data;
 }
 
+const updateTopic = async (lessonId: string, topicId: string, token: string, payload: TopicPayloadType) => {
+  const updateTopicURL = `${HOST}/api/v1/admin/lessons/${lessonId}/topics/${topicId}`
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.put(updateTopicURL, payload, config)
+
+  return res.data;
+}
+
 export {
   getLessonTopics,
-  addNewTopic
+  addNewTopic,
+  updateTopic
 }
