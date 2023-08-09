@@ -2,7 +2,7 @@ import axios from "axios";
 
 const HOST = process.env.HOST;
 
-type TopicPayloadType = {
+export type TopicPayloadType = {
   lesson_id: number;
   title: string;
   content: string;
@@ -27,7 +27,7 @@ const addNewTopic = async (lessonId: string, token: string, payload: TopicPayloa
   }
 
   const res = await axios.post(addNewTopicURL, payload, config)
-  
+
   return res.data;
 }
 
