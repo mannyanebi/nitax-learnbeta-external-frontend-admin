@@ -46,7 +46,11 @@ const verifyOldPassword = async (payload: any) => {
 
 const refreshToken = async (token: any) => {
   const refreshTokenURL = `${HOST}/api/v1/admin/auth/refresh-token`;
-  const res = await axios.post(refreshTokenURL, token);
+  const config = {
+    headers: { Authorization: token }
+  }
+  
+  const res = await axios.post(refreshTokenURL, config);
 
   return res.data;
 };
@@ -57,7 +61,7 @@ const logoutAdmin = async (token: any) => {
     headers: { Authorization: token }
   }
 
-  const res = await axios.post(logoutURL, token);
+  const res = await axios.post(logoutURL, config);
 
   return res.data;
 };

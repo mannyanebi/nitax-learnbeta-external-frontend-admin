@@ -134,6 +134,13 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   const handleLessonDelete = () => {
     deleteMutation.mutate()
   }
+
+  type TopicObjType = {
+    id: number;
+    title: string;
+    content: string;
+    video_url: string;
+  };
   
   return (
     <React.Fragment>
@@ -300,17 +307,17 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
 
           <Collapse
             in={opened}
-            className='my-3'
+            className='py-3'
             transitionDuration={150}
             transitionTimingFunction="linear"
           >
             <Box>
               {topics.data &&
                 <List className='list-disc'>
-                  {topics.data.data.map((topic: any, index: number) => (
-                    <List.Item key={index}>
+                  {topics.data.data.map((topic: TopicObjType) => (
+                    <List.Item key={topic.id}>
                       <Text className='font-[450] truncate'>
-                        Lesson Topic
+                        {topic.title}
                       </Text>
                     </List.Item>
                   ))
@@ -318,7 +325,7 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
                 </List>
               }
 
-              <Text className='font-[500] mt-5 truncate'>
+              <Text className='font-[500] mt-3 truncate'>
                 Lesson Description
               </Text>
 
