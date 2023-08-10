@@ -15,6 +15,13 @@ export interface QuizQuestionType {
   lesson_id: number;
 }
 
+export interface TheoryQuestionType {
+  assessment_type: string;
+  question: string;
+  answer: string;
+  lesson_id: number;
+}
+
 const addQuizAssessment = async (lessonId: string, payload: QuizQuestionType, token: string) => {
   const addQuizAssessmentsURL = `${HOST}/api/v1/admin/lessons/${lessonId}/quiz-assessments`;
   const config = {
@@ -26,6 +33,18 @@ const addQuizAssessment = async (lessonId: string, payload: QuizQuestionType, to
   return res.data;
 };
 
+const addTheoryAssessment = async (lessonId: string, payload: TheoryQuestionType, token: string) => {
+  const addTheoryAssessmentsURL = `${HOST}/api/v1/admin/lessons/${lessonId}/theory-assessments`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.post(addTheoryAssessmentsURL, payload, config);
+
+  return res.data;
+};
+
 export {
-  addQuizAssessment
+  addQuizAssessment,
+  addTheoryAssessment
 }

@@ -215,7 +215,7 @@ export default function NewQuizAssessmentForm({ lesson_id }: Props) {
           <TextArea
             type="text"
             disabled={mutation.isLoading}
-            label='E.g: Option D'
+            label='Option D'
             maxLength={100}
             {...form.getInputProps('option_d')}
             placeholder="E.g: Uncertainty Principle"
@@ -291,6 +291,14 @@ export default function NewQuizAssessmentForm({ lesson_id }: Props) {
             },
           })}
         />
+
+        <Box className="mt-[0.2rem]">
+          {form.errors.answer &&
+            <label className="text-red-500 text-sm">
+              {form.errors.answer}
+            </label>
+          }
+        </Box>
       </Box>
 
       <Flex className="justify-end !mt-10">

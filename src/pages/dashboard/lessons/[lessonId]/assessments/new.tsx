@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import ProfileNav from "@/components/nav/ProfileNav";
 import PageLayout from "@/layouts/PageLayout";
 import NewQuizAssessmentForm from "@/components/assessment/NewQuizAssessmentForm";
+import NewTheoryAssessmentForm from "@/components/assessment/NewTheoryAssessmentForm";
 
 export default function AddAssessment() {
   const router = useRouter();
@@ -104,9 +105,9 @@ export default function AddAssessment() {
               </Tabs.Panel>
 
               <Tabs.Panel className="mt-5" value="theory" pt="xs">
-                <Box>
-                  theory
-                </Box>
+                <NewTheoryAssessmentForm
+                  lesson_id={Number(lessonId)}
+                />
               </Tabs.Panel>
             </Tabs>
           </Box>
