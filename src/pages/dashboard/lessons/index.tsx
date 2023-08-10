@@ -159,7 +159,7 @@ const Lessons = () => {
                           🎒 Class
                         </Text>
 
-                        <Text className="text-[#FAA61B] truncate font-bold text-right">
+                        <Text className="text-[#00433F] truncate font-bold text-right">
                           {activeSubject.grade_level_name}
                         </Text>
                       </Flex>
@@ -169,7 +169,7 @@ const Lessons = () => {
                           📚 Lessons
                         </Text>
 
-                        <Text className="text-[#e25a2d] truncate font-bold text-right">
+                        <Text className="text-[#00433F] truncate font-bold text-right">
                           {lessons.data &&
                             (lessons.data.data.length > 1 ?
                               lessons.data.data.length : 0
@@ -321,7 +321,7 @@ const Lessons = () => {
                         🎒 Class
                       </Text>
 
-                      <Text className="text-[#FAA61B] truncate font-bold text-right">
+                      <Text className="text-[#00433F] truncate font-bold text-right">
                         {activeSubject.grade_level_name}
                       </Text>
                     </Flex>
@@ -331,7 +331,7 @@ const Lessons = () => {
                         📚 Lessons
                       </Text>
 
-                      <Text className="text-[#e25a2d] truncate font-bold text-right">
+                      <Text className="text-[#00433F] truncate font-bold text-right">
                         {lessons.data &&
                           (lessons.data.data.length > 1 ?
                             lessons.data.data.length : 0

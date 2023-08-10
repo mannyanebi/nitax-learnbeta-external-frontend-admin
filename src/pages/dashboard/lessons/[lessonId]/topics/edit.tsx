@@ -22,8 +22,6 @@ export default function EditTopics() {
 
   const router = useRouter();
 
-  console.log('hiiiii', router.query.lessonId)
-
   const lessonId: string = typeof router.query.lessonId === 'string' ? router.query.lessonId : ''
 
   const topics = useQuery(['topics', Number(router.query.lessonId)], () => getLessonTopics(lessonId, token))
@@ -75,26 +73,26 @@ export default function EditTopics() {
 
             {topics.data &&
               topics.data.data.length < 1 &&
-                <EmptyState
-                  message="No topics available"
-                />
+              <EmptyState
+                message="No topics available"
+              />
             }
 
             {topics.isLoading &&
-              [1,2,3].map((num: number) => (
+              [1, 2, 3].map((num: number) => (
                 <EditTopicFormSkeleton key={num} />
               ))
             }
 
             {topics.isError &&
-              <RefetchButton 
+              <RefetchButton
                 retry={() => topics.refetch()}
                 message='Failed to fetch topics'
               />
             }
           </Box>
         </Box>
-      </Box>  
+      </Box>
     </PageLayout>
   )
 }

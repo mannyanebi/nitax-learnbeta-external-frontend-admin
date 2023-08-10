@@ -162,8 +162,8 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
               </UnstyledButton>
 
               <Popover
-                width={190}
-                position="bottom"
+                width={205}
+                position="left-start"
                 withArrow
                 opened={popoverOpened}
                 onChange={() => {
@@ -299,6 +299,38 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
                         }
                       </Flex>
                     </UnstyledButton>
+                  </Box>
+
+                  <Box>
+                    <Link href={`/dashboard/lessons/${lesson.id}/assessments/new`}>
+                      <UnstyledButton className="hover:bg-[#D9D9D9] py-2 px-4 w-full transition duration-75 delay-75 ease-linear">
+                        <Flex className='items-center space-x-2'>
+                          <Box>
+                            <Icon icon="ph:exam-fill" color="#666" width="16" height="16" />
+                          </Box>
+
+                          <Text className="text- font-semibold text-[#666666]">
+                            Add Assessment
+                          </Text>
+                        </Flex>
+                      </UnstyledButton>
+                    </Link>
+                  </Box>
+
+                  <Box>
+                    <Link href={`/dashboard/lessons/${lesson.id}/assessments/edit`}>
+                      <UnstyledButton className="hover:bg-[#D9D9D9] py-2 px-4 w-full transition duration-75 delay-75 ease-linear">
+                        <Flex className='items-center space-x-2'>
+                          <Box>
+                            <Icon icon="carbon:exam-mode" color="#666" width="16" height="16" />
+                          </Box>
+
+                          <Text className="text- font-semibold text-[#666666]">
+                            Edit Assessments
+                          </Text>
+                        </Flex>
+                      </UnstyledButton>
+                    </Link>
                   </Box>
                 </Popover.Dropdown>
               </Popover>

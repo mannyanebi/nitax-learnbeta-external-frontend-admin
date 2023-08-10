@@ -107,7 +107,7 @@ const AddTopics = () => {
           </Box>
 
           <Box className='mt-8'>
-            <TopicForm 
+            <TopicForm
               title={title}
               setTitle={setTitle}
               videoLink={videoLink}
