@@ -42,8 +42,20 @@ const updateTopic = async (lessonId: string, topicId: string, token: string, pay
   return res.data;
 }
 
+const deleteTopic = async (lessonId: string, topicId: string, token: string,) => {
+  const deleteTopicURL = `${HOST}/api/v1/admin/lessons/${lessonId}/topics/${topicId}`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.delete(deleteTopicURL, config);
+
+  return res.data;
+};
+
 export {
   getLessonTopics,
   addNewTopic,
-  updateTopic
+  updateTopic,
+  deleteTopic
 }

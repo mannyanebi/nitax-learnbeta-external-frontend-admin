@@ -73,6 +73,17 @@ export default function EditTopics() {
               ))
             }
 
+            <EditTopicForm
+              index={1}
+              lessonId={lessonId}
+              topic={{
+                id: 3,
+                title: "Lesson 3",
+                content: "This is the content for Lesson 3.",
+                video_url: "youtube.com/lesson3"
+              }}
+            />
+
             {topics.data &&
               topics.data.data.length < 1 &&
                 <EmptyState
