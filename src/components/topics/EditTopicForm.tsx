@@ -203,25 +203,23 @@ export default function EditTopicForm({
           </Box>
 
           <Flex className='mt-5 justify-end items-end flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3'>
-            {isDirty &&
-              <UnstyledButton
-                disabled={mutation.isLoading}
-                onClick={handleUpdateTopic}
-                type="submit"
-                className="px-8 text-sm h-12 disabled:opacity-50 w-44 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-2xl py-2 bg-[#FAA61A] text-white"
-              >
-                {mutation.isLoading ?
-                  <Icon
-                    className={`animate-spin mx-auto`}
-                    icon="icomoon-free:spinner2"
-                    color="#white"
-                    width="20"
-                    height="20"
-                  /> :
-                  'Update Topic'
-                }
-              </UnstyledButton>
-            }
+            <UnstyledButton
+              disabled={mutation.isLoading || !isDirty}
+              onClick={handleUpdateTopic}
+              type="submit"
+              className="px-8 text-sm h-12 disabled:opacity-50 w-44 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-2xl py-2 bg-[#FAA61A] text-white"
+            >
+              {mutation.isLoading ?
+                <Icon
+                  className={`animate-spin mx-auto`}
+                  icon="icomoon-free:spinner2"
+                  color="#white"
+                  width="20"
+                  height="20"
+                /> :
+                'Update Topic'
+              }
+            </UnstyledButton>
 
             <UnstyledButton
               onClick={openDelete}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import Head from "next/head";
-import { Box, Text, Flex, Modal, UnstyledButton } from "@mantine/core";
+import { Box, Text, Flex, Modal, UnstyledButton, Center } from "@mantine/core";
 import { getSubjects } from "@/services/subjects";
 import { useQuery } from "react-query";
 import { AdminContext } from "@/contexts/AdminContext";
@@ -51,16 +51,16 @@ const Lessons = () => {
         const active = {
           id: Number(subjId),
           name: '',
-          description:'',
-          grade_level_name:'',
-          created_at:'',
-          updated_at:'',
+          description: '',
+          grade_level_name: '',
+          created_at: '',
+          updated_at: '',
         }
 
         setActiveSubject(active)
       }
     }
-    
+
   }, [subjects])
 
   return (
@@ -110,17 +110,17 @@ const Lessons = () => {
 
             {subjects.data &&
               subjects.data.data.length < 1 &&
-                <Box className="font-semibold w-full border-2 border-[#E2E2E2] rounded-xl text-center text-[#777777] p-5">
-                  <Text className="mt">
-                    No subjects available
-                  </Text>
-                </Box>
+              <Box className="font-semibold w-full border-2 border-[#E2E2E2] rounded-xl text-center text-[#777777] p-5">
+                <Text className="mt">
+                  No subjects available
+                </Text>
+              </Box>
             }
 
             {subjects.isError &&
-              <RefetchButton 
+              <RefetchButton
                 retry={() => subjects.refetch()}
-                message="Failed to fetch subjects!" 
+                message="Failed to fetch subjects!"
               />
             }
           </Box>
@@ -141,30 +141,78 @@ const Lessons = () => {
           {activeSubject &&
             <Box className="px-4 sm:px-8 pb-20 md:px-10">
               <Box className="max-w-[40rem] lg:max-w-[62rem] xl:max-w-[75rem] 2xl:max-w-[85rem] mx-auto ">
-                <Box className='w-fit mx-auto mt-4'>
-                  <UnstyledButton onClick={openNewLessonModal}>
-                    <Box className="border-2 w-[285px] rounded-2xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
-                      <Box className="w-full">
-                        <Flex className="justify-center">
-                          <Box>
-                            <Text className="text-[#777777] font-semibold">
-                              Add New Lesson
-                            </Text>
+                <Box className="sm:flex sm:space-x-4 md:space-x-7 space-y-4 sm:space-y-0 sm:justify-center mt-4">
+                  <Box className="border-2 w-[285px] sm:mx-0 mx-auto rounded-2xl flex items-center h-[130px] border-[#E2E2E2] p-5">
+                    <Box className="w-full space-y-2">
+                      <Flex className="justify-between space-x-7 overflow-hidden items-center">
+                        <Text className="text-[#777777] font-semibold ">
+                          ✏️ Subject
+                        </Text>
 
-                            <Flex className="justify-center mt-4">
-                              <Box className="h-[40px] w-[40px]">
-                                <Image
-                                  alt='display icon'
-                                  src={plus_icon}
-                                  className='rounded-full h-[40px] w-[40px]'
-                                />
-                              </Box>
-                            </Flex>
-                          </Box>
-                        </Flex>
-                      </Box>
+                        <Text className="text-[#00433F] truncate font-bold text-right">
+                          {activeSubject.name}
+                        </Text>
+                      </Flex>
+
+                      <Flex className="justify-between space-x-7 overflow-hidden items-center">
+                        <Text className="text-[#777777] font-semibold ">
+                          🎒 Class
+                        </Text>
+
+                        <Text className="text-[#FAA61B] truncate font-bold text-right">
+                          {activeSubject.grade_level_name}
+                        </Text>
+                      </Flex>
+
+                      <Flex className="justify-between space-x-7 overflow-hidden items-center">
+                        <Text className="text-[#777777] font-semibold ">
+                          📚 Lessons
+                        </Text>
+
+                        <Text className="text-[#e25a2d] truncate font-bold text-right">
+                          {lessons.data &&
+                            (lessons.data.data.length > 1 ?
+                              lessons.data.data.length : 0
+                            )
+                          }
+
+                          {lessons.isLoading &&
+                            '...'
+                          }
+
+                          {lessons.isError &&
+                            '0'
+                          }
+                        </Text>
+                      </Flex>
                     </Box>
-                  </UnstyledButton>
+                  </Box>
+
+                  <Box className='w-fit mx-auto sm:mx-0'>
+                    <UnstyledButton onClick={openNewLessonModal}>
+                      <Box className="border-2 h-[130px] w-[285px] rounded-2xl flex items-center border-[#E2E2E2] border-dashed p-5">
+                        <Box className="w-full">
+                          <Flex className="justify-center">
+                            <Box>
+                              <Text className="text-[#777777] font-semibold">
+                                Add New Lesson
+                              </Text>
+
+                              <Flex className="justify-center mt-4">
+                                <Box className="h-[40px] w-[40px]">
+                                  <Image
+                                    alt='display icon'
+                                    src={plus_icon}
+                                    className='rounded-full h-[40px] w-[40px]'
+                                  />
+                                </Box>
+                              </Flex>
+                            </Box>
+                          </Flex>
+                        </Box>
+                      </Box>
+                    </UnstyledButton>
+                  </Box>
                 </Box>
 
                 <Text className='text-[#444444] mt-7 font-semibold text-lg'>
@@ -210,7 +258,7 @@ const Lessons = () => {
                   }
                 </Box>
 
-                {!lessons.isError && 
+                {!lessons.isError &&
                   <Box>
                     <Text className='text-[#444444] mt-10 font-semibold text-lg'>
                       Archived Lessons
@@ -255,31 +303,79 @@ const Lessons = () => {
                 Lessons
               </Text>
 
-              <Box className='w-fit mx-auto mt-4'>
-                <UnstyledButton onClick={openNewLessonModal}>
-                  <Box className="border-2 w-[285px] rounded-2xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
-                    <Box className="w-full">
-                      <Flex className="justify-center">
-                        <Box>
-                          <Text className="text-[#777777] font-semibold">
-                            Add New Lesson
-                          </Text>
+              <Flex className="space-x-7 mt-4 ">
+                <Box className="border-2 w-[285px] rounded-2xl flex items-center h-[130px] border-[#E2E2E2] p-5">
+                  <Box className="w-full space-y-2">
+                    <Flex className="justify-between space-x-7 overflow-hidden items-center">
+                      <Text className="text-[#777777] font-semibold ">
+                        ✏️ Subject
+                      </Text>
 
-                          <Flex className="justify-center mt-4">
-                            <Box className="h-[40px] w-[40px]">
-                              <Image
-                                alt='display icon'
-                                src={plus_icon}
-                                className='rounded-full h-[40px] w-[40px]'
-                              />
-                            </Box>
-                          </Flex>
-                        </Box>
-                      </Flex>
-                    </Box>
+                      <Text className="text-[#00433F] truncate font-bold text-right">
+                        {activeSubject.name}
+                      </Text>
+                    </Flex>
+
+                    <Flex className="justify-between space-x-7 overflow-hidden items-center">
+                      <Text className="text-[#777777] font-semibold ">
+                        🎒 Class
+                      </Text>
+
+                      <Text className="text-[#FAA61B] truncate font-bold text-right">
+                        {activeSubject.grade_level_name}
+                      </Text>
+                    </Flex>
+
+                    <Flex className="justify-between space-x-7 overflow-hidden items-center">
+                      <Text className="text-[#777777] font-semibold ">
+                        📚 Lessons
+                      </Text>
+
+                      <Text className="text-[#e25a2d] truncate font-bold text-right">
+                        {lessons.data &&
+                          (lessons.data.data.length > 1 ?
+                            lessons.data.data.length : 0
+                          )
+                        }
+
+                        {lessons.isLoading &&
+                          '...'
+                        }
+
+                        {lessons.isError &&
+                          '0'
+                        }
+                      </Text>
+                    </Flex>
                   </Box>
-                </UnstyledButton>
-              </Box>
+                </Box>
+
+                <Box className='w-fit'>
+                  <UnstyledButton onClick={openNewLessonModal}>
+                    <Box className="border-2 w-[285px] rounded-2xl flex items-center h-[130px] border-[#E2E2E2] border-dashed p-5">
+                      <Box className="w-full">
+                        <Flex className="justify-center">
+                          <Box>
+                            <Text className="text-[#777777] font-semibold">
+                              Add New Lesson
+                            </Text>
+
+                            <Flex className="justify-center mt-4">
+                              <Box className="h-[40px] w-[40px]">
+                                <Image
+                                  alt='display icon'
+                                  src={plus_icon}
+                                  className='rounded-full h-[40px] w-[40px]'
+                                />
+                              </Box>
+                            </Flex>
+                          </Box>
+                        </Flex>
+                      </Box>
+                    </Box>
+                  </UnstyledButton>
+                </Box>
+              </Flex>
 
               <Box className="space-y-4 mt-7">
                 <LessonsCard
@@ -309,10 +405,10 @@ const Lessons = () => {
                     <LessonsCardSkeleton key={lesson} />
                   ))
                 }
-                
+
                 {lessons.data &&
                   lessons.data.data.filter((l: any) => (l.is_archived === false)).map((l: any) => (
-                    <LessonsCard 
+                    <LessonsCard
                       subjectId={Number(subjectId)}
                       key={l.id}
                       lesson={l}
@@ -329,9 +425,9 @@ const Lessons = () => {
 
                 {lessons.data &&
                   lessons.data.data.length < 1 &&
-                    <EmptyState
-                      message="No lessons available"
-                    />
+                  <EmptyState
+                    message="No lessons available"
+                  />
                 }
 
                 {lessons.isError &&
@@ -342,7 +438,7 @@ const Lessons = () => {
                 }
               </Box>
 
-              {!lessons.isError && 
+              {!lessons.isError &&
                 <Box>
                   <Text className='text-[#444444] mt-10 font-semibold text-lg'>
                     Archived Lessons
@@ -367,9 +463,9 @@ const Lessons = () => {
 
                     {lessons.data &&
                       lessons.data.data.filter((l: any) => (l.is_archived === true)).length < 1 &&
-                        <EmptyState
-                          message="No archived lessons yet"
-                        />
+                      <EmptyState
+                        message="No archived lessons yet"
+                      />
                     }
                   </Box>
                 </Box>
@@ -379,7 +475,7 @@ const Lessons = () => {
 
           {!activeSubject &&
             <Box className="mt-10">
-              <EmptyState 
+              <EmptyState
                 message="Select a Subject and the Lessons will appear here"
               />
             </Box>
@@ -387,10 +483,10 @@ const Lessons = () => {
         </Box>
       </Box>
 
-      <NewLessonModal 
+      <NewLessonModal
         subjectId={Number(subjectId)}
-        opened={openedNewLessonModal} 
-        close={closeNewLessonModal} 
+        opened={openedNewLessonModal}
+        close={closeNewLessonModal}
       />
     </DashboardLayout>
   )
