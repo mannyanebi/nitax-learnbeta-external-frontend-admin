@@ -12,6 +12,7 @@ import cookie from "cookiejs";
 export default function SessionExpiredModal() {
   const Router = useRouter();
   const { admin, setAdmin } = useContext(AdminContext)
+  const token = `bearer ${admin?.data?.access_token}`
   const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function SessionExpiredModal() {
     }
   }, []);
 
-  const mutation = useMutation((data: any) => logoutAdmin(data), {
+  const mutation = useMutation(() => logoutAdmin(token), {
     onError: () => {
       toast.error('Snap! Try again')
     },
@@ -55,7 +56,7 @@ export default function SessionExpiredModal() {
     }
   })
 
-  const refreshTokenMutation = useMutation((data: any) => refreshToken(data), {
+  const refreshTokenMutation = useMutation(() => refreshToken(token), {
     onError: () => {
       renewAccessToken() // retry operation
     },
@@ -66,11 +67,11 @@ export default function SessionExpiredModal() {
   })
 
   const renewAccessToken = () => {
-    refreshTokenMutation.mutate(admin.data?.access_token)
+    refreshTokenMutation.mutate()
   };
 
   const sessionOverSignin = async () => {
-    mutation.mutate(admin.data?.access_token)
+    mutation.mutate()
   }
 
   return (

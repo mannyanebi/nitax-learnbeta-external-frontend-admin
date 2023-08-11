@@ -1,14 +1,62 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Modal, Box, Text, UnstyledButton } from '@mantine/core';
+import { Icon } from '@iconify/react';
+import { useForm } from '@mantine/form';
 import Input from '../custom/Input';
 import TextArea from '../custom/TextArea';
 import Form from '../custom/Form';
+import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from 'react-query';
+import { addLesson } from '@/services/lessons';
+import { AdminContext } from '@/contexts/AdminContext';
+
 interface Props {
   opened: boolean,
-  close: () => void
+  close: () => void,
+  subjectId: number
 }
 
-export default function NewLessonModal({ opened, close }: Props) {
+export default function NewLessonModal({ opened, close, subjectId }: Props) {
+  const { admin } = useContext(AdminContext)  
+  const queryClient = useQueryClient();
+  const token = `bearer ${admin?.data?.access_token}`
+
+  const form = useForm({
+    initialValues: {
+      title: '',
+      description: ''
+    },
+
+    validate: {
+      title: (value) => (
+        !value ? 'Lesson title is required' : null
+      ),
+      description: (value) => (
+        !value ? 'Lesson description is required' : null
+      )
+    },
+  });
+
+  const mutation = useMutation((data: any) => addLesson(subjectId.toString(), data, token), {
+    onError: () => {
+      toast.error('Failed to add new lesson')
+    },
+
+    onSuccess: () => {
+      toast.success('Lesson added successfully')
+
+      queryClient.invalidateQueries('lessons');
+
+      form.reset()
+    },
+  })
+
+  const handleAddLesson = async (values: any) => {
+    values.subject_id = subjectId
+
+    mutation.mutate(values)
+  }
+
   return (
     <React.Fragment>
       <Modal
@@ -22,38 +70,41 @@ export default function NewLessonModal({ opened, close }: Props) {
             Add New Lesson
           </Text>
 
-          <Form className='my-10'>
+          <Form 
+            onSubmit={form.onSubmit((values) => handleAddLesson(values))}
+            className='my-10'
+          >
             <Box>
               <Input
                 type="text"
-                // error={form.errors.email}
+                {...form.getInputProps('title')}
+                error={form.errors.title}
                 label='Enter Lesson Title'
                 placeholder="Lesson title"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full border-2 px-3 py-5 text-[#555555] font-sans transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                disabled={mutation.isLoading}
+                className={`w-full ${form.errors.title ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] font-sans transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
             <Box className='mt-5'>
               <TextArea
                 maxLength={80}
-                // error={form.errors.email}
+                {...form.getInputProps('description')}
+                error={form.errors.description}
                 label='Brief description of lesson'
                 placeholder="Enter lesson description"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full min-h-[5rem] resize-none border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                disabled={mutation.isLoading}
+                className={`w-full ${form.errors.description ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} min-h-[5rem] resize-none border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
             <Box className="text-center mt-8">
               <UnstyledButton
-                // disabled={mutation.isLoading}
+                disabled={mutation.isLoading}
                 type="submit"
-                className="px-8 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+                className="px-8 h-14 disabled:opacity-50 w-56 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
               >
-                {/* {mutation.isLoading ?
+                {mutation.isLoading ?
                   <Icon
                     className={`animate-spin mx-auto`}
                     icon="icomoon-free:spinner2"
@@ -61,9 +112,8 @@ export default function NewLessonModal({ opened, close }: Props) {
                     width="20"
                     height="20"
                   /> :
-                  'Sign In'
-                } */}
-                Create new lesson
+                  'Create new lesson'
+                }
               </UnstyledButton>
             </Box>
           </Form>

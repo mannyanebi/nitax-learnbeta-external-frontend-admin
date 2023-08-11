@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Head from "next/head";
 import { Box, Center, Text, Flex, UnstyledButton } from "@mantine/core";
 import ProfileNav from "@/components/nav/ProfileNav";
@@ -6,67 +6,25 @@ import PageLayout from "@/layouts/PageLayout";
 import { useRouter } from 'next/router';
 import NextLink from 'next/link'
 import backArrow from '../../../../../assets/svgs/backarrow_icon.svg'
-import EditTopicForm from "@/components/topics/EditTopicForm";
+import { Toaster } from "react-hot-toast";
+import { AdminContext } from "@/contexts/AdminContext";
+import EditTopicForm, { EditTopicFormSkeleton } from "@/components/topics/EditTopicForm";
+import { useQuery } from "react-query";
+import { getLessonTopics } from "@/services/topics";
 import Image from "next/image";
+import { TopicObjType } from "@/components/lessons/LessonsCard";
+import RefetchButton from "@/components/lessons/RefetchButton";
+import { EmptyState } from "@/components/lessons/EmptyState";
 
-const data = [
-  {
-    id: 1,
-    title: 'Numbers',
-    videoLink: 'youtube.com',
-    transcript: '<h4>Numbers youtube.com</h4>'
-  },
+export default function EditTopics() {
+  const { admin } = useContext(AdminContext)
+  const token = `bearer ${admin?.data?.access_token}`
 
-  {
-    id: 2,
-    title: 'Sets',
-    videoLink: 'facebook.com',
-    transcript: '<h4>Sets facebook.com</h4>'
-  },
-
-  {
-    id: 3,
-    title: 'Metrics',
-    videoLink: 'instagram.com',
-    transcript: '<h4>Metrics instagram.com</h4>'
-  },
-]
-
-export default function Performance() {
   const router = useRouter();
-  const [isDirty ,setIsDirty] = useState(false)
-  const [topicsArray, setTopicsArray] = useState<any>(data)
 
-  const handleUpdateTitle = (value: any, id: number) => {
-    setTopicsArray((prevTopicsArray: any) =>
-      prevTopicsArray.map((topic: any) =>
-        topic.id === id ? { ...topic, title: value } : topic
-      )
-    );
+  const lessonId: string = typeof router.query.lessonId === 'string' ? router.query.lessonId : ''
 
-    setIsDirty(true)
-  };
-
-  const handleUpdateVideoLink = (value: any, id: number) => {
-    setTopicsArray((prevTopicsArray: any) =>
-      prevTopicsArray.map((topic: any) =>
-        topic.id === id ? { ...topic, videoLink: value } : topic
-      )
-    );
-
-    setIsDirty(true)
-  };
-
-  const handleUpdateTranscript = (value: any, id: number) => {
-    setTopicsArray((prevTopicsArray: any) =>
-      prevTopicsArray.map((topic: any) =>
-        topic.id === id ? { ...topic, transcript: value } : topic
-      )
-    );
-
-    setIsDirty(true)
-  };
-
+  const topics = useQuery(['topics', Number(router.query.lessonId)], () => getLessonTopics(lessonId, token))
 
   return (
     <PageLayout>
@@ -77,6 +35,11 @@ export default function Performance() {
       </Head>
 
       <ProfileNav />
+
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+      />
 
       <Box className="w-full px-4 sm:px-8 md:px-10 mt-4">
         <Box className='w-full max-w-[40rem] lg:max-w-[62rem] xl:max-w-[65rem] mx-auto pb-20'>
@@ -97,29 +60,39 @@ export default function Performance() {
           </Box>
 
           <Box className='mt-8 space-y-10 lg:space-y-14'>
-            {topicsArray.map((topic: any, index: number) => (
-              <EditTopicForm
-                key={topic.id}
-                index={index}
-                topic={topic}
-                handleUpdateTitle={handleUpdateTitle}
-                handleUpdateVideoLink={handleUpdateVideoLink}
-                handleUpdateTranscript={handleUpdateTranscript}
-              />
-            ))}
-          </Box>
+            {topics.data &&
+              topics.data.data.map((topic: TopicObjType, index: number) => (
+                <EditTopicForm
+                  key={topic.id}
+                  index={index}
+                  lessonId={lessonId}
+                  topic={topic}
+                />
+              ))
+            }
 
-          <Flex className='mt-20 justify-end'>
-            <UnstyledButton
-              disabled={!isDirty}
-              type="submit"
-              className="px-10 h-14 disabled:opacity-50 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-2xl py-4 bg-[#FAA61A] text-white"
-            >
-              Save changes
-            </UnstyledButton>
-          </Flex>
+            {topics.data &&
+              topics.data.data.length < 1 &&
+              <EmptyState
+                message="No topics available"
+              />
+            }
+
+            {topics.isLoading &&
+              [1, 2, 3].map((num: number) => (
+                <EditTopicFormSkeleton key={num} />
+              ))
+            }
+
+            {topics.isError &&
+              <RefetchButton
+                retry={() => topics.refetch()}
+                message='Failed to fetch topics'
+              />
+            }
+          </Box>
         </Box>
-      </Box>  
+      </Box>
     </PageLayout>
   )
 }

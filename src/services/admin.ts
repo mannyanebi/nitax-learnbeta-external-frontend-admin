@@ -9,4 +9,18 @@ const uploadAvatar = async (payload: any) => {
   return res.data;
 };
 
-export { uploadAvatar }
+const getAdminProfile = async (token: any) => {
+  const getAdminProfileURL = `${HOST}/api/v1/admin/profile`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.get(getAdminProfileURL, config);
+
+  return res.data;
+};
+
+export {
+  uploadAvatar, 
+  getAdminProfile
+}

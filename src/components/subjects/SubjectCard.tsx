@@ -81,7 +81,7 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
     fontWeight: 400
   };
 
-  const editMutation = useMutation((data: any) => editSubject(data, token), {
+  const editMutation = useMutation((data: any) => editSubject(subject.id, data, token), {
     onError: () => {
       toast.error('Failed to edit subject')
     },

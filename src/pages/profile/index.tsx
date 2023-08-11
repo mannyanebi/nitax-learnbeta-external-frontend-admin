@@ -7,7 +7,6 @@ import ProfileBanner from "@/components/profile/ProfileBanner";
 import AppLayout from "@/layouts/AppLayout";
 import { Toaster } from 'react-hot-toast';
 
-
 const Profile = () => {
   return (
     <PageLayout>

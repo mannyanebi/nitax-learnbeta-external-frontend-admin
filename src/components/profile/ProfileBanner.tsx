@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { BackgroundImage, Box, Flex, Text, UnstyledButton } from "@mantine/core";
 import yellowBg from '../../assets/svgs/yellow_bg.svg'
 import Image from "next/image";
@@ -9,8 +9,16 @@ import Form from "../custom/Form";
 import Input from "../custom/Input";
 import { useMutation } from "react-query";
 import { uploadAvatar } from "@/services/admin";
+import { useQuery, UseQueryResult } from "react-query";
+import { getAdminProfile } from "@/services/admin";
+import { AdminContext } from "@/contexts/AdminContext";
 
 const ProfileBanner = () => {
+  const { admin } = useContext(AdminContext)
+  const token = `bearer ${admin?.data?.access_token}`
+
+  const adminProfile: UseQueryResult<any, unknown> = useQuery('adminProfile', () => getAdminProfile(token))
+  
   const [avatar, setAvatar] = useState<any>(noProfile)
   const [fileInputState, setFileInputState] = useState('')
   const [selectedFile, setSelectedFile] = useState()
@@ -124,7 +132,13 @@ const ProfileBanner = () => {
             </Box>
 
             <Text className="font-bold text-white mt-5 text-3xl">
-              Emeka Francis
+              {adminProfile.data &&
+                adminProfile.data.data.name
+              }
+
+              {adminProfile.isLoading &&
+                'Admin'
+              }
             </Text>
           </Flex>
         </Box>
@@ -133,7 +147,16 @@ const ProfileBanner = () => {
       <Box className="lg:hidden">
         <BackgroundImage className="rounded-xl py-6 px-4 max-w-[40rem] mx-auto" src={yellowBg.src}>
           <Text className="font-bold text-white text-3xl">
-            Emeka Francis
+            {adminProfile.data &&
+              adminProfile.data.data.name
+            }
+
+            {adminProfile.isLoading &&
+              'Admin'
+            }
+
+            {adminProfile.isError && adminProfile.refetch()
+            }
           </Text>
         </BackgroundImage>
 
@@ -189,7 +212,13 @@ const ProfileBanner = () => {
 
           <Flex className="border-2 rounded-lg mt-2 p-4 border-[#E2E2E2] text-[#555555]">
             <Text>
-              Emeka Francis
+              {adminProfile.data &&
+                adminProfile.data.data.name
+              }
+
+              {adminProfile.isLoading &&
+                'Loading...'
+              }
             </Text>
           </Flex>
         </Box>
@@ -199,7 +228,13 @@ const ProfileBanner = () => {
 
           <Flex className="border-2 rounded-lg mt-2 p-4 border-[#E2E2E2] text-[#555555]">
             <Text className="truncate">
-              emekafrancis@gmail.com
+              {adminProfile.data &&
+                adminProfile.data.data.email
+              }
+
+              {adminProfile.isLoading &&
+                'Loading...'
+              }
             </Text>
           </Flex>
         </Box>

@@ -1,3 +1,5 @@
+// depricated component. Not in use
+
 import React from "react"; 
 import { Box, Flex, Divider, Text, UnstyledButton } from "@mantine/core";
 import minus_icon from '../../assets/svgs/minus.svg'

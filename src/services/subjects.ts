@@ -35,13 +35,13 @@ const deleteSubject = async (id: any, token: any) => {
   return res.data;
 };
 
-const editSubject = async (id: any, token: any) => {
+const editSubject = async (id: any, payload: any, token: any) => {
   const deleteSubjectsURL = `${HOST}/api/v1/admin/subjects/${id}`;
   const config = {
     headers: { Authorization: token }
   }
 
-  const res = await axios.put(deleteSubjectsURL, config);
+  const res = await axios.put(deleteSubjectsURL, payload, config);
 
   return res.data;
 };
