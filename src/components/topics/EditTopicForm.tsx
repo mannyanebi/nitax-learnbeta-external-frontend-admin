@@ -232,7 +232,7 @@ export default function EditTopicForm({
         </Box>
       </Box>
 
-      {/* Delete lesson modal start */}
+      {/* Delete topic modal start */}
       <Modal
         opened={openedDelete}
         onClose={closeDelete}
@@ -275,7 +275,7 @@ export default function EditTopicForm({
           </Flex>
         </Box>
       </Modal>
-      {/* Delete lesson modal end */}
+      {/* Delete topic modal end */}
     </React.Fragment>
   )
 }

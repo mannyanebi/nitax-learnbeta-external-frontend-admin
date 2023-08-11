@@ -22,6 +22,12 @@ export interface TheoryQuestionType {
   lesson_id: number;
 }
 
+export interface UpdateTheoryQuestionType {
+  question: string;
+  answer: string;
+  lesson_id: number;
+}
+
 const addQuizAssessment = async (lessonId: string, payload: QuizQuestionType, token: string) => {
   const addQuizAssessmentsURL = `${HOST}/api/v1/admin/lessons/${lessonId}/quiz-assessments`;
   const config = {
@@ -44,7 +50,43 @@ const addTheoryAssessment = async (lessonId: string, payload: TheoryQuestionType
   return res.data;
 };
 
+const updateTheoryAssessment = async (lessonId: string, assessmentId: string, payload: UpdateTheoryQuestionType, token: string) => {
+  const updateTheoryAssessmentsURL = `${HOST}/api/v1/admin/lessons/${lessonId}/theory-assessments/${assessmentId}`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.put(updateTheoryAssessmentsURL, payload, config);
+
+  return res.data;
+};
+
+const getTheoryAssessments = async (lessonId: string, token: string) => {
+  const getTheoryAssessmentsURL = `${HOST}api/v1/admin/lessons/${lessonId}/theory-assessments`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.get(getTheoryAssessmentsURL, config);
+
+  return res.data;
+};
+
+const deleteTheoryAssessment = async (lessonId: string, assessmentId: string, token: string) => {
+  const deleteTheoryAssessmentsURL = `${HOST}/api/v1/admin/lessons/${lessonId}/theory-assessments/${assessmentId}`
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.delete(deleteTheoryAssessmentsURL, config);
+
+  return res.data;
+};
+
 export {
   addQuizAssessment,
-  addTheoryAssessment
+  addTheoryAssessment,
+  updateTheoryAssessment,
+  getTheoryAssessments,
+  deleteTheoryAssessment
 }
