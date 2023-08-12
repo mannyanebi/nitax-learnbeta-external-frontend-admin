@@ -9,9 +9,12 @@ import { useQuery } from "react-query";
 import { AdminContext } from "@/contexts/AdminContext";
 import { Box, Center, Flex, Text, Tabs } from '@mantine/core'
 import backArrow from '../../../../../assets/svgs/backarrow_icon.svg'
-import { getTheoryAssessments } from "@/services/assessment";
+import { getTheoryAssessments, getQuizAssessments } from "@/services/assessment";
 import Image from "next/image";
-import EditTheoryAssessmentForm from "@/components/assessment/EditTheoryAssessmentForm";
+import EditTheoryAssessmentForm, { EditTheoryAssessmentSkeleton } from "@/components/assessment/EditTheoryAssessmentForm";
+import { EmptyState } from "@/components/lessons/EmptyState";
+import RefetchButton from "@/components/lessons/RefetchButton";
+import EditQuizAssessmentForm, { EditQuizAssessmentSkeleton, QuizQuestion } from "@/components/assessment/EditQuizAssessmentForm";
 
 type TheoryQuestionType = {
   id: number;
@@ -30,6 +33,8 @@ export default function EditAssessments() {
   const lessonId: string = typeof router.query.lessonId === 'string' ? router.query.lessonId : ''
 
   const theoryAssessments = useQuery(['theoryAssessments', Number(router.query.lessonId)], () => getTheoryAssessments(lessonId, token))
+
+  const quizAssessments = useQuery(['quizAssessments', Number(router.query.lessonId)], () => getQuizAssessments(lessonId, token))
 
   return (
     <PageLayout>
@@ -114,42 +119,70 @@ export default function EditAssessments() {
               </Box>
 
               <Tabs.Panel className="mt-5" value="quiz" pt="xs">
+                <Box className="space-y-8 lg:space-y-20">
+                  {quizAssessments.data &&
+                    quizAssessments.data.data.map((question: QuizQuestion, index: number) => (
+                      <EditQuizAssessmentForm
+                        key={question.id}
+                        index={index}
+                        question={question}
+                      />
+                    ))
+                  }
 
+                  {quizAssessments.data &&
+                    quizAssessments.data.data.length < 1 &&
+                      <EmptyState
+                        message="No quiz question(s) available"
+                      />
+                  }
+
+                  {quizAssessments.isLoading &&
+                    [1, 2, 3].map((num: number) => (
+                      <EditQuizAssessmentSkeleton key={num} />
+                    ))
+                  }
+
+                  {quizAssessments.isError &&
+                    <RefetchButton
+                      retry={() => quizAssessments.refetch()}
+                      message='Failed to fetch quiz question(s)'
+                    />
+                  }
+                </Box>
               </Tabs.Panel>
 
               <Tabs.Panel className="mt-5" value="theory" pt="xs">
-                {/* {theoryAssessments.data &&
-                  theoryAssessments.data.data.map((question: TheoryQuestionType) => (
-                    <EditTheoryAssessmentForm
-                      key={question.id}
-                      question={question}
-                    />
-                  ))
-                } */}
-
                 <Box className="space-y-8 lg:space-y-20">
-                  {[
-                    {
-                      id: 43,
-                      question: "What is an equilateral triangle?",
-                      answer: "An equilateral triangle is a triangle in which all three sides have the same length...",
-                      assessment_type: "THEORY",
-                      lesson_id: 1,
-                    },
-                    {
-                      id: 45,
-                      question: "What is a right-angled triangle",
-                      answer: "A right triangle or right-angled triangle, or more formally an orthogonal triangle, formerly called a rectangled triangle, is a triangle in which one angle is a right angle",
-                      assessment_type: "THEORY",
-                      lesson_id: 1,
-                    }
-                  ].map((question: TheoryQuestionType, index: number) => (
-                    <EditTheoryAssessmentForm
-                      key={question.id}
-                      index={index}
-                      question={question}
+                  {theoryAssessments.data &&
+                    theoryAssessments.data.data.map((question: TheoryQuestionType, index: number) => (
+                      <EditTheoryAssessmentForm
+                        index={index}
+                        key={question.id}
+                        question={question}
+                      />
+                    ))
+                  }
+
+                  {theoryAssessments.data &&
+                    theoryAssessments.data.data.length < 1 &&
+                    <EmptyState
+                      message="No theory question(s) available"
                     />
-                  ))}
+                  }
+
+                  {theoryAssessments.isLoading &&
+                    [1, 2, 3].map((num: number) => (
+                      <EditTheoryAssessmentSkeleton key={num} />
+                    ))
+                  }
+
+                  {theoryAssessments.isError &&
+                    <RefetchButton
+                      retry={() => theoryAssessments.refetch()}
+                      message='Failed to fetch theory question(s)'
+                    />
+                  }
                 </Box>
               </Tabs.Panel>
             </Tabs>

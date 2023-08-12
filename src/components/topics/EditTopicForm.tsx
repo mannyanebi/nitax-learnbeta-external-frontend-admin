@@ -103,11 +103,11 @@ export default function EditTopicForm({
   
   const mutation = useMutation((data: TopicPayloadType) => updateTopic(lessonId, topic.id.toString(), token, data), {
     onError: () => {
-      toast.error(`Failed to update topic ${topic.id.toString()}`)
+      toast.error(`Failed to update topic ${index + 1}`)
     },
 
     onSuccess: () => {
-      toast.success(`Topic ${topic.id.toString()} updated successfully`)
+      toast.success(`Topic ${index + 1} updated successfully`)
 
       setIsDirty(false)
     },
@@ -126,11 +126,11 @@ export default function EditTopicForm({
 
   const deleteMutation = useMutation(() => deleteTopic(lessonId, topic.id.toString(), token), {
     onError: () => {
-      toast.error(`Failed to delete topic ${topic.id.toString()}`)
+      toast.error(`Failed to delete topic ${index + 1}`)
     },
 
     onSuccess: () => {
-      toast.success(`Topic ${topic.id.toString()} deleted`)
+      toast.success(`Topic ${index + 1} deleted`)
 
       queryClient.invalidateQueries('topics');
 

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Box, Divider, Text, Flex, Modal, UnstyledButton } from "@mantine/core";
+import { Box, Divider, Text, Flex, Modal, UnstyledButton, Skeleton } from "@mantine/core";
 import { useMutation, useQueryClient } from "react-query";
 import { useForm } from '@mantine/form';
 import TextArea from "../custom/TextArea";
@@ -9,6 +9,40 @@ import { Icon } from "@iconify/react";
 import { useDisclosure } from "@mantine/hooks";
 import toast from 'react-hot-toast';
 import { AdminContext } from '@/contexts/AdminContext';
+
+export function EditTheoryAssessmentSkeleton() {
+  return (
+    <Box className="mx-auto max-w-[40rem] space-y-4">
+      <Divider
+        color='#E7EAED'
+        size="md"
+        label={
+          <Skeleton className='w-28 h-4 rounded-lg' />
+        }
+      />
+
+      <Box className='w-full'>
+        <Skeleton className='w-full h-[13.5rem]' />
+      </Box>
+
+      <Divider
+        color='#E7EAED'
+        size="md"
+        label={
+          <Skeleton className='w-40 h-4 rounded-lg' />
+        }
+      />
+
+      <Box className='w-full'>
+        <Skeleton className='w-full h-[13.5rem]' />
+      </Box>
+
+      <Flex className="justify-end">
+        <Skeleton className="w-40 h-11 rounded-lg"/>
+      </Flex>
+    </Box>
+  )
+}
 
 type Props = {
   question: {
