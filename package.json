@@ -2,6 +2,7 @@
   "name": "learn-beta-admin",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://164.90.157.22:8080",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

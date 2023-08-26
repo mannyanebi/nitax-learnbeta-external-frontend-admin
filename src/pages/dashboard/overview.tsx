@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import Head from "next/head";
 import hero_banner from '../../assets/svgs/hero_banner.svg'
@@ -9,8 +9,24 @@ import users_green from '../../assets/svgs/users_group_green.svg'
 import { TotalSkeleton } from "@/components/analytics/TotalSkeleton";
 import UserTable from "@/components/user/UserTable";
 import users_yellow from '../../assets/svgs/users_group_yellow.svg'
+import axios from "axios";
 
 const Overview = () => {
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get('/api/v1/admin/test');
+        console.log(res.data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <DashboardLayout>
       <Head>

@@ -92,7 +92,7 @@ const Subscriptions = () => {
         <Flex className="mt-4 justify-end space-x-4 md:space-x-1 lg:space-x-4 items-center">
           <Box>
             <Select
-              placeholder='Billing Type'
+              placeholder='Billing Method'
               data={[
                 { value: 'airtime', label: 'Airtime' },
                 { value: 'psp', label: 'PSP' },
@@ -108,7 +108,7 @@ const Subscriptions = () => {
                   paddingBottom: '0.5rem',
                   paddingLeft: '1rem',
                   paddingRight: '1rem',
-                  width: '8.5rem',
+                  width: '9.5rem',
                   color: "#483D3D",
                   fontWeight: 500,
                   height: '2.5rem',
@@ -176,35 +176,7 @@ const Subscriptions = () => {
                 { value: 'expired', label: 'Expired' },
                 { value: 'canceled', label: 'Canceled' },
               ]}
-              styles={() => ({
-                input: {
-                  border: '2px solid #E9E5E5',
-                  '&:focus-within': {
-                    borderColor: '#FAA61A',
-                  },
-                  borderRadius: '0.5rem',
-                  paddingTop: '0.5rem',
-                  paddingBottom: '0.5rem',
-                  paddingLeft: '1rem',
-                  paddingRight: '1rem',
-                  width: '7.5rem',
-                  color: "#483D3D",
-                  fontWeight: 500,
-                  height: '2.5rem',
-                  "::placeholder": {
-                    color: "#483D3D",
-                    fontWeight: 500,
-                  },
-                },
-                item: {
-                  '&[data-selected]': {
-                    '&, &:hover': {
-                      backgroundColor: '#FAA61A',
-                      color: 'white',
-                    },
-                  }
-                },
-              })}
+ 
             />
           </Box>
 
@@ -258,7 +230,7 @@ const Subscriptions = () => {
 
                 <Grid.Col className="3xl:max-w-none max-w-[15rem]" span="auto">
                   <Text className='text-[#555555] font-semibold'>
-                    Billing Type
+                    Billing Method
                   </Text>
                 </Grid.Col>
 
