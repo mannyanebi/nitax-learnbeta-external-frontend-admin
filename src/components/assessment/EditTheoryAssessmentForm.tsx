@@ -38,7 +38,7 @@ export function EditTheoryAssessmentSkeleton() {
       </Box>
 
       <Flex className="justify-end">
-        <Skeleton className="w-40 h-11 rounded-lg"/>
+        <Skeleton className="w-40 h-11 rounded-lg" />
       </Flex>
     </Box>
   )
@@ -68,7 +68,7 @@ export default function EditTheoryAssessmentForm({
   const [isDirty, setIsDirty] = useState(false)
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const [
     openedDelete,
@@ -102,6 +102,8 @@ export default function EditTheoryAssessmentForm({
     onSuccess: () => {
       toast.success(`Question ${index + 1} updated successfully`)
 
+      queryClient.invalidateQueries(['quizAssessments', question.lesson_id]);
+
       setIsDirty(false)
     },
   })
@@ -114,7 +116,9 @@ export default function EditTheoryAssessmentForm({
     onSuccess: () => {
       toast.success(`Question ${index + 1} deleted successfully`)
 
-      queryClient.invalidateQueries('theoryAssessments');
+      queryClient.invalidateQueries(['quizAssessments', question.lesson_id]);
+
+      closeDelete()
     },
   })
 

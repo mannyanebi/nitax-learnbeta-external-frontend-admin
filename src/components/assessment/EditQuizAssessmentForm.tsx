@@ -23,7 +23,7 @@ export function EditQuizAssessmentSkeleton() {
       />
 
       <Box className='w-full'>
-        <Skeleton className='w-full h-[13.5rem]'/>
+        <Skeleton className='w-full h-[13.5rem]' />
       </Box>
 
       <Divider
@@ -104,7 +104,7 @@ export default function EditQuizAssessmentForm({ index, question }: Props) {
   const [isDirty, setIsDirty] = useState(false)
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const [
     openedDelete,
@@ -191,10 +191,10 @@ export default function EditQuizAssessmentForm({ index, question }: Props) {
       toast.error(`Failed to update question ${index + 1}`)
     },
 
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success(`Question ${index + 1} updated successfully`)
 
-      form.reset()
+      queryClient.invalidateQueries(['quizAssessments', question.lesson_id]);
     },
   })
 
@@ -222,7 +222,9 @@ export default function EditQuizAssessmentForm({ index, question }: Props) {
     onSuccess: () => {
       toast.success(`Question ${index + 1} deleted successfully`)
 
-      queryClient.invalidateQueries('quizAssessments');
+      queryClient.invalidateQueries(['quizAssessments', question.lesson_id]);
+
+      closeDelete()
     },
   })
 

@@ -30,7 +30,7 @@ interface Props {
 
 const ClassCard: React.FC<Props> = ({ gradeLevel }) => {
   const { admin } = useContext(AdminContext)
-  const token = `beearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
   const queryClient = useQueryClient();
   const [popoverOpened, setPopoverOpened] = useState(false);
 
@@ -126,14 +126,15 @@ const ClassCard: React.FC<Props> = ({ gradeLevel }) => {
           </Text>
 
           <Text className="text-center mt-8">
-            This class will be deleted and all content in it will be lost and students in this class will be removed
+            This class will be deleted and all content in it will be lost and students in this class will be removed. Please contact Tech Support.
           </Text>
 
           <Flex className="justify-between space-y-3 my-10 sm:space-y-0 sm:space-x-4 sm:flex-row flex-col">
             <UnstyledButton
               onClick={handleClassDelete}
-              disabled={deleteMutation.isLoading}
-              className="px-8 h-12 w-full  text-center font-bold transition disabled:opacity-50 duration-75 delay-75 ease-linear hover:bg-red-500 rounded-full py-3 bg-[#E2E2E2] text-[#888888] hover:text-white"
+              // disabled={deleteMutation.isLoading}
+              disabled={true}
+              className="px-8 h-12 w-full disabled:cursor-not-allowed text-center font-bold transition disabled:opacity-50 duration-75 delay-75 ease-linear hover:bg-red-500 rounded-full py-3 bg-[#E2E2E2] text-[#888888] hover:text-white"
             >
               {deleteMutation.isLoading ?
                 <Icon

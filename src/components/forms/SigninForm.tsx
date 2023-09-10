@@ -67,14 +67,14 @@ const SigninForm: React.FC<Props> = ({
       </Box>
 
       <Box className="space-y-4 mt-4">
-        <Box>
+        {/* <Box>
           <Link
             href='/auth/forgot_password'
             className="text-sm w-fit hover:underline hover:text-[#FAA61A]"
           >
             Forgot Password?
           </Link>
-        </Box>
+        </Box> */}
 
         <Box>
           <Checkbox

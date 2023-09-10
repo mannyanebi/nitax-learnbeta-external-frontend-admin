@@ -33,43 +33,59 @@ export const UserCardSkeleton = () => {
   )
 }
 
-const UserCard = () => {
+interface Props {
+  student: any;
+  index: number;
+  currentPage: number;
+  usersPerPage: number
+}
+
+const UserCard: React.FC<Props> = ({ student, index, currentPage, usersPerPage }) => {
+
+  const pageNumber = (currentPage - 1) * usersPerPage + index + 1;
+
   return (
     <Box>
       <Grid>
         <Grid.Col className="3xl:max-w-none max-w-[6rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
-            01
+            {pageNumber}
           </Text>
         </Grid.Col>
 
         <Grid.Col className="3xl:max-w-none max-w-[14rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
-            Malachi Mark
+            {student.name}
           </Text>
         </Grid.Col>
 
         <Grid.Col className="3xl:max-w-none max-w-[18rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
-            johndoe@gmail.com
+            {student.email}
           </Text>
         </Grid.Col>
 
         <Grid.Col className="3xl:max-w-none max-w-[13rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
-            Akwa Ibom, Nigeria
+            {student.location}
           </Text>
         </Grid.Col>
 
         <Grid.Col className="3xl:max-w-none max-w-[15rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
-            Premium Plan
+            {student.subscription?.subscription_plan ?
+              student.subscription?.subscription_plan :
+              'Not Subscribed'
+            }
           </Text>
         </Grid.Col>
 
         <Grid.Col className="3xl:max-w-nonemax-w-[6rem]" span="auto">
           <Text className='text-[#555555] truncate font-semibold'>
-            Grade 5
+            {student.grade_level ?
+              student.grade_level :
+              'Not Enrolled'
+            }
           </Text>
         </Grid.Col>
       </Grid>

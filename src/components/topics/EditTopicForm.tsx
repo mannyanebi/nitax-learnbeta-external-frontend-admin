@@ -27,7 +27,7 @@ export function EditTopicFormSkeleton() {
           color='#E7EAED'
           className='animate-pulse'
           label={
-            <Skeleton className='w-16 h-5 rounded-md'/>
+            <Skeleton className='w-16 h-5 rounded-md' />
           }
         />
       </Box>
@@ -72,7 +72,7 @@ export default function EditTopicForm({
 }: Props) {
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const [title, setTitle] = useState<string>(topic.title)
   const [videoLink, setVideoLink] = useState<string>(topic.video_url)
@@ -100,7 +100,7 @@ export default function EditTopicForm({
       setTranscript(e.editor.getHTML());
     },
   });
-  
+
   const mutation = useMutation((data: TopicPayloadType) => updateTopic(lessonId, topic.id.toString(), token, data), {
     onError: () => {
       toast.error(`Failed to update topic ${index + 1}`)

@@ -36,7 +36,7 @@ export default function NewSubjectsModal({ opened, close }: Props) {
   const theme = useMantineTheme();
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const gradeLevels = useQuery('gradeLevels', () => getGradeLevels(token))
 
@@ -81,7 +81,7 @@ export default function NewSubjectsModal({ opened, close }: Props) {
   const handleAddSubject = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!value.name){
+    if (!value.name) {
       setError({
         ...error,
         name: 'Subject title is required'
@@ -101,7 +101,7 @@ export default function NewSubjectsModal({ opened, close }: Props) {
         ...error,
         class: 'Subject class is required'
       })
-    } else {      
+    } else {
       const data = {
         name: value.name,
         img: file,
@@ -114,17 +114,17 @@ export default function NewSubjectsModal({ opened, close }: Props) {
   }
 
   const gradeLevelsState = gradeLevels?.data?.data.map((level: any) => ({
-      value: level.id.toString(),
-      label: level.name
+    value: level.id.toString(),
+    label: level.name
   })) || []
 
   return (
     <React.Fragment>
-      <Modal 
+      <Modal
         size='lg'
         radius={12}
-        opened={opened} 
-        onClose={close} 
+        opened={opened}
+        onClose={close}
         centered
       >
         <Box className='px-2 sm:px-8 md:px-10'>
@@ -170,7 +170,8 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                     ...error,
                     bannerImg: null
                   })
-                  setFile(files)}
+                  setFile(files)
+                }
                 }
                 onReject={() => null}
                 maxSize={3 * 1024 ** 2}
@@ -187,10 +188,10 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                       />
 
                       <Box className='text-center mt-4'>
-                        <Text 
-                          inline 
+                        <Text
+                          inline
                           color={theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]}
-                          className='font-semibold' 
+                          className='font-semibold'
                           size="md"
                         >
                           Release to drop file
@@ -219,17 +220,17 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                       </Box>
                     </Box>
                   </Dropzone.Reject>
-                  
+
                   <Box>
                     <Dropzone.Idle>
                       {file.length > 0 ?
                         <Box>
-                          <Icon 
-                            icon="teenyicons:tick-circle-solid" 
-                            color="#777777" 
-                            width="40" 
-                            height="40" 
-                            className='mx-auto' 
+                          <Icon
+                            icon="teenyicons:tick-circle-solid"
+                            color="#777777"
+                            width="40"
+                            height="40"
+                            className='mx-auto'
                           />
 
 
@@ -386,7 +387,7 @@ export default function NewSubjectsModal({ opened, close }: Props) {
                 type="submit"
                 className="px-8 h-14 disabled:opacity-50 w-60 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
               >
-                {mutation.isLoading ? 
+                {mutation.isLoading ?
                   <Icon
                     className={`animate-spin mx-auto`}
                     icon="icomoon-free:spinner2"

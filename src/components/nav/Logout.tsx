@@ -10,7 +10,7 @@ import { AdminContext } from "@/contexts/AdminContext";
 const Logout: React.FC = () => {
   const { admin, setAdmin } = useContext(AdminContext)
   const Router = useRouter();
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const mutation = useMutation(() => logoutAdmin(token))
 
@@ -21,7 +21,7 @@ const Logout: React.FC = () => {
     setAdmin(null)
     Router.push('/auth/signin')
   }
-  
+
   return (
     <Center className="h-[60px] w-full">
       <UnstyledButton onClick={handleLogout} className='w-[160px] text-left rounded-xl transition duration-75 delay-50 ease-linear px-[15px] py-[12px] text-white text-sm font-[600]'>

@@ -21,7 +21,7 @@ interface FormValues {
 
 export default function NewTheoryAssessmentForm({ lesson_id }: Props) {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const initialValues: FormValues = {
     assessment_type: 'THEORY',

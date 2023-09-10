@@ -16,7 +16,7 @@ interface Props {
 export default function NewClassModal({ opened, close }: Props) {
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
   const [newClass, setNewClass] = useState('')
   const [error, setError] = useState<null | string>(null)
 

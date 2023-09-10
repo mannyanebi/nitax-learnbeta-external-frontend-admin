@@ -1,15 +1,18 @@
-import React, { useState } from "react";
-import { Skeleton, UnstyledButton, Modal, Box, Text, Flex } from "@mantine/core";
+import React, { useContext } from "react";
+import { Skeleton, UnstyledButton, Modal, Box, Text, Select, Radio } from "@mantine/core";
 import Input from '../custom/Input';
 import { useDisclosure } from "@mantine/hooks";
-import { ItemCard } from "./NewPlanModal";
 import Form from '../custom/Form';
-import Image from 'next/image'
-import plus_icon from '../../assets/svgs/plus.svg'
+import toast from 'react-hot-toast';
+import { Icon } from "@iconify/react";
+import { AdminContext } from "@/contexts/AdminContext";
+import { useMutation, useQueryClient } from 'react-query'
+import { useForm } from "@mantine/form";
+import { editSubscription } from "@/services/subscriptions";
 
 export const PlanCardSkeleton = () => {
   return (
-    <Box className='w-full border-2 rounded-3xl border-[#E2E2E2] p-6 text-center space-y-5'>
+    <Box className='w-full border-2 h-[18rem] rounded-3xl border-[#E2E2E2] p-6 text-center space-y-6'>
       <Skeleton className="mx-auto w-40 h-3" />
       <Skeleton className="mx-auto w-full h-3" />
       <Skeleton className={`h-3 w-3 rounded-full mx-auto`} />
@@ -23,10 +26,7 @@ export const PlanCardSkeleton = () => {
   )
 }
 
-type NoPlanProps = { 
-  colorTheme: string
-  item: any
-}
+type NoPlanProps = { colorTheme: string; item: any }
 
 export const NoPlanCard: React.FC<NoPlanProps> = ({ colorTheme, item }) => {
   return (
@@ -59,53 +59,134 @@ export const NoPlanCard: React.FC<NoPlanProps> = ({ colorTheme, item }) => {
   )
 }
 
-interface Props {
-  style: any
+interface Props { style: any; sub: any }
+
+export type FormValuesType = {
+  name: string;
+  description: string;
+  price: number;
+  duration: number;
+  subjects_allowed: number;
+  is_active: string | null;
+  radioValue: string
 }
 
-function getRandomColor(colors: string[]) {
-  const randomIndex = Math.floor(Math.random() * colors.length);
-  return colors[randomIndex];
-}
+const PlanCard: React.FC<Props> = ({ style, sub }) => {
+  const queryClient = useQueryClient();
 
-const PlanCard: React.FC<Props> = ({ style }) => {
+  const { admin } = useContext(AdminContext)
+  const token = `Bearer ${admin?.data?.access_token}`
   const [opened, { open, close }] = useDisclosure(false);
-  const [items, setItems] = useState<any>([])
-  const [itemName, setItemName] = useState('')
 
-  const handleAddItem = () => {
-    const newItem = {
-      name: itemName,
-      id: items.length + 1
-    }
-    items.push(newItem)
-    setItemName('')
-  }
-
-  const colors = [
-    'red',
-    'yellow',
-    'green',
-    'blue',
-    'purple',
-  ];
+  const colors = [ 'red', 'green', 'blue', 'purple'];
 
   function getRandomColor() {
     const randomIndex = Math.floor(Math.random() * colors.length);
     return colors[randomIndex];
   }
-
   const color = getRandomColor()
+
+  const formValues: FormValuesType = {
+    name: sub.name,
+    description: sub.description,
+    price: sub.price,
+    duration: sub.duration,
+    subjects_allowed: sub.subjects_allowed,
+    is_active: sub.active ? 'true' : 'false',
+    radioValue: sub.subjects_allowed === -1 ? 'all' : 'custom'
+  }
+
+  const form = useForm({
+    initialValues: formValues,
+
+    validate: {
+      name: (value) => {
+        if (!value) {
+          return 'Name is required';
+        }
+        return null;
+      },
+      description: (value) => {
+        if (!value) {
+          return 'Description is required';
+        }
+        return null;
+      },
+      price: (value) => {
+        if (!value) {
+          return 'Price is required';
+        }
+        return null;
+      },
+      duration: (value) => {
+        if (!value) {
+          return 'Duration is required';
+        }
+        return null;
+      },
+      subjects_allowed: (value, values) => {
+        const numericValue = Number(value);
+        if (values.radioValue !== 'all' && (numericValue <= 0 || numericValue === -1)) {
+          return 'Subjects allowed must be more than 0';
+        }
+        return null;
+      },
+      is_active: (value) => {
+        if (value === undefined || value === null) {
+          return 'Active status is required';
+        }
+        return null;
+      },
+      radioValue: (value) => {
+        if (!value) {
+          return 'Select subject type';
+        }
+        return null;
+      },
+    }
+  });
+
+  const editMutation = useMutation((data: any) => editSubscription(data, sub.id.toString(), token), {
+    onError: (error: any) => {
+      toast.error(error.response.data.data)
+    },
+    onSuccess: () => {
+      toast.success('Subcription plan updated!')
+
+      queryClient.invalidateQueries('subscriptions');
+
+      close()
+    },
+  })
+
+  const handleSubmit = () => {
+    let subjectsAllowedValue = form.values.subjects_allowed;
+
+    if (form.values.radioValue === 'all') {
+      subjectsAllowedValue = -1;
+    }
+
+    const data = {
+      name: form.values.name,
+      description: form.values.description,
+      price: Number(form.values.price),
+      duration: Number(form.values.duration), 
+      subjects_allowed: Number(subjectsAllowedValue),
+      is_active: form.values.is_active === 'true' ? true : false,
+    };
+
+    editMutation.mutate(data);
+  };
 
   return (
     <React.Fragment>
       <Box style={style} className='w-full border-2 rounded-3xl border-[#E2E2E2] p-6 text-center space-y-5'>
         <Text className={`text-${color}-500 font-semibold text-lg`}>
-          Premium Plan
+          {sub.name}
         </Text>
 
         <Text className="font-bold text-[#666666] text-2xl">
-          &#x20A6;5,000
+          &#x20A6;{sub.price}
         </Text>
 
         <Box className={`h-3 w-3 bg-${color}-500 rounded-full mx-auto`} />
@@ -120,7 +201,7 @@ const PlanCard: React.FC<Props> = ({ style }) => {
             textOverflow: 'ellipsis',
           }}
         >
-          Access to just one subjects and its lessons
+          {sub.description}
         </Text>
 
         <Box className="hidden">
@@ -153,86 +234,179 @@ const PlanCard: React.FC<Props> = ({ style }) => {
           </Text>
 
           <Form
-            onSubmit={(e: any) => {
-              e.preventDefault()
-            }}
+            onSubmit={form.onSubmit(() => handleSubmit())}
             className='my-10'
           >
             <Box>
               <Input
                 type="text"
-                // error={form.errors.email}
+                {...form.getInputProps('name')}
+                disabled={editMutation.isLoading}
                 label='Plan Name'
                 placeholder="Enter Name for Plan"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                className={`w-full ${form.errors.name ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+              />
+            </Box>
+
+            <Box className='mt-5'>
+              <Input
+                type="text"
+                {...form.getInputProps('description')}
+                disabled={editMutation.isLoading}
+                label='Plan Description'
+                placeholder="Enter Description for Plan"
+                className={`w-full border-2 ${form.errors.description ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
             <Box className='mt-5'>
               <Input
                 type="number"
-                // error={form.errors.email}
-                label='Plan Price'
+                label='Plan Price ₦'
                 placeholder="Enter Plan Price"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                {...form.getInputProps('price')}
+                disabled={editMutation.isLoading}
+                className={`w-full ${form.errors.price ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
-            <Box className='mt-5 space-y-1'>
-              <Text className="text-sm text-[#343434]">
-                Plan Items
-              </Text>
-
-              {items.map((item: any) => (
-                <ItemCard
-                  key={item.id}
-                  item={item}
-                  items={items}
-                  setItems={setItems}
-                />
-              ))}
-
-              <Flex className='w-full space-x-4 items-center'>
-                <Box className='w-full'>
-                  <Input
-                    type="text"
-                    value={itemName}
-                    onChange={({ target }) => {
-                      setItemName(target.value)
-                    }}
-                    placeholder="Enter item"
-                    className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 border-[#E2E2E2] focus:outline-[#FAA61A] rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
-                  />
-                </Box>
-
-                <Box>
-                  <UnstyledButton
-                    type='button'
-                    disabled={!itemName ? true : false}
-                    onClick={handleAddItem}
-                    className='bg-[#00433F] hover:bg-[#00433fcf] px-6 py-[1rem] disabled:hover:cursor-not-allowed rounded-md transition duration-75 delay-75 ease-linear'
-                  >
-                    <Image
-                      src={plus_icon}
-                      alt='control icon'
-                      className='w-[30px] h-[30px]'
-                    />
-                  </UnstyledButton>
-                </Box>
-              </Flex>
+            <Box className='mt-5'>
+              <Input
+                type="number"
+                label='Plan Duration'
+                placeholder="Enter Duration for Plan"
+                {...form.getInputProps('duration')}
+                disabled={editMutation.isLoading}  
+                className={`w-full ${form.errors.duration ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+              />
             </Box>
 
-            <Box className="text-center mt-28">
-              <UnstyledButton
-                // disabled={mutation.isLoading}
-                type="submit"
-                className="px-8 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+            <Box>
+              <Radio.Group
+                value={form.values.radioValue}
+                onChange={(val) => {
+                  if(val !== null) {
+                    form.setValues({
+                      ...form.values,
+                      radioValue: val
+                    })
+                  }
+                }}
+                label={
+                  <label className="text-sm !text-[#585858]">
+                    Subjects Allowed
+                  </label>
+                }
+                className='mt-5'
               >
-                {/* {mutation.isLoading ?
+                <Box className={`border-2 space-y-3 rounded-lg p-3 ${form.errors.radioValue ? 'border-red-500' : null}`}>
+                  <Radio
+                    label="All Subjects"
+                    color="yellow"
+                    value='all'
+                    disabled={editMutation.isLoading}
+                  />
+
+                  <Radio
+                    label="Custom"
+                    color="yellow"
+                    value='custom'
+                    disabled={editMutation.isLoading}
+                  />
+
+                  {form.values.radioValue === 'custom' &&
+                    <Box className='mt-5'>
+                      <Input
+                        type="number"
+                        label='No of Subjects'
+                        {...form.getInputProps('subjects_allowed')}
+                        disabled={editMutation.isLoading}  
+                        placeholder="Enter Number of Subjects"
+                        className={`w-full ${form.errors.radioValue ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                      />
+                    </Box>
+                  }
+                </Box>
+              </Radio.Group>
+
+              <div className="mt-[0.2rem]">
+                {form.errors.radioValue &&
+                  <label className="text-red-500 text-sm">
+                    {form.errors.radioValue}
+                  </label>
+                }
+              </div>
+            </Box>
+
+            <Box className='mt-5'>
+              <Select
+                label={
+                  <label className="text-sm !text-[#585858]">
+                    Plan Status
+                  </label>
+                }
+                placeholder='Select Plan Status'
+                value={form.values.is_active}
+                disabled={editMutation.isLoading}
+                onChange={(val) => {
+                  if(val !== null){                    
+                    form.setValues({
+                      ...form.values,
+                      is_active: val
+                    })
+                  }
+                }}
+                data={[
+                  { value: 'true', label: 'Active' },
+                  { value: 'false', label: 'Inactive' }
+                ]}
+                styles={() => ({
+                  input: {
+                    border: form.errors.is_active ? '2px solid red' : '2px solid #E9E5E5',
+                    '&:focus-within': {
+                      borderColor: '#FAA61A',
+                    },
+                    borderRadius: '0.5rem',
+                    paddingTop: '0.5rem',
+                    paddingBottom: '0.5rem',
+                    paddingLeft: '1rem',
+                    paddingRight: '1rem',
+                    width: '100%',
+                    color: "#483D3D",
+                    fontWeight: 500,
+                    height: '3.7rem',
+                    "::placeholder": {
+                      color: "#483D3D",
+                      fontWeight: 500,
+                    },
+                  },
+                  item: {
+                    '&[data-selected]': {
+                      '&, &:hover': {
+                        backgroundColor: '#FAA61A',
+                        color: 'white',
+                      },
+                    }
+                  },
+                })}
+              />
+
+              <Box className="mt-[0.2rem]">
+                {form.errors.is_active &&
+                  <label className="text-red-500 text-sm">
+                    {form.errors.is_active}
+                  </label>
+                }
+              </Box>
+            </Box>
+
+            <Box className="text-center mt-20">
+              <UnstyledButton
+                disabled={editMutation.isLoading}
+                type="submit"
+                className="px-8 h-14 w-48 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+              >
+                {editMutation.isLoading ?
                   <Icon
                     className={`animate-spin mx-auto`}
                     icon="icomoon-free:spinner2"
@@ -240,9 +414,8 @@ const PlanCard: React.FC<Props> = ({ style }) => {
                     width="20"
                     height="20"
                   /> :
-                  'Sign In'
-                } */}
-                Save Changes
+                  'Save Changes'
+                }
               </UnstyledButton>
             </Box>
           </Form>

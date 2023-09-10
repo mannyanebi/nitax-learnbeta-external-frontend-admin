@@ -17,9 +17,9 @@ interface Props {
 }
 
 export default function NewLessonModal({ opened, close, subjectId }: Props) {
-  const { admin } = useContext(AdminContext)  
+  const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const form = useForm({
     initialValues: {
@@ -45,7 +45,7 @@ export default function NewLessonModal({ opened, close, subjectId }: Props) {
     onSuccess: () => {
       toast.success('Lesson added successfully')
 
-      queryClient.invalidateQueries('lessons');
+      queryClient.invalidateQueries(['lessons', subjectId]);
 
       form.reset()
     },
@@ -70,7 +70,7 @@ export default function NewLessonModal({ opened, close, subjectId }: Props) {
             Add New Lesson
           </Text>
 
-          <Form 
+          <Form
             onSubmit={form.onSubmit((values) => handleAddLesson(values))}
             className='my-10'
           >

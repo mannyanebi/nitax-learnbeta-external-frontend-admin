@@ -13,7 +13,7 @@ import { AdminContext } from "@/contexts/AdminContext";
 
 const ProfileNav = () => {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const adminProfile = useQuery('adminProfile', () => getAdminProfile(token))
 

@@ -26,7 +26,7 @@ type TheoryQuestionType = {
 
 export default function EditAssessments() {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const router = useRouter();
 
@@ -132,9 +132,9 @@ export default function EditAssessments() {
 
                   {quizAssessments.data &&
                     quizAssessments.data.data.length < 1 &&
-                      <EmptyState
-                        message="No quiz question(s) available"
-                      />
+                    <EmptyState
+                      message="No quiz question(s) available"
+                    />
                   }
 
                   {quizAssessments.isLoading &&

@@ -19,7 +19,7 @@ import { SubjectType } from "../subjects";
 
 const Lessons = () => {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
   const [activeSubject, setActiveSubject] = useState<null | SubjectType>(null)
 
   const subjectId = activeSubject ? activeSubject.id.toString() : ''
@@ -50,9 +50,9 @@ const Lessons = () => {
       if (subjId !== null) {
         const active = {
           id: Number(subjId),
-          name: '',
-          description: '',
-          grade_level_name: '',
+          name: '...',
+          description: '...',
+          grade_level_name: '...',
           created_at: '',
           updated_at: '',
         }
@@ -60,8 +60,7 @@ const Lessons = () => {
         setActiveSubject(active)
       }
     }
-
-  }, [subjects])
+  }, [subjects.data])
 
   return (
     <DashboardLayout>
@@ -75,20 +74,6 @@ const Lessons = () => {
             <Text className='text-[#444444] font-semibold text-lg'>
               Subjects
             </Text>
-
-            <SubjectControl
-              setActiveSubject={setActiveSubject}
-              activeSubject={activeSubject}
-              openMobile={openMobile}
-              subject={{
-                id: 2,
-                name: "English",
-                description: "English Language.",
-                grade_level_name: "Grade 1",
-                created_at: "2023-06-06T02:08:26.127289",
-                updated_at: "2023-06-06T02:08:26.127373"
-              }}
-            />
 
             {subjects.isLoading &&
               [1, 2, 3, 4, 5, 6].map((subj: number) => (
@@ -236,7 +221,7 @@ const Lessons = () => {
                     ))
                   }
 
-                  {lessons.data &&
+                  {lessons.data && lessons.data.data.length > 0 &&
                     lessons.data.data.filter((l: any) => (l.is_archived === false)).length < 1 &&
                     <EmptyState
                       message="No active lessons yet"
@@ -333,7 +318,7 @@ const Lessons = () => {
 
                       <Text className="text-[#00433F] truncate font-bold text-right">
                         {lessons.data &&
-                          (lessons.data.data.length > 1 ?
+                          (lessons.data.data.length > 0 ?
                             lessons.data.data.length : 0
                           )
                         }
@@ -378,28 +363,6 @@ const Lessons = () => {
               </Flex>
 
               <Box className="space-y-4 mt-7">
-                <LessonsCard
-                  subjectId={Number(subjectId)}
-                  lesson={{
-                    id: 2,
-                    title: "Addition",
-                    description: "Addition is one of the four basic operations of arithmetic, the other three being subtraction, multiplication and division.",
-                    subject_name: "Mathematics",
-                    is_archived: true
-                  }}
-                />
-
-                <LessonsCard
-                  subjectId={Number(subjectId)}
-                  lesson={{
-                    id: 2,
-                    title: "Addition",
-                    description: "Addition is one of the four basic operations of arithmetic, the other three being subtraction, multiplication and division.",
-                    subject_name: "Mathematics",
-                    is_archived: false
-                  }}
-                />
-
                 {lessons.isLoading &&
                   [1, 2, 3, 4].map((lesson: number) => (
                     <LessonsCardSkeleton key={lesson} />
@@ -416,7 +379,7 @@ const Lessons = () => {
                   ))
                 }
 
-                {lessons.data &&
+                {lessons.data && lessons.data.data.length > 0 &&
                   lessons.data.data.filter((l: any) => (l.is_archived === false)).length < 1 &&
                   <EmptyState
                     message="No active lessons yet"
@@ -461,7 +424,7 @@ const Lessons = () => {
                       ))
                     }
 
-                    {lessons.data &&
+                    {lessons.data && 
                       lessons.data.data.filter((l: any) => (l.is_archived === true)).length < 1 &&
                       <EmptyState
                         message="No archived lessons yet"

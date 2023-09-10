@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Head from "next/head";
 import { Box, Tabs, Text, Flex, UnstyledButton, Center } from "@mantine/core";
 import plus_icon from '../../../assets/svgs/plus_icon.svg'
@@ -11,8 +11,16 @@ import NewVoucherModal from "@/components/subscriptions/NewVoucherModal";
 import backArrow from '../../../assets/svgs/backarrow_icon.svg'
 import Link from "next/link";
 import VoucherCard, { VoucherCardSkeleton } from "@/components/subscriptions/VoucherCard";
+import { AdminContext } from "@/contexts/AdminContext";
+import { useQuery } from 'react-query'
+import { getSubscriptionPlans } from "@/services/subscriptions";
+import RefetchButton from "@/components/lessons/RefetchButton";
 
 const NewSubscriptions = () => {
+  const { admin } = useContext(AdminContext)
+  const token = `Bearer ${admin?.data?.access_token}`
+  const subscriptions = useQuery('subscriptions', () => getSubscriptionPlans(token))
+
   const [openedPlan, { open: openPlan, close: closePlan }] = useDisclosure(false);
   const [openedVoucher, { open: openVoucher, close: closeVoucher }] = useDisclosure(false);
 
@@ -86,40 +94,53 @@ const NewSubscriptions = () => {
           </Box>
 
           <Tabs.Panel className="mt-5 lg:mt-8" value="plans" pt="xs">
-            <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:max-w-[50rem] mx-auto">
-              {[1, 2, 4, 5, 6].map((item, index) => (
+            <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:max-w-[45rem] mx-auto">
+              {subscriptions.data &&
+                subscriptions.data.data.map((sub: any, index: number) => (
                 <PlanCard
                   key={index}
+                  sub={sub}
                   style={{ order: index === 2 ? -1 : index }}
                 />
               ))}
 
-              {/* {[1, 2].map((item, index) => (
-                <PlanCardSkeleton 
-                  key={index}
-                />
-              ))} */}
-
-              {/* {[
-                {
-                  color: 'purple',
-                  header: 'Did you forget to add a plan?',
-                  description: "Plans are necessary for market growth!"
-                },
-                {
-                  color: 'yellow',
-                  header: 'You have no active plans set. Look right!',
-                  description: "Quick! Add a plan. We need revenue!"
-
-                }
-               ].map((item, index) => (
-                 <NoPlanCard
-                    key={index}
-                    item={item}
-                   colorTheme={item.color}
+              {subscriptions.isLoading &&
+                [1, 2].map((num: number) => (
+                  <PlanCardSkeleton 
+                    key={num}
                   />
                 ))
-              } */}
+              }
+
+              {subscriptions.data &&
+                subscriptions.data.data.length < 1 &&
+                [
+                  {
+                    color: 'purple',
+                    header: 'Did you forget to add a plan?',
+                    description: "Plans are necessary for market growth!"
+                  },
+                  {
+                    color: 'yellow',
+                    header: 'You have no active plans set. Look right!',
+                    description: "Quick! Add a plan. We need revenue!"
+
+                  }
+                ].map((item, index) => (
+                  <NoPlanCard
+                      key={index}
+                      item={item}
+                      colorTheme={item.color}
+                    />
+                  ))
+              }
+
+              {subscriptions.isError &&
+                <RefetchButton
+                  retry={() => subscriptions.refetch()}
+                  message="Failed to fetch subscription plans!"
+                />
+              }
 
               <UnstyledButton onClick={openPlan} className="h-full">
                 <Box className="border-2 rounded-3xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">

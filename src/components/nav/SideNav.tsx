@@ -14,10 +14,10 @@ type Props = { mobile?: boolean }
 
 const SideNav: React.FC<Props> = ({ mobile }) => {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const adminProfile = useQuery('adminProfile', () => getAdminProfile(token))
-  
+
   mobile = mobile ? mobile : false
 
   const [activePage, setActivePage] = useState({
@@ -33,7 +33,6 @@ const SideNav: React.FC<Props> = ({ mobile }) => {
   useEffect(() => {
     const page = window.location.href.split("?")[0].split("/").pop()
     const url = window.location.href.split("/")
-    console.log(page)
 
     if (page === "overview") {
       setActivePage({

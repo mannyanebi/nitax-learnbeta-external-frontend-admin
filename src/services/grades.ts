@@ -26,6 +26,7 @@ const addGradeLevel = async (payload: any, token: any) => {
 
 const deleteGradeLevel = async (id: any, token: any) => {
   const deleteGradeLevelURL = `${HOST}/api/v1/admin/grade-levels/${id}`;
+  
   const config = {
     headers: { Authorization: token }
   }

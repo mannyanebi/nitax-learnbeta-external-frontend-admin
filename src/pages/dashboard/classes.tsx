@@ -22,7 +22,7 @@ type GradeLevelType = {
 
 const Classes = () => {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
   const [opened, { open, close }] = useDisclosure(false);
 
   const gradeLevels = useQuery('gradeLevels', () => getGradeLevels(token))
@@ -32,14 +32,14 @@ const Classes = () => {
       <Head>
         <title>Dashboard | Classes</title>
       </Head>
-      
+
       <Box className="px-4 sm:px-8 md:pl-8 md:pr-14 lg:pr-20 mt-5 lg:mt-8">
         <Box className="lg:flex lg:justify-between space-y-3 lg:space-y-0 lg:space-x-6 sm:space-y-4 xl:max-w-[45rem] mx-auto">
           {gradeLevels.isLoading &&
             <TotalSkeleton />
           }
 
-          {gradeLevels.data || gradeLevels.isError &&
+          {gradeLevels.data &&
             <Box className="border-2 w-full rounded-xl border-[#E2E2E2] p-5">
               <Flex className="h-full xl:hidden items-center justify-between">
                 <Flex className="items-center space-x-3">
@@ -57,7 +57,7 @@ const Classes = () => {
                 </Flex>
 
                 <Text className="text-[#444444] font-bold text-xl">
-                  {gradeLevels?.data?.data?.length > 1 ?
+                  {gradeLevels?.data?.data?.length > 0 ?
                     gradeLevels?.data?.data?.length : 0
                   }
                 </Text>
@@ -79,9 +79,53 @@ const Classes = () => {
                 </Flex>
 
                 <Text className="text-[#444444] text-center font-bold text-2xl">
-                  {gradeLevels?.data?.data?.length > 1 ?
+                  {gradeLevels?.data?.data?.length > 0 ?
                     gradeLevels?.data?.data?.length : 0
                   }
+                </Text>
+              </Box>
+            </Box>
+          }
+
+          {gradeLevels.isError &&
+            <Box className="border-2 w-full rounded-xl border-[#E2E2E2] p-5">
+              <Flex className="h-full xl:hidden items-center justify-between">
+                <Flex className="items-center space-x-3">
+                  <Box className="h-[40px] w-[40px]">
+                    <Image
+                      alt='display icon'
+                      src={people_group}
+                      className='rounded-full h-[40px] w-[40px]'
+                    />
+                  </Box>
+
+                  <Text className="text-[#777777] font-semibold text-lg">
+                    Total Number of Classes
+                  </Text>
+                </Flex>
+
+                <Text className="text-[#444444] font-bold text-xl">
+                  0
+                </Text>
+              </Flex>
+
+              <Box className="hidden xl:block">
+                <Flex className="items-center space-x-8">
+                  <Box className="h-[40px] w-[40px]">
+                    <Image
+                      alt='display icon'
+                      src={people_group}
+                      className='rounded-full h-[40px] w-[40px]'
+                    />
+                  </Box>
+
+                  <Text className="text-[#777777] font-semibold">
+                    Total Number of Classes
+                  </Text>
+                </Flex>
+
+                <Text className="text-[#444444] text-center font-bold text-2xl">
+                  0
                 </Text>
               </Box>
             </Box>

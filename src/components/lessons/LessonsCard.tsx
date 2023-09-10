@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Box, Skeleton, Collapse, Popover, Modal,  Flex, Text, UnstyledButton, List } from '@mantine/core'
+import { Box, Skeleton, Collapse, Popover, Modal, Flex, Text, UnstyledButton, List } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks';
 import yellow_arrow from '../../assets/svgs/yellow_arrow_up.svg'
 import { useQuery } from 'react-query';
@@ -25,7 +25,7 @@ export const LessonsCardSkeleton = () => {
     <Box>
       <Box className='rounded-2xl p-5 border-2 border-[#E2E2E2]'>
         <Flex className='justify-between items-center'>
-          <Skeleton className='w-20 md:w-72 h-3'/>
+          <Skeleton className='w-20 md:w-72 h-3' />
           <Flex className='items-center space-x-2'>
             <Skeleton className='w-7 h-7 rounded-full' />
             <Skeleton className='w-7 h-7 rounded-full' />
@@ -48,7 +48,7 @@ export type TopicObjType = {
 const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
-  const token =  `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const topics = useQuery(['topics', lesson.id], () => getLessonTopics(lesson.id.toString(), token))
 
@@ -133,7 +133,11 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   }
 
   const handleArchive = (status: boolean) => {
-    const payload = { is_archived: status }
+    const payload = { 
+      is_archived: status, 
+      title: lesson.title,
+      description: lesson.description
+    }
 
     archiveMutation.mutate(payload)
   }
@@ -141,7 +145,7 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
   const handleLessonDelete = () => {
     deleteMutation.mutate()
   }
-  
+
   return (
     <React.Fragment>
       <Box>
@@ -173,11 +177,11 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
                 shadow="md"
               >
                 <Popover.Target>
-                  <UnstyledButton 
+                  <UnstyledButton
                     onClick={() => {
                       setPopoverOpened((v: any) => !v)
                       lesson.is_archived === true && setArchived(!archived)
-                    }}               
+                    }}
                   >
                     <Image
                       alt="icon"
@@ -223,7 +227,7 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
                   </Box>
 
                   <Box>
-                    <UnstyledButton 
+                    <UnstyledButton
                       onClick={() => {
                         openEdit()
                         setPopoverOpened(false)
@@ -272,7 +276,7 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
                   </Box>
 
                   <Box>
-                    <UnstyledButton 
+                    <UnstyledButton
                       onClick={() => {
                         openArchive()
                         setPopoverOpened(false)
@@ -292,7 +296,7 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
                         {lesson.is_archived ?
                           <Text className="text- font-semibold text-[#666666]">
                             Unarchive
-                          </Text> : 
+                          </Text> :
                           <Text className="text- font-semibold text-[#666666]">
                             Archive Lesson
                           </Text>
@@ -387,7 +391,7 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
             Edit Lesson
           </Text>
 
-          <Form 
+          <Form
             onSubmit={editForm.onSubmit((values) => handleEditLesson(values))}
             className='my-10'
           >
@@ -492,8 +496,8 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
       >
         <Box className='px-2 sm:px-8 md:px-10'>
           <Text className='font-semibold text-center text-lg'>
-            {lesson.is_archived ? 
-              'Unarchive Lesson' : 
+            {lesson.is_archived ?
+              'Unarchive Lesson' :
               'Archive Lesson'
             }
           </Text>

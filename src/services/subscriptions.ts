@@ -13,6 +13,42 @@ const getLessonTopics = async (lessonId: string, token: string) => {
   return res.data;
 };
 
+const getSubscriptionPlans = async (token: string) => {
+  const getSubscriptionPlansURL = `${HOST}/api/v1/admin/subscription-plans`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.get(getSubscriptionPlansURL, config);
+
+  return res.data;
+};
+
+const editSubscription = async (payload: any, planId: string, token: string) => {
+  const editSubURL = `${HOST}/api/v1/admin/subscription-plans/${planId}`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.put(editSubURL, payload, config);
+
+  return res.data;
+};
+
+const addSubscription = async (payload: any, token: string) => {
+  const addSubURL = `${HOST}/api/v1/admin/subscription-plans`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.post(addSubURL, payload, config);
+
+  return res.data;
+};
+
 export {
-  getLessonTopics 
+  getLessonTopics,
+  editSubscription,
+  addSubscription,
+  getSubscriptionPlans
 }

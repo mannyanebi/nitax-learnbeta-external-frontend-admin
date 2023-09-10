@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, Text, Flex, Radio, Pagination, Popover, UnstyledButton, Center } from "@mantine/core";
 import Image from "next/image";
 import filter_icon from '../../assets/svgs/filter.svg'
 import emptyState from '../../assets/svgs/empty_state.svg'
 import UserCard from "./UserCard";
 import Input from "../custom/Input";
-import { UserCardSkeleton } from "./UserCard";
 
-const UserTableEmpty = () => {
+export const UserTableEmpty = () => {
   return (
     <Box>
       <Center>
@@ -15,10 +14,10 @@ const UserTableEmpty = () => {
           <Image
             alt='empty state icon'
             src={emptyState}
-            className='w-40 h-40 animate-pulse'
+            className='w-40 h-40 animate-pulse mx-auto'
           />
 
-          <Text className='text-[#555555] text-xl mt-5 font-semibold'>
+          <Text className='text-[#555555] text-xl mt-5 text-center font-semibold'>
             No Users Found
           </Text>
         </Box>
@@ -27,15 +26,73 @@ const UserTableEmpty = () => {
   )
 }
 
-const UserTable = () => {
-  const [filter, setFilter] = useState<any>()
+export const NoMatch = () => {
+  return (
+    <Box>
+      <Center>
+        <Box>
+          <Image
+            alt='empty state icon'
+            src={emptyState}
+            className='w-40 h-40 animate-pulse mx-auto'
+          />
+
+          <Text className='text-[#555555] text-xl mt-5 text-center font-semibold'>
+            No matching users found
+          </Text>
+        </Box>
+      </Center>
+    </Box>
+  )
+}
+
+type Props = { students: any }
+
+const UserTable: React.FC<Props> = ({ students }) => {
+  const [users, setUsers] = useState<any>(students.data.data)
+  const [query, setQuery] = useState('')
+  const [filter, setFilter] = useState('')
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 10; 
+
+  useEffect(() => {
+    filterUsers();
+  }, [filter, query]);
+
+  const filterUsers = () => {
+    let filteredUsers = [...students.data.data];
+
+    // Check if a filter is selected
+    if (filter === 'grade') {
+      // Filter based on grade_level
+      filteredUsers = filteredUsers.filter((user) =>
+        user.grade_level && user.grade_level.toLowerCase().includes(query.toLowerCase())
+      );
+    } else if (filter === 'location') {
+      // Filter based on location
+      filteredUsers = filteredUsers.filter((user) =>
+        user.location && user.location.toLowerCase().includes(query.toLowerCase())
+      );
+    } else if (filter === 'plan') {
+      // Filter based on subscription_plan (if available)
+      filteredUsers = filteredUsers.filter((user) =>
+        user.subscription &&
+        user.subscription.subscription_plan &&
+        user.subscription.subscription_plan.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+    setUsers(filteredUsers);
+
+    setCurrentPage(1); // Reset to the first page when filters change
+  };
+
+  const startIndex = (currentPage - 1) * usersPerPage;
+  const endIndex = startIndex + usersPerPage;
 
   return (
     <React.Fragment>
-      {/* <Box className="mt-10">
-        <UserTableEmpty />
-      </Box> */}
-
       <Box>
         <Box className="w-full min-w-[75rem]">
           <Grid className="bg-[#FFF6E8] rounded-lg py-2">
@@ -75,11 +132,11 @@ const UserTable = () => {
                   Class
                 </Text>
 
-                <Box>
-                  <Popover 
-                    width={210} 
-                    position="bottom" 
-                    withArrow 
+                <Box className="relative">
+                  <Popover
+                    width={210}
+                    position="bottom"
+                    withArrow
                     shadow="md"
                   >
                     <Popover.Target>
@@ -90,7 +147,7 @@ const UserTable = () => {
                           alt='filter icon'
                           className="w-3 h-3"
                         />
-                      </UnstyledButton>                    
+                      </UnstyledButton>
                     </Popover.Target>
 
                     <Popover.Dropdown>
@@ -99,8 +156,8 @@ const UserTable = () => {
                       </Text>
 
                       <Box className="mt-3">
-                        <Radio.Group 
-                          className="space-y-3" 
+                        <Radio.Group
+                          className="space-y-3"
                           name="filterBy"
                           value={filter}
                           onChange={(val) => setFilter(val)}
@@ -114,6 +171,10 @@ const UserTable = () => {
                           {filter === 'grade' &&
                             <Input
                               type="text"
+                              value={query}
+                              onChange={({ target }) => {
+                                setQuery(target.value)
+                              }}
                               placeholder="Enter grade"
                               className="w-28 border-[#E2E2E2] focus:outline-[#FAA61A] border-2 px-2 py-1 rounded-sm text-[#555555] placeholder:text-sm mt-2 transition duration-75 delay-75 ease-linear placeholder:text-[#555555]"
                             />
@@ -125,32 +186,54 @@ const UserTable = () => {
                             color="yellow"
                           />
 
+                          {filter === 'location' &&
+                            <Input
+                              type="text"
+                              value={query}
+                              onChange={({ target }) => {
+                                setQuery(target.value)
+                              }}
+                              placeholder="Enter location"
+                              className="w-28 border-[#E2E2E2] focus:outline-[#FAA61A] border-2 px-2 py-1 rounded-sm text-[#555555] placeholder:text-sm mt-2 transition duration-75 delay-75 ease-linear placeholder:text-[#555555]"
+                            />
+                          }
+
                           <Radio
                             label="Subscriptiion Plan"
-                            value='subscriptionPlan'
+                            value='plan'
                             color="yellow"
                           />
+
+                          {filter === 'plan' &&
+                            <Input
+                              type="text"
+                              value={query}
+                              onChange={({ target }) => {
+                                setQuery(target.value)
+                              }}
+                              placeholder="Enter plan"
+                              className="w-28 border-[#E2E2E2] focus:outline-[#FAA61A] border-2 px-2 py-1 rounded-sm text-[#555555] placeholder:text-sm mt-2 transition duration-75 delay-75 ease-linear placeholder:text-[#555555]"
+                            />
+                          }
                         </Radio.Group>
                       </Box>
 
                       {filter &&
-                        <Flex className="space-x-3 mt-3">
+                        <Box className="mt-3">
                           <UnstyledButton
-                            onClick={() => setFilter(null)}
-                            className="px-2 w-full text-center text-sm font-bold transition duration-75 delay-75 ease-linear hover:bg-[#888888] text-[#888888] rounded-full py-2 bg-[#E2E2E2] hover:text-white"
+                            onClick={() => setFilter('')}
+                            className="px-2 w-20 text-center text-sm font-bold transition duration-75 delay-75 ease-linear hover:bg-[#888888] text-[#888888] rounded-full py-2 bg-[#E2E2E2] hover:text-white"
                           >
                             Clear
                           </UnstyledButton>
-
-                          <UnstyledButton
-                            className="px-2 w-full text-center text-sm font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-2 bg-[#FAA61A] text-white"
-                          >
-                            Filter
-                          </UnstyledButton>
-                        </Flex>
+                        </Box>
                       }
                     </Popover.Dropdown>
                   </Popover>
+                  
+                  {filter &&
+                    <Box className="h-2 w-2 animate-ping rounded-full bg-yellow-500 absolute z-10 top-0 right-0" />
+                  }
                 </Box>
               </Flex>
             </Grid.Col>
@@ -158,21 +241,34 @@ const UserTable = () => {
         </Box>
 
         <Box className="w-full min-w-[75rem] mt-5 space-y-5">
-          <UserCard />
-          <UserCard />
-          <UserCard />
-          <UserCard />
-          <UserCard />
-          <UserCard />
-          <UserCard />
-          <UserCard />
-          <UserCard />
-          <UserCard />
+          {users.length === 0 ?
+            (
+              <Box className="mt-4 lg:mt-7 w-full">
+                <NoMatch />
+              </Box>
+            ) :
+            users.slice(startIndex, endIndex).map((student: any, index: number) => (
+              <UserCard
+                index={index}
+                key={student.id}
+                usersPerPage={usersPerPage}
+                currentPage={currentPage}
+                student={student}
+              />
+            ))
+          }
         </Box>
 
-        <Flex className="2xl:justify-end mt-8">
-          <Pagination total={3} color="yellow" radius="xl" />
-        </Flex>
+        {users.length > 0 &&
+          <Flex className="2xl:justify-end mt-8">
+            <Pagination 
+              total={Math.ceil(users.length / usersPerPage)} 
+              onChange={(newPage) => setCurrentPage(newPage)}
+              color="yellow" 
+              radius="xl" 
+            />
+          </Flex>
+        }
       </Box>
     </React.Fragment>
   )

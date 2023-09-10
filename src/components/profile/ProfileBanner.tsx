@@ -15,10 +15,10 @@ import { AdminContext } from "@/contexts/AdminContext";
 
 const ProfileBanner = () => {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const adminProfile: UseQueryResult<any, unknown> = useQuery('adminProfile', () => getAdminProfile(token))
-  
+
   const [avatar, setAvatar] = useState<any>(noProfile)
   const [fileInputState, setFileInputState] = useState('')
   const [selectedFile, setSelectedFile] = useState()
@@ -34,10 +34,10 @@ const ProfileBanner = () => {
   const previewFile = (file: any) => {
     const reader = new FileReader();
 
-    if(file) {
+    if (file) {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        console.log('Img',file)
+        console.log('Img', file)
         setAvatar(reader.result);
         setIsTouched(true)
       };
@@ -112,7 +112,7 @@ const ProfileBanner = () => {
 
               {isTouched &&
                 <Form className="text-center mt-2">
-                  <UnstyledButton 
+                  <UnstyledButton
                     onClick={handleSubmitFile}
                     className="transition duration-75 w-20 text-center delay-75 ease-linear hover:bg-[#da9217] px-2 font-bold text-xs py-1 bg-[#FAA61A] text-white"
                   >
@@ -239,7 +239,7 @@ const ProfileBanner = () => {
           </Flex>
         </Box>
 
-        <Box>
+        {/* <Box>
           <Text className="text-sm font-light">Password</Text>
 
           <Flex className="border-2 items-center justify-between rounded-lg mt-2 p-4 border-[#E2E2E2] text-[#555555]">
@@ -253,7 +253,7 @@ const ProfileBanner = () => {
               </UnstyledButton>
             </Link>
           </Flex>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   )
