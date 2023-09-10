@@ -132,13 +132,22 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
         description: 'Subject description is required'
       })
     } else {
-      const data = {
-        name: value.name,
-        img: file,
-        description: value.description,
-      }
+      // Convert file to base64-encoded string here
+      const reader = new FileReader();
 
-      editMutation.mutate(data)
+      reader.onload = () => {
+        const base64String = reader.result as string;
+
+        const data = {
+          name: value.name,
+          img: base64String, // Use the base64 string here
+          description: value.description,
+        };
+
+        editMutation.mutate(data);
+      };
+
+      reader.readAsDataURL(file[0]);
     }
   }
 
@@ -149,6 +158,7 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
           <Image
             alt="subject banner"
             src={subjectIcon}
+            // src={subject.img}
             className='w-full h-[127px] object-cover object-center rounded-xl hover:brightness-75 hover:scale-125 transition duration-200 delay-75 ease-linear'
           />
         </Box>
