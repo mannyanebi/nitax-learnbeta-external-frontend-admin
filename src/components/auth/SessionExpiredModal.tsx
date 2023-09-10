@@ -12,7 +12,7 @@ import cookie from "cookiejs";
 export default function SessionExpiredModal() {
   const Router = useRouter();
   const { admin, setAdmin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
   const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
@@ -75,9 +75,9 @@ export default function SessionExpiredModal() {
   }
 
   return (
-    <Modal 
-      opened={opened} 
-      onClose={close} 
+    <Modal
+      opened={opened}
+      onClose={close}
       centered
       trapFocus={false}
       withCloseButton={false}
@@ -91,12 +91,12 @@ export default function SessionExpiredModal() {
         color: 'black',
         blur: 5
       }}
-      transitionProps={{ 
-        duration: 100, 
-        timingFunction: 'linear' 
+      transitionProps={{
+        duration: 100,
+        timingFunction: 'linear'
       }}
     >
-      <UnstyledButton 
+      <UnstyledButton
         disabled={mutation.isLoading}
         onClick={sessionOverSignin}
         className='bg-[#00433F] disabled:opacity-50 px-6 py-3 transition duration-75 delay-75 ease-linear font-semibold text-white w-28 h-12 rounded-md hover:bg-[#00433fc5]'>
@@ -107,7 +107,7 @@ export default function SessionExpiredModal() {
             color="#white"
             width="20"
             height="20"
-          /> : 
+          /> :
           "Sign in"
         }
       </UnstyledButton>

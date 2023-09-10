@@ -13,7 +13,7 @@ import { AdminContext } from "@/contexts/AdminContext";
 
 const TopNav = () => {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const adminProfile = useQuery('adminProfile', () => getAdminProfile(token))
 
@@ -29,12 +29,12 @@ const TopNav = () => {
             </Link>
           </Box>
 
-          <Burger 
-            className="md:hidden" 
-            size='md' 
-            color="#FAA61A" 
-            opened={opened} 
-            onClick={toggle} 
+          <Burger
+            className="md:hidden"
+            size='md'
+            color="#FAA61A"
+            opened={opened}
+            onClick={toggle}
           />
 
           <Box className="hidden md:block">

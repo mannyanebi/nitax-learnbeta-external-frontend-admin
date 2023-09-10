@@ -27,7 +27,7 @@ export function EditTopicFormSkeleton() {
           color='#E7EAED'
           className='animate-pulse'
           label={
-            <Skeleton className='w-16 h-5 rounded-md'/>
+            <Skeleton className='w-16 h-5 rounded-md' />
           }
         />
       </Box>
@@ -72,7 +72,7 @@ export default function EditTopicForm({
 }: Props) {
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const [title, setTitle] = useState<string>(topic.title)
   const [videoLink, setVideoLink] = useState<string>(topic.video_url)
@@ -100,14 +100,14 @@ export default function EditTopicForm({
       setTranscript(e.editor.getHTML());
     },
   });
-  
+
   const mutation = useMutation((data: TopicPayloadType) => updateTopic(lessonId, topic.id.toString(), token, data), {
     onError: () => {
-      toast.error(`Failed to update topic ${topic.id.toString()}`)
+      toast.error(`Failed to update topic ${index + 1}`)
     },
 
     onSuccess: () => {
-      toast.success(`Topic ${topic.id.toString()} updated successfully`)
+      toast.success(`Topic ${index + 1} updated successfully`)
 
       setIsDirty(false)
     },
@@ -126,11 +126,11 @@ export default function EditTopicForm({
 
   const deleteMutation = useMutation(() => deleteTopic(lessonId, topic.id.toString(), token), {
     onError: () => {
-      toast.error(`Failed to delete topic ${topic.id.toString()}`)
+      toast.error(`Failed to delete topic ${index + 1}`)
     },
 
     onSuccess: () => {
-      toast.success(`Topic ${topic.id.toString()} deleted`)
+      toast.success(`Topic ${index + 1} deleted`)
 
       queryClient.invalidateQueries('topics');
 
@@ -232,7 +232,7 @@ export default function EditTopicForm({
         </Box>
       </Box>
 
-      {/* Delete lesson modal start */}
+      {/* Delete topic modal start */}
       <Modal
         opened={openedDelete}
         onClose={closeDelete}
@@ -275,7 +275,7 @@ export default function EditTopicForm({
           </Flex>
         </Box>
       </Modal>
-      {/* Delete lesson modal end */}
+      {/* Delete topic modal end */}
     </React.Fragment>
   )
 }

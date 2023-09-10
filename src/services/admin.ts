@@ -11,6 +11,7 @@ const uploadAvatar = async (payload: any) => {
 
 const getAdminProfile = async (token: any) => {
   const getAdminProfileURL = `${HOST}/api/v1/admin/profile`;
+  
   const config = {
     headers: { Authorization: token }
   }

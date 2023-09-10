@@ -26,7 +26,7 @@ export type SubjectType = {
 
 const Subjects = () => {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
   const [opened, { open, close }] = useDisclosure(false);
   const subjects = useQuery('subjects', () => getSubjects(token))
 
@@ -35,7 +35,7 @@ const Subjects = () => {
       <Head>
         <title>Dashboard | Subjects</title>
       </Head>
-      
+
       <Box className="px-4 sm:px-8 md:pl-8 md:pr-14 lg:pr-20 mt-5 lg:mt-8">
         <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 sm:gap-4 max-w-[57.5rem] xl:grid-cols-3">
           <Box className="hidden xl:block" />
@@ -62,7 +62,7 @@ const Subjects = () => {
                 </Flex>
 
                 <Text className="text-[#444444] font-bold text-xl">
-                  {subjects.data.data.length > 1 ?
+                  {subjects.data.data.length > 0 ?
                     subjects.data.data.length : 0
                   }
                 </Text>
@@ -179,22 +179,22 @@ const Subjects = () => {
           </UnstyledButton>
         </Box>
 
-        <NewSubjectsModal 
+        <NewSubjectsModal
           close={close}
           opened={opened}
         />
 
-        <Divider 
+        <Divider
           className="mt-5 lg:mt-8"
-          my="xs" 
+          my="xs"
           size='sm'
-          labelProps={{ 
-            style: { 
+          labelProps={{
+            style: {
               fontSize: '1.125rem',
               fontWeight: 600
-            } 
+            }
           }}
-          label="Subject" 
+          label="Subject"
         />
 
         <Box className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-6 sm:gap-4 max-w-[57.5rem] sm:grid-cols-2 xl:grid-cols-3">
@@ -206,7 +206,7 @@ const Subjects = () => {
 
           {subjects.data &&
             subjects.data.data.map((subject: SubjectType) => (
-              <SubjectCard 
+              <SubjectCard
                 key={subject.id}
                 subject={subject}
               />
@@ -216,9 +216,9 @@ const Subjects = () => {
 
         {subjects.data &&
           subjects.data.data.length < 1 &&
-            <EmptyState
-              message="No subjects available"
-            />
+          <EmptyState
+            message="No subjects available"
+          />
         }
 
         {subjects.isError &&

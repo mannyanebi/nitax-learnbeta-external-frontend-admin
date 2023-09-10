@@ -1,55 +1,115 @@
-import React, { useState } from 'react';
-import { Modal, Box, Text, Flex, UnstyledButton } from '@mantine/core';
+import React, { useContext } from 'react';
+import { Modal, Box, Text, Radio, UnstyledButton } from '@mantine/core';
+import { useMutation, useQueryClient } from 'react-query'
+import { Icon } from "@iconify/react";
+import toast from 'react-hot-toast';
 import Input from '../custom/Input';
 import Form from '../custom/Form';
-import Image from 'next/image'
-import plus_icon from '../../assets/svgs/plus.svg'
-import minus_icon from '../../assets/svgs/minus.svg'
+import { useForm } from "@mantine/form";
+import { AdminContext } from "@/contexts/AdminContext";
+import { addSubscription } from '@/services/subscriptions';
 
-export function ItemCard({ item, items, setItems }: any) {
-  const handleRemoveItem = () => {
-    const newItemsArray = items.filter((i: any) => i.id !== item.id);
-    setItems(newItemsArray)
-  };
+type Props = { opened: boolean; close: () => void }
 
-  return (
-    <Flex className='space-x-4 items-center'>
-      <Box className='w-full py-4'>
-        <Text className='truncate'>
-          {item.name}
-        </Text>
-      </Box>
-
-      <Box>
-        <UnstyledButton type='button' onClick={handleRemoveItem} className='bg-[#00433F] hover:bg-[#00433fcf] px-6 py-[0.8rem] rounded-md transition duration-75 delay-75 ease-linear'>
-          <Image
-            src={minus_icon}
-            alt='control icon'
-            className='w-[30px] h-[30px]'
-          />
-        </UnstyledButton>
-      </Box>
-    </Flex>
-  )
-}
-
-interface Props {
-  opened: boolean,
-  close: () => void
+export type FormValuesType = {
+  name: string;
+  description: string;
+  price: string;
+  duration: number | string;
+  subjects_allowed: string | number;
+  radioValue: string
 }
 
 export default function NewPlanModal({ opened, close }: Props) {
-  const [items, setItems] = useState<any>([])
-  const [itemName, setItemName] = useState('')
+  const queryClient = useQueryClient();
 
-  const handleAddItem = () => {
-    const newItem = {
-      name: itemName,
-      id: items.length + 1
-    }
-    items.push(newItem)
-    setItemName('')
+  const { admin } = useContext(AdminContext)
+  const token = `Bearer ${admin?.data?.access_token}`
+
+  const formValues: FormValuesType = {
+    name: '',
+    description: '',
+    price: '',
+    duration: 30,
+    subjects_allowed: -1,
+    radioValue: ''
   }
+
+  const form = useForm({
+    initialValues: formValues,
+
+    validate: {
+      name: (value) => {
+        if (!value) {
+          return 'Name is required';
+        }
+        return null;
+      },
+      description: (value) => {
+        if (!value) {
+          return 'Description is required';
+        }
+        return null;
+      },
+      price: (value) => {
+        if (!value) {
+          return 'Price is required';
+        }
+        return null;
+      },
+      duration: (value) => {
+        if (!value) {
+          return 'Duration is required';
+        }
+        return null;
+      },
+      subjects_allowed: (value, values) => {
+        const numericValue = Number(value);
+        if (values.radioValue !== 'all' && (numericValue <= 0 || numericValue === -1)) {
+          return 'Subjects allowed must be more than 0';
+        }
+        return null;
+      },
+      radioValue: (value) => {
+        if (!value) {
+          return 'Select subject type';
+        }
+        return null;
+      },
+    }
+  });
+
+  const addMutation = useMutation((data: any) => addSubscription(data, token), {
+    onError: (error: any) => {
+      toast.error(error.response.data.message)
+    },
+    onSuccess: () => {
+      toast.success('Subcription plan add!')
+
+      queryClient.invalidateQueries('subscriptions');
+
+      form.reset()
+    },
+  })
+
+  const handleSubmit = () => {
+    let subjectsAllowedValue: string | number = form.values.subjects_allowed;
+
+    if (form.values.radioValue === 'all') {
+      subjectsAllowedValue = -1;
+    }
+
+    const data = {
+      name: form.values.name,
+      description: form.values.description,
+      price: Number(form.values.price),
+      duration: Number(form.values.duration),
+      subjects_allowed: Number(subjectsAllowedValue),
+      is_active: true
+    };
+
+    addMutation.mutate(data);
+  };
 
   return (
     <React.Fragment>
@@ -64,87 +124,118 @@ export default function NewPlanModal({ opened, close }: Props) {
             Create New Plan
           </Text>
 
-          <Form 
-            onSubmit={(e: any) => {
-              e.preventDefault()
-            }} 
+          <Form
+            onSubmit={form.onSubmit(() => handleSubmit())}
             className='my-10'
           >
             <Box>
               <Input
                 type="text"
-                // error={form.errors.email}
+                {...form.getInputProps('name')}
+                disabled={addMutation.isLoading}
                 label='Plan Name'
                 placeholder="Enter Name for Plan"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                className={`w-full ${form.errors.name ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+              />
+            </Box>
+
+            <Box className='mt-5'>
+              <Input
+                type="text"
+                {...form.getInputProps('description')}
+                disabled={addMutation.isLoading}
+                label='Plan Description'
+                placeholder="Enter Description for Plan"
+                className={`w-full border-2 ${form.errors.description ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
             <Box className='mt-5'>
               <Input
                 type="number"
-                // error={form.errors.email}
-                label='Plan Price'
+                label='Plan Price ₦'
                 placeholder="Enter Plan Price"
-                // disabled={mutation.isLoading}
-                // ${form.errors.email ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'}
-                className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                {...form.getInputProps('price')}
+                disabled={addMutation.isLoading}
+                className={`w-full ${form.errors.price ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
               />
             </Box>
 
-            <Box className='mt-5 space-y-1'>
-              <Text className="text-sm text-[#343434]">
-                Plan Items
-              </Text> 
-
-              {items.map((item: any) => (
-                <ItemCard 
-                  key={item.id} 
-                  item={item} 
-                  items={items}
-                  setItems={setItems}
-                />
-              ))}
-
-              <Flex className='w-full space-x-4 items-center'>
-                <Box className='w-full'>
-                  <Input
-                    type="text"
-                    value={itemName}
-                    onChange={({ target }) => {
-                      setItemName(target.value)
-                    }}
-                    placeholder="Enter item"
-                    className={`w-full border-2 px-3 py-5 text-[#555555] transition duration-75 border-[#E2E2E2] focus:outline-[#FAA61A] rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
-                  />
-                </Box>
-
-                <Box>
-                  <UnstyledButton 
-                    type='button'
-                    disabled={!itemName ? true : false}
-                    onClick={handleAddItem}
-                    className='bg-[#00433F] hover:bg-[#00433fcf] px-6 py-[1rem] disabled:hover:cursor-not-allowed rounded-md transition duration-75 delay-75 ease-linear'
-                  >
-                    <Image
-                      src={plus_icon}
-                      alt='control icon'
-                      className='w-[30px] h-[30px]'
-                    />
-                  </UnstyledButton>
-                </Box>
-              </Flex>
+            <Box className='mt-5'>
+              <Input
+                type="number"
+                label='Plan Duration'
+                placeholder="Enter Duration for Plan"
+                {...form.getInputProps('duration')}
+                disabled={addMutation.isLoading}
+                className={`w-full ${form.errors.duration ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+              />
             </Box>
 
-            <Box className="text-center mt-28">
-              <UnstyledButton
-                // disabled={mutation.isLoading}
-                type="submit"
-                className="px-8 h-14 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+            <Box>
+              <Radio.Group
+                value={form.values.radioValue}
+                onChange={(val) => {
+                  if (val !== null) {
+                    form.setValues({
+                      ...form.values,
+                      radioValue: val
+                    })
+                  }
+                }}
+                label={
+                  <label className="text-sm !text-[#585858]">
+                    Subjects Allowed
+                  </label>
+                }
+                className='mt-5'
               >
-                {/* {mutation.isLoading ?
+                <Box className={`border-2 space-y-3 rounded-lg p-3 ${form.errors.radioValue ? 'border-red-500' : null}`}>
+                  <Radio
+                    label="All Subjects"
+                    disabled={addMutation.isLoading}
+                    color="yellow"
+                    value='all'
+                  />
+
+                  <Radio
+                    label="Custom"
+                    disabled={addMutation.isLoading}
+                    color="yellow"
+                    value='custom'
+                  />
+
+                  {form.values.radioValue === 'custom' &&
+                    <Box className='mt-5'>
+                      <Input
+                        type="number"
+                        label='No of Subjects'
+                        {...form.getInputProps('subjects_allowed')}
+                        disabled={addMutation.isLoading}
+                        placeholder="Enter Number of Subjects"
+                        className={`w-full ${form.errors.radioValue ? 'border-red-500 focus:outline-red-500' : 'border-[#E2E2E2] focus:outline-[#FAA61A]'} border-2 px-3 py-5 text-[#555555] transition duration-75 rounded-lg delay-75 ease-linear placeholder:text-sm placeholder:text-[#555555]`}
+                      />
+                    </Box>
+                  }
+                </Box>
+              </Radio.Group>
+
+              <div className="mt-[0.2rem]">
+                {form.errors.radioValue &&
+                  <label className="text-red-500 text-sm">
+                    {form.errors.radioValue}
+                  </label>
+                }
+              </div>
+            </Box>
+
+            <Box className="text-center mt-20">
+              <UnstyledButton
+                disabled={addMutation.isLoading}
+                type="submit"
+                className="px-8 h-14 w-48 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+              >
+                {addMutation.isLoading ?
                   <Icon
                     className={`animate-spin mx-auto`}
                     icon="icomoon-free:spinner2"
@@ -152,9 +243,8 @@ export default function NewPlanModal({ opened, close }: Props) {
                     width="20"
                     height="20"
                   /> :
-                  'Sign In'
-                } */}
-                Create New Plan
+                  'Save Changes'
+                }
               </UnstyledButton>
             </Box>
           </Form>

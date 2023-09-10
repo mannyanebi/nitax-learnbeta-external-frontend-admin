@@ -9,7 +9,7 @@ import { Icon } from "@iconify/react";
 import toast from 'react-hot-toast';
 import { AdminContext } from '@/contexts/AdminContext';
 
-type Props = { 
+type Props = {
   lesson_id: number
 }
 
@@ -25,7 +25,7 @@ interface FormValues {
 
 export default function NewQuizAssessmentForm({ lesson_id }: Props) {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const initialValues: FormValues = {
     assessment_type: 'QUIZ',
@@ -138,7 +138,7 @@ export default function NewQuizAssessmentForm({ lesson_id }: Props) {
   };
 
   return (
-    <Form 
+    <Form
       onSubmit={form.onSubmit((values) => handleAddQuiz(values))}
       className="mx-auto max-w-[40rem] space-y-4"
     >
@@ -164,7 +164,7 @@ export default function NewQuizAssessmentForm({ lesson_id }: Props) {
         />
       </Box>
 
-      <Divider 
+      <Divider
         color='#FAA61A'
         size="md"
         label={
@@ -240,7 +240,7 @@ export default function NewQuizAssessmentForm({ lesson_id }: Props) {
           radius={8}
           dropdownPosition="top"
           onChange={(val) => {
-            if(typeof val === 'string') {
+            if (typeof val === 'string') {
               form.setValues({
                 ...form.values,
                 answer: val

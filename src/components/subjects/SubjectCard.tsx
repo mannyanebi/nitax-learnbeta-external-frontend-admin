@@ -51,7 +51,7 @@ type ValueType = {
 const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
   const { admin } = useContext(AdminContext)
   const queryClient = useQueryClient();
-  const token = `beearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
   const [
     openedDelete, 
     { open: openDelete, close: closeDelete }

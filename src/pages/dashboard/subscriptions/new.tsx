@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import Head from "next/head";
 import { Box, Tabs, Text, Flex, UnstyledButton, Center } from "@mantine/core";
+import { Icon } from "@iconify/react";
 import plus_icon from '../../../assets/svgs/plus_icon.svg'
 import Image from "next/image";
 import DashboardLayout from "@/layouts/DashboardLayout";
@@ -11,8 +12,17 @@ import NewVoucherModal from "@/components/subscriptions/NewVoucherModal";
 import backArrow from '../../../assets/svgs/backarrow_icon.svg'
 import Link from "next/link";
 import VoucherCard, { VoucherCardSkeleton } from "@/components/subscriptions/VoucherCard";
+import { AdminContext } from "@/contexts/AdminContext";
+import { useQuery } from 'react-query'
+import { getSubscriptionPlans, getVouchers } from "@/services/subscriptions";
+import RefetchButton from "@/components/lessons/RefetchButton";
 
 const NewSubscriptions = () => {
+  const { admin } = useContext(AdminContext)
+  const token = `Bearer ${admin?.data?.access_token}`
+  const subscriptions = useQuery('subscriptions', () => getSubscriptionPlans(token))
+  const vouchers = useQuery('vouchers', () => getVouchers(token))
+
   const [openedPlan, { open: openPlan, close: closePlan }] = useDisclosure(false);
   const [openedVoucher, { open: openVoucher, close: closeVoucher }] = useDisclosure(false);
 
@@ -86,40 +96,53 @@ const NewSubscriptions = () => {
           </Box>
 
           <Tabs.Panel className="mt-5 lg:mt-8" value="plans" pt="xs">
-            <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:max-w-[50rem] mx-auto">
-              {[1, 2, 4, 5, 6].map((item, index) => (
+            <Box className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:max-w-[45rem] mx-auto">
+              {subscriptions.data &&
+                subscriptions.data.data.map((sub: any, index: number) => (
                 <PlanCard
                   key={index}
+                  sub={sub}
                   style={{ order: index === 2 ? -1 : index }}
                 />
               ))}
 
-              {/* {[1, 2].map((item, index) => (
-                <PlanCardSkeleton 
-                  key={index}
-                />
-              ))} */}
-
-              {/* {[
-                {
-                  color: 'purple',
-                  header: 'Did you forget to add a plan?',
-                  description: "Plans are necessary for market growth!"
-                },
-                {
-                  color: 'yellow',
-                  header: 'You have no active plans set. Look right!',
-                  description: "Quick! Add a plan. We need revenue!"
-
-                }
-               ].map((item, index) => (
-                 <NoPlanCard
-                    key={index}
-                    item={item}
-                   colorTheme={item.color}
+              {subscriptions.isLoading &&
+                [1, 2].map((num: number) => (
+                  <PlanCardSkeleton 
+                    key={num}
                   />
                 ))
-              } */}
+              }
+
+              {subscriptions.data &&
+                subscriptions.data.data.length < 1 &&
+                [
+                  {
+                    color: 'purple',
+                    header: 'Did you forget to add a plan?',
+                    description: "Plans are necessary for market growth!"
+                  },
+                  {
+                    color: 'yellow',
+                    header: 'You have no active plans set. Look right!',
+                    description: "Quick! Add a plan. We need revenue!"
+
+                  }
+                ].map((item, index) => (
+                  <NoPlanCard
+                      key={index}
+                      item={item}
+                      colorTheme={item.color}
+                    />
+                  ))
+              }
+
+              {subscriptions.isError &&
+                <RefetchButton
+                  retry={() => subscriptions.refetch()}
+                  message="Failed to fetch subscription plans!"
+                />
+              }
 
               <UnstyledButton onClick={openPlan} className="h-full">
                 <Box className="border-2 rounded-3xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">
@@ -178,18 +201,42 @@ const NewSubscriptions = () => {
             </UnstyledButton>
 
             <Box className="grid grid-cols-1 sm:grid-cols-2 mt-6 sm:mt-0 gap-6 lg:max-w-[48rem] mx-auto">
-              {[1, 2, 4, 5, 6].map((item, index) => (
-                <VoucherCard
-                  key={index}
-                  style={{ order: index === 2 ? -1 : index + 1 }}
-                />
-              ))}
+              {vouchers.data &&
+                vouchers.data.data.map((item: any, index: number) => (
+                  <VoucherCard
+                    item={item}
+                    key={index}
+                    style={{ order: index === 2 ? -1 : index + 1 }}
+                  />
+                ))
+              }
 
-              {/* {[1, 2].map((item, index) => (
-                <VoucherCardSkeleton
-                  key={index}
+              {vouchers.data && vouchers.data.data.length < 1 &&
+                <Flex className="justify-center font-semibold w-full rounded-xl text-center animate-pulse text-[#777777] h-full p-5 mx-auto max-w-md border-2 border-[#E2E2E2]">
+                  <Box>
+                    <Icon icon="system-uicons:no-sign" color="#777" width="30" className="mx-auto" height="30" />
+
+                    <Text className="mt-2">
+                      No vouchers available
+                    </Text>
+                  </Box>
+                </Flex>
+              }
+
+              {vouchers.isLoading &&
+                [1, 2].map((item, index) => (
+                  <VoucherCardSkeleton
+                    key={index}
+                  />
+                ))
+              }
+
+              {vouchers.isError &&
+                <RefetchButton
+                  retry={() => vouchers.refetch()}
+                  message="Failed to fetch vouchers!"
                 />
-              ))} */}
+              }
 
               <UnstyledButton onClick={openVoucher} className="h-full hidden sm:block">
                 <Box className="border-2 rounded-3xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">

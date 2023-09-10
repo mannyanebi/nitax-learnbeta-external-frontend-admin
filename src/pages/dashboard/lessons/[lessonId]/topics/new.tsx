@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Box, Center, Flex, Text, UnstyledButton } from '@mantine/core'
 import backArrow from '../../../../../assets/svgs/backarrow_icon.svg'
+import { Icon } from '@iconify/react';
 import Head from 'next/head'
 import { useRouter } from 'next/router';
 import ProfileNav from '@/components/nav/ProfileNav'
@@ -26,7 +27,7 @@ const defaultTranscript = '<h4>You can <em>type</em> and <u>edit</u> your <stron
 
 const AddTopics = () => {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const router = useRouter();
   const [title, setTitle] = useState<string>('')
@@ -121,9 +122,18 @@ const AddTopics = () => {
               disabled={!title || !videoLink || !transcript}
               onClick={handleAddTopic}
               type="submit"
-              className="px-10 h-14 disabled:opacity-50 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-2xl py-4 bg-[#FAA61A] text-white"
+              className="px-10 h-14 w-44 disabled:opacity-50 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-2xl py-4 bg-[#FAA61A] text-white"
             >
-              Add Topic
+              {mutation.isLoading ?
+                <Icon
+                  className={`animate-spin mx-auto`}
+                  icon="icomoon-free:spinner2"
+                  color="#white"
+                  width="20"
+                  height="20"
+                /> :
+                'Add Topic'
+              }
             </UnstyledButton>
           </Flex>
         </Box>

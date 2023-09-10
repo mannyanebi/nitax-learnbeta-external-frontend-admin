@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Box, Divider, Text, Select, Flex, UnstyledButton } from "@mantine/core";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useForm } from '@mantine/form';
 import TextArea from "../custom/TextArea";
 import Form from "../custom/Form";
@@ -20,8 +20,10 @@ interface FormValues {
 }
 
 export default function NewTheoryAssessmentForm({ lesson_id }: Props) {
+  const queryClient = useQueryClient();
+
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const initialValues: FormValues = {
     assessment_type: 'THEORY',
@@ -49,6 +51,8 @@ export default function NewTheoryAssessmentForm({ lesson_id }: Props) {
 
     onSuccess: () => {
       toast.success('Theory question added successfully')
+
+      queryClient.invalidateQueries('theoryAssessments');
 
       form.reset()
     },

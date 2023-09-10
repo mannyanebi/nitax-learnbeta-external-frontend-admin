@@ -18,7 +18,7 @@ import { EmptyState } from "@/components/lessons/EmptyState";
 
 export default function EditTopics() {
   const { admin } = useContext(AdminContext)
-  const token = `bearer ${admin?.data?.access_token}`
+  const token = `Bearer ${admin?.data?.access_token}`
 
   const router = useRouter();
 
