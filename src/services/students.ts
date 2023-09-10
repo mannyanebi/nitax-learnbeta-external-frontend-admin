@@ -13,6 +13,18 @@ const getStudents = async (token: any) => {
   return res.data;
 };
 
+const getStudentsPerformance = async (token: any) => {
+  const getStudentsURL = `${HOST}/api/v1/admin/students`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.get(getStudentsURL, config);
+
+  return res.data;
+};
+
 export {
-  getStudents
+  getStudents,
+  getStudentsPerformance
 }

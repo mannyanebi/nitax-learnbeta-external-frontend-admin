@@ -24,6 +24,17 @@ const getSubscriptionPlans = async (token: string) => {
   return res.data;
 };
 
+const getVouchers = async (token: string) => {
+  const getVouchersURL = `${HOST}/api/v1/admin/vouchers`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.get(getVouchersURL, config);
+
+  return res.data;
+};
+
 const editSubscription = async (payload: any, planId: string, token: string) => {
   const editSubURL = `${HOST}/api/v1/admin/subscription-plans/${planId}`;
   const config = {
@@ -46,9 +57,22 @@ const addSubscription = async (payload: any, token: string) => {
   return res.data;
 };
 
+const generateVoucher = async (payload: any, token: string) => {
+  const generateVoucherURL = `${HOST}/api/v1/admin/vouchers`;
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const res = await axios.post(generateVoucherURL, payload, config);
+
+  return res.data;
+};
+
 export {
   getLessonTopics,
   editSubscription,
   addSubscription,
-  getSubscriptionPlans
+  getSubscriptionPlans,
+  getVouchers,
+  generateVoucher
 }

@@ -191,10 +191,10 @@ export default function EditQuizAssessmentForm({ index, question }: Props) {
       toast.error(`Failed to update question ${index + 1}`)
     },
 
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success(`Question ${index + 1} updated successfully`)
 
-      queryClient.invalidateQueries(['quizAssessments', question.lesson_id]);
+      queryClient.invalidateQueries('quizAssessments');
     },
   })
 
@@ -222,7 +222,7 @@ export default function EditQuizAssessmentForm({ index, question }: Props) {
     onSuccess: () => {
       toast.success(`Question ${index + 1} deleted successfully`)
 
-      queryClient.invalidateQueries(['quizAssessments', question.lesson_id]);
+      queryClient.invalidateQueries('quizAssessments');
 
       closeDelete()
     },

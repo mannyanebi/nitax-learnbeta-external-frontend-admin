@@ -1,6 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import Head from "next/head";
 import { Box, Tabs, Text, Flex, UnstyledButton, Center } from "@mantine/core";
+import { Icon } from "@iconify/react";
 import plus_icon from '../../../assets/svgs/plus_icon.svg'
 import Image from "next/image";
 import DashboardLayout from "@/layouts/DashboardLayout";
@@ -13,13 +14,14 @@ import Link from "next/link";
 import VoucherCard, { VoucherCardSkeleton } from "@/components/subscriptions/VoucherCard";
 import { AdminContext } from "@/contexts/AdminContext";
 import { useQuery } from 'react-query'
-import { getSubscriptionPlans } from "@/services/subscriptions";
+import { getSubscriptionPlans, getVouchers } from "@/services/subscriptions";
 import RefetchButton from "@/components/lessons/RefetchButton";
 
 const NewSubscriptions = () => {
   const { admin } = useContext(AdminContext)
   const token = `Bearer ${admin?.data?.access_token}`
   const subscriptions = useQuery('subscriptions', () => getSubscriptionPlans(token))
+  const vouchers = useQuery('vouchers', () => getVouchers(token))
 
   const [openedPlan, { open: openPlan, close: closePlan }] = useDisclosure(false);
   const [openedVoucher, { open: openVoucher, close: closeVoucher }] = useDisclosure(false);
@@ -199,18 +201,42 @@ const NewSubscriptions = () => {
             </UnstyledButton>
 
             <Box className="grid grid-cols-1 sm:grid-cols-2 mt-6 sm:mt-0 gap-6 lg:max-w-[48rem] mx-auto">
-              {[1, 2, 4, 5, 6].map((item, index) => (
-                <VoucherCard
-                  key={index}
-                  style={{ order: index === 2 ? -1 : index + 1 }}
-                />
-              ))}
+              {vouchers.data &&
+                vouchers.data.data.map((item: any, index: number) => (
+                  <VoucherCard
+                    item={item}
+                    key={index}
+                    style={{ order: index === 2 ? -1 : index + 1 }}
+                  />
+                ))
+              }
 
-              {/* {[1, 2].map((item, index) => (
-                <VoucherCardSkeleton
-                  key={index}
+              {vouchers.data && vouchers.data.data.length < 1 &&
+                <Flex className="justify-center font-semibold w-full rounded-xl text-center animate-pulse text-[#777777] h-full p-5 mx-auto max-w-md border-2 border-[#E2E2E2]">
+                  <Box>
+                    <Icon icon="system-uicons:no-sign" color="#777" width="30" className="mx-auto" height="30" />
+
+                    <Text className="mt-2">
+                      No vouchers available
+                    </Text>
+                  </Box>
+                </Flex>
+              }
+
+              {vouchers.isLoading &&
+                [1, 2].map((item, index) => (
+                  <VoucherCardSkeleton
+                    key={index}
+                  />
+                ))
+              }
+
+              {vouchers.isError &&
+                <RefetchButton
+                  retry={() => vouchers.refetch()}
+                  message="Failed to fetch vouchers!"
                 />
-              ))} */}
+              }
 
               <UnstyledButton onClick={openVoucher} className="h-full hidden sm:block">
                 <Box className="border-2 rounded-3xl flex items-center h-full border-[#E2E2E2] border-dashed p-5">

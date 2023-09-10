@@ -81,7 +81,7 @@ export default function NewPlanModal({ opened, close }: Props) {
 
   const addMutation = useMutation((data: any) => addSubscription(data, token), {
     onError: (error: any) => {
-      toast.error(error.response.data.data)
+      toast.error(error.response.data.message)
     },
     onSuccess: () => {
       toast.success('Subcription plan add!')

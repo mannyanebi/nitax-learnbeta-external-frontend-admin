@@ -148,7 +148,7 @@ const PlanCard: React.FC<Props> = ({ style, sub }) => {
 
   const editMutation = useMutation((data: any) => editSubscription(data, sub.id.toString(), token), {
     onError: (error: any) => {
-      toast.error(error.response.data.data)
+      toast.error(error.response.data.message)
     },
     onSuccess: () => {
       toast.success('Subcription plan updated!')

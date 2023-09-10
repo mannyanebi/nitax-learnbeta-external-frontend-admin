@@ -102,7 +102,7 @@ export default function EditTheoryAssessmentForm({
     onSuccess: () => {
       toast.success(`Question ${index + 1} updated successfully`)
 
-      queryClient.invalidateQueries(['quizAssessments', question.lesson_id]);
+      queryClient.invalidateQueries('theoryAssessments');
 
       setIsDirty(false)
     },
@@ -116,7 +116,7 @@ export default function EditTheoryAssessmentForm({
     onSuccess: () => {
       toast.success(`Question ${index + 1} deleted successfully`)
 
-      queryClient.invalidateQueries(['quizAssessments', question.lesson_id]);
+      queryClient.invalidateQueries('theoryAssessments');
 
       closeDelete()
     },
