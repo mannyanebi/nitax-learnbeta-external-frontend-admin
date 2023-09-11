@@ -13,8 +13,8 @@ const getStudents = async (token: any) => {
   return res.data;
 };
 
-const getStudentsPerformance = async (token: any) => {
-  const getStudentsURL = `${HOST}/api/v1/admin/students`;
+const getStudentsPerformance = async (token: any, lessonId: string) => {
+  const getStudentsURL = `${HOST}/api/v1/admin/lesson-assessments/${lessonId}`;
   const config = {
     headers: { Authorization: token }
   }

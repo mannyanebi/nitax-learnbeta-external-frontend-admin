@@ -10,7 +10,6 @@ import { deleteSubject, editSubject } from '@/services/subjects';
 import Link from 'next/link';
 import Input from '../custom/Input';
 import dot_control from '../../assets/svgs/dot_control.svg'
-import subjectIcon from '../../assets/svgs/subject_icon.svg'
 import doument_icon from '../../assets/svgs/Document.svg'
 import edit_icon from '../../assets/svgs/edit-2.svg'
 import trash_icon from '../../assets/svgs/trash-2.svg'
@@ -63,6 +62,7 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
   ] = useDisclosure(false);
 
   const [file, setFile] = useState<FileWithPath[]>([])
+
   const [error, setError] = useState<ErrorStateType>({
     name: null,
     description: null,
@@ -91,6 +91,7 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
 
       queryClient.invalidateQueries('subjects');
 
+      setFile([])
       closeEdit()
     },
   })
@@ -121,33 +122,37 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
         ...error,
         name: 'Subject title is required'
       })
-    } else if (file.length < 1) {
-      setError({
-        ...error,
-        bannerImg: 'Subject header image is required'
-      })
     } else if (!value.description) {
       setError({
         ...error,
         description: 'Subject description is required'
       })
     } else {
-      // Convert file to base64-encoded string here
-      const reader = new FileReader();
+      if (file && file[0]) {
+        const reader = new FileReader();
 
-      reader.onload = () => {
-        const base64String = reader.result as string;
+        reader.onload = () => {
+          const base64String = reader.result as string;
 
+          const data = {
+            name: value.name,
+            image: base64String, 
+            description: value.description,
+          };
+
+          editMutation.mutate(data);
+        };
+
+        reader.readAsDataURL(file[0]);
+      } else {
         const data = {
           name: value.name,
-          img: base64String, // Use the base64 string here
+          image: subject.image,
           description: value.description,
         };
 
-        editMutation.mutate(data);
-      };
-
-      reader.readAsDataURL(file[0]);
+        editMutation.mutate(data)
+      }
     }
   }
 
@@ -156,10 +161,11 @@ const SubjectCard: React.FC<SubjectDataType> = ({ subject }) => {
       <Box className="border-2 rounded-xl border-[#E2E2E2] p-5 h-[18.5rem] flex flex-col">
         <Box className="w-full h-[127px] rounded-xl overflow-hidden">
           <Image
+            width={100}
+            height={100}
             alt="subject banner"
-            src={subjectIcon}
-            // src={subject.img}
-            className='w-full h-[127px] object-cover object-center rounded-xl hover:brightness-75 hover:scale-125 transition duration-200 delay-75 ease-linear'
+            src={subject.image}
+            className='!w-full !h-[127px] object-cover object-center rounded-xl hover:brightness-75 hover:scale-125 transition duration-200 delay-75 ease-linear'
           />
         </Box>
 

@@ -19,6 +19,7 @@ export type SubjectType = {
   id: number;
   name: string;
   description: string;
+  image: string;
   grade_level_name: string;
   created_at: string;
   updated_at: string;

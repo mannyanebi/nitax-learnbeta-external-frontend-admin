@@ -5,6 +5,7 @@ import PageLayout from "@/layouts/PageLayout";
 import { Box, Center, Flex, Text, Grid } from "@mantine/core";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import preview_subject from '../../../../assets/svgs/empty_state.svg'
 import { AdminContext } from "@/contexts/AdminContext";
 
@@ -43,10 +44,14 @@ const StudentScoreCard: React.FC<Props> = ({ index, score }) => {
 }
 
 export default function Performance() {
+  const { query } = useRouter()
+
   const { admin } = useContext(AdminContext)
   const token = `Bearer ${admin?.data?.access_token}`
 
-  const studentsPerformance = useQuery('studentsPerformance', () => getStudentsPerformance(token))
+  const lessonId = Array.isArray(query.lessonId) ? query.lessonId[0] : query.lessonId;
+
+  const studentsPerformance = useQuery('studentsPerformance', () => getStudentsPerformance(token, lessonId ? lessonId : ''))
 
   return (
     <PageLayout>
@@ -78,46 +83,47 @@ export default function Performance() {
         </Box>
       </Box>
 
-      {studentsPerformance.data &&
-        <Box className="w-full px-4 sm:px-8 md:px-10 my-10">
-          <Text className="text-4xl font-bold text-center">
-            {studentsPerformance.data.data.average}%
-          </Text>
+      {studentsPerformance.data && 
+        studentsPerformance.data.data.student_scores.length > 0 &&
+          <Box className="w-full px-4 sm:px-8 md:px-10 my-10">
+            <Text className="text-4xl font-bold text-center">
+              {studentsPerformance.data.data.average_score}%
+            </Text>
 
-          <Text className="text-lg mt-3 font-bold text-center">
-            Average Assessment Score
-          </Text>
+            <Text className="text-lg mt-3 font-bold text-center">
+              Average Assessment Score
+            </Text>
 
-          <Box className="mt-10 w-full mx-auto max-w-[40rem] lg:max-w-[62rem] xl:max-w-[65rem] py-2 rounded-lg border border-[#E2E2E2]">
-            <Grid className="bg-[#FFF6E8] lg:px-8 w-full rounded-t-lg mx-auto py-2">
-              <Grid.Col span="auto">
-                <Text className='text-[#555555] font-semibold'>
-                  S/N
-                </Text>
-              </Grid.Col>
+            <Box className="mt-10 w-full mx-auto max-w-[40rem] lg:max-w-[62rem] xl:max-w-[65rem] py-2 rounded-lg border border-[#E2E2E2]">
+              <Grid className="bg-[#FFF6E8] lg:px-8 w-full rounded-t-lg mx-auto py-2">
+                <Grid.Col span="auto">
+                  <Text className='text-[#555555] font-semibold'>
+                    S/N
+                  </Text>
+                </Grid.Col>
 
-              <Grid.Col span="auto">
-                <Text className='text-[#555555] font-semibold'>
-                  Name
-                </Text>
-              </Grid.Col>
+                <Grid.Col span="auto">
+                  <Text className='text-[#555555] font-semibold'>
+                    Name
+                  </Text>
+                </Grid.Col>
 
-              <Grid.Col span="auto">
-                <Text className='text-[#555555] font-semibold'>
-                  Score
-                </Text>
-              </Grid.Col>
-            </Grid>
+                <Grid.Col span="auto">
+                  <Text className='text-[#555555] font-semibold'>
+                    Score
+                  </Text>
+                </Grid.Col>
+              </Grid>
 
-            <Box className="mt-5 space-y-3 overflow-y-auto max-h-[41rem]">
-              {studentsPerformance.data &&
-                studentsPerformance.data.data.map((score: any, index: number) => (
-                  <StudentScoreCard key={index} index={index} score={score} />
-                ))
-              }
+              <Box className="mt-5 space-y-3 overflow-y-auto max-h-[41rem]">
+                {studentsPerformance.data &&
+                  studentsPerformance.data.data.student_scores.map((score: any, index: number) => (
+                    <StudentScoreCard key={index} index={index} score={score} />
+                  ))
+                }
+              </Box>
             </Box>
           </Box>
-        </Box>
       }
 
       {studentsPerformance.isLoading &&
@@ -139,8 +145,8 @@ export default function Performance() {
       }
 
       {studentsPerformance.data &&
-        studentsPerformance.data.data.length < 1 &&
-        <Box className="w-full max-w-[50rem] mx-auto mt-10">
+        studentsPerformance.data.data.student_scores.length < 1 &&
+        <Box className="w-full max-w-[50rem] mx-auto mt-10 px-4 sm:px-8">
           <Center className='h-[35rem] bg-gradient-to-br from-[#FAAB2E] to-[#d9f3f1] rounded-2xl'>
             <Box>
               <Image

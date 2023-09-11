@@ -110,7 +110,7 @@ export default function NewSubjectsModal({ opened, close }: Props) {
 
         const data = {
           name: value.name,
-          img: base64String, // Use the base64 string here
+          image: base64String,
           description: value.description,
           grade_level_id: Number(value.class),
         };
