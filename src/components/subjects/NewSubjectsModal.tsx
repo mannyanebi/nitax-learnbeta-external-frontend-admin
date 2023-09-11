@@ -102,14 +102,23 @@ export default function NewSubjectsModal({ opened, close }: Props) {
         class: 'Subject class is required'
       })
     } else {
-      const data = {
-        name: value.name,
-        img: file,
-        description: value.description,
-        grade_level_id: Number(value.class)
-      }
+      // Convert file to base64-encoded string here
+      const reader = new FileReader();
 
-      mutation.mutate(data)
+      reader.onload = () => {
+        const base64String = reader.result as string;
+
+        const data = {
+          name: value.name,
+          image: base64String,
+          description: value.description,
+          grade_level_id: Number(value.class),
+        };
+
+        mutation.mutate(data);
+      };
+
+      reader.readAsDataURL(file[0]);
     }
   }
 
