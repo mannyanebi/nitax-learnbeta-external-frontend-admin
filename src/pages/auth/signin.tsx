@@ -46,7 +46,7 @@ const Signin = () => {
 
     onSuccess: (data) => {
       const now = new Date()
-      const admin = data
+      let admin = data
 
       if (checked){
         admin.expiry = now.getTime() + 86400000 // 1 day
