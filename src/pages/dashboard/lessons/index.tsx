@@ -52,6 +52,7 @@ const Lessons = () => {
           id: Number(subjId),
           name: '...',
           description: '...',
+          image: '',
           grade_level_name: '...',
           created_at: '',
           updated_at: '',
