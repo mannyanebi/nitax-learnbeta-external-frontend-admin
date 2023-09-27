@@ -423,7 +423,7 @@ const LessonsCard: React.FC<Props> = ({ lesson, subjectId }) => {
               <UnstyledButton
                 disabled={editMutation.isLoading}
                 type="submit"
-                className="px-8 h-14 w-56 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
+                className="px-8 h-14 disabled:opacity-50 w-56 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-full py-4 bg-[#FAA61A] text-white"
               >
                 {editMutation.isLoading ?
                   <Icon

@@ -96,37 +96,37 @@ const UserTable: React.FC<Props> = ({ students }) => {
       <Box>
         <Box className="w-full min-w-[75rem]">
           <Grid className="bg-[#FFF6E8] rounded-lg py-2">
-            <Grid.Col className="3xl:max-w-none max-w-[6rem]" span="auto">
+            <Grid.Col span={1}>
               <Text className='text-[#555555] font-semibold'>
                 S/N
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="3xl:max-w-none max-w-[14rem]" span="auto">
+            <Grid.Col span={2}>
               <Text className='text-[#555555] font-semibold'>
                 Name
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="3xl:max-w-none max-w-[18rem]" span="auto">
+            <Grid.Col span={3}>
               <Text className='text-[#555555] font-semibold'>
                 Email
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="3xl:max-w-none max-w-[13rem]" span="auto">
+            <Grid.Col span={2}>
               <Text className='text-[#555555] font-semibold'>
                 Location
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="3xl:max-w-none max-w-[15rem]" span="auto">
+            <Grid.Col span={2}>
               <Text className='text-[#555555] font-semibold'>
                 Subscription Plan
               </Text>
             </Grid.Col>
 
-            <Grid.Col className="3xl:max-w-nonemax-w-[6rem]" span="auto">
+            <Grid.Col span={2}>
               <Flex className='justify-between mr-5'>
                 <Text className='text-[#555555] font-semibold'>
                   Class

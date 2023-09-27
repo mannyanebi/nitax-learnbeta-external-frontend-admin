@@ -119,7 +119,7 @@ const AddTopics = () => {
 
           <Flex className='mt-20 justify-end'>
             <UnstyledButton
-              disabled={!title || !videoLink || !transcript}
+              disabled={!title || !videoLink || !transcript || mutation.isLoading}
               onClick={handleAddTopic}
               type="submit"
               className="px-10 h-14 w-44 disabled:opacity-50 text-center font-bold transition duration-75 delay-75 ease-linear hover:bg-[#da9217] rounded-2xl py-4 bg-[#FAA61A] text-white"

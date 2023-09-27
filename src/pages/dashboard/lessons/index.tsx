@@ -24,7 +24,9 @@ const Lessons = () => {
 
   const subjectId = activeSubject ? activeSubject.id.toString() : ''
   const subjects = useQuery('subjects', () => getSubjects(token))
-  const lessons = useQuery(['lessons', activeSubject?.id], () => getSubjectLessons(subjectId, token))
+  const lessons = useQuery(['lessons', activeSubject?.id], () => getSubjectLessons(subjectId, token), {
+    enabled: false,
+  })
 
   const { width } = useViewportSize();
   const [
@@ -35,6 +37,12 @@ const Lessons = () => {
     openedNewLessonModal,
     { open: openNewLessonModal, close: closeNewLessonModal }
   ] = useDisclosure(false);
+
+  useEffect(() => {
+    if (subjectId) {
+      lessons.refetch();
+    }
+  }, [subjectId])
 
   useEffect(() => {
     width > 1024 && closeMobile()
