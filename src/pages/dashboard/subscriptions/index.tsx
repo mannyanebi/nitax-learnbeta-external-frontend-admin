@@ -39,24 +39,32 @@ const Subscriptions = () => {
   }, [paymentMethod]);
 
   const filterSubscribedUsers = () => {
-    let filteredSubscribedUsers = [...subscribedUsers];
+    if (students.data && Array.isArray(students.data.data)) {
+      let filteredSubscribedUsers = [...students.data.data];
 
-    // Apply filter by payment method if selected
-    if (paymentMethod === 'paystack') {
-      filteredSubscribedUsers = filteredSubscribedUsers.filter((user) =>
-        user.subscription &&
-        user.subscription.payment_method &&
-        user.subscription.payment_method === 'PAYSTACK'
-      );
-    } else if (paymentMethod === 'voucher') {
-      filteredSubscribedUsers = filteredSubscribedUsers.filter((user) =>
-        user.subscription &&
-        user.subscription.payment_method &&
-        user.subscription.payment_method === 'VOUCHER'
-      );
+      // Apply filter by payment method if selected
+      if (paymentMethod === 'paystack') {
+        filteredSubscribedUsers = filteredSubscribedUsers.filter((user) =>
+          user.subscription &&
+          user.subscription.payment_method &&
+          user.subscription.payment_method === 'PAYSTACK'
+        );
+        setSubscribedUsers(filteredSubscribedUsers);
+      } else if (paymentMethod === 'voucher') {
+        filteredSubscribedUsers = filteredSubscribedUsers.filter((user) =>
+          user.subscription &&
+          user.subscription.payment_method &&
+          user.subscription.payment_method === 'VOUCHER'
+        );
+        setSubscribedUsers(filteredSubscribedUsers);
+      } else if (paymentMethod === 'all') {
+        const activeSubscribedUsers = students.data.data.filter((user: any) => (
+          user.subscription && !user.subscription.is_expired
+        ));
+
+        setSubscribedUsers(activeSubscribedUsers);
+      }
     }
-
-    setSubscribedUsers(filteredSubscribedUsers);
   };
 
   return (

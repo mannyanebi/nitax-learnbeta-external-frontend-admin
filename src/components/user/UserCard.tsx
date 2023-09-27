@@ -47,31 +47,31 @@ const UserCard: React.FC<Props> = ({ student, index, currentPage, usersPerPage }
   return (
     <Box>
       <Grid>
-        <Grid.Col className="3xl:max-w-none max-w-[6rem]" span="auto">
+        <Grid.Col className="" span={1}>
           <Text className='text-[#555555] truncate font-semibold'>
             {pageNumber}
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="3xl:max-w-none max-w-[14rem]" span="auto">
+        <Grid.Col span={2}>
           <Text className='text-[#555555] truncate font-semibold'>
             {student.name}
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="3xl:max-w-none max-w-[18rem]" span="auto">
+        <Grid.Col span={3}>
           <Text className='text-[#555555] truncate font-semibold'>
             {student.email}
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="3xl:max-w-none max-w-[13rem]" span="auto">
+        <Grid.Col span={2}>
           <Text className='text-[#555555] truncate font-semibold'>
             {student.location}
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="3xl:max-w-none max-w-[15rem]" span="auto">
+        <Grid.Col span={2}>
           <Text className='text-[#555555] truncate font-semibold'>
             {student.subscription?.subscription_plan ?
               student.subscription?.subscription_plan :
@@ -80,7 +80,7 @@ const UserCard: React.FC<Props> = ({ student, index, currentPage, usersPerPage }
           </Text>
         </Grid.Col>
 
-        <Grid.Col className="3xl:max-w-nonemax-w-[6rem]" span="auto">
+        <Grid.Col span={2}>
           <Text className='text-[#555555] truncate font-semibold'>
             {student.grade_level ?
               student.grade_level :

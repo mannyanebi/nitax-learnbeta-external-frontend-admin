@@ -18,7 +18,7 @@ export interface SigninData {
 
 const Signin = () => {
   const { setAdmin } = useContext(AdminContext)
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
 
   const form = useForm({
     initialValues: {
