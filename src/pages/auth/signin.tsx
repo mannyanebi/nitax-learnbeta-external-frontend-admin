@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Box } from "@mantine/core";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import AuthLayout from "@/layouts/AuthLayout";
 import SigninForm from "@/components/forms/SigninForm";
-import { useForm } from '@mantine/form';
+import { useForm } from "@mantine/form";
 import { useMutation } from "react-query";
 import { signin } from "@/services/auth";
 import Head from "next/head";
@@ -17,48 +17,48 @@ export interface SigninData {
 }
 
 const Signin = () => {
-  const { setAdmin } = useContext(AdminContext)
+  const { setAdmin } = useContext(AdminContext);
   const [checked, setChecked] = useState(true);
 
   const form = useForm({
     initialValues: {
-      email: '',
-      password: ''
+      email: "",
+      password: "",
     },
 
     validate: {
-      email: (value) => (
-        !value ? 'Email is required' :
-          !/^\S+@\S+$/.test(value) ? 'Invalid email' : null
-      ),
-      password: (value) => (
-        !value ? 'Password is required' : null
-      )
+      email: (value) =>
+        !value
+          ? "Email is required"
+          : !/^\S+@\S+$/.test(value)
+          ? "Invalid email"
+          : null,
+      password: (value) => (!value ? "Password is required" : null),
     },
   });
 
   const mutation = useMutation((data: any) => signin(data), {
-    onError: (error: any) => {  
+    onError: (error: any) => {
       form.setErrors({
-        email: error.response.data.message // update error object path
-      })
+        email: error.response.data.message, // update error object path
+      });
     },
 
     onSuccess: (data) => {
-      const now = new Date()
-      let admin = data
+      const now = new Date();
+      let admin = data;
 
-      if (checked){
-        admin.expiry = now.getTime() + 86400000 // 1 day
+      if (checked) {
+        admin.expiry = now.getTime() + 86400000; // 1 day
       } else {
-        admin.expiry = now.getTime() + 21600000 // 6 hrs
+        admin.expiry = now.getTime() + 21600000; // 6 hrs
       }
-        
-      setCookieItem('learnbeta_admin', admin)
-      setAdmin(admin)
+
+      setCookieItem("learnbeta_admin", admin);
+      setAdmin(admin);
 
       form.reset();
-      toast.success('Signin successful')
+      toast.success("Signin successful");
 
       const params = new URLSearchParams(window.location.search);
 
@@ -67,7 +67,7 @@ const Signin = () => {
 
         if (redirectUrl !== null) {
           setTimeout(() => {
-            Router.push(redirectUrl)
+            Router.push(redirectUrl);
           }, 2000);
         }
       } else {
@@ -76,11 +76,11 @@ const Signin = () => {
         }, 2000);
       }
     },
-  })
+  });
 
   const handleSignin = async (values: SigninData) => {
-    mutation.mutate(values)
-  }
+    mutation.mutate(values);
+  };
 
   return (
     <AuthLayout>
@@ -88,10 +88,7 @@ const Signin = () => {
         <title>Signin</title>
       </Head>
 
-      <Toaster 
-        position="bottom-right" 
-        reverseOrder={false} 
-      />
+      <Toaster position="bottom-right" reverseOrder={false} />
 
       <Box>
         <SigninForm
@@ -103,7 +100,7 @@ const Signin = () => {
         />
       </Box>
     </AuthLayout>
-  )
-}
+  );
+};
 
-export default Signin
+export default Signin;
