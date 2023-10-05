@@ -13,5 +13,4 @@ export const get_advertisement = async (dispatch: Function) => {
   } catch (error) {
     if (isAxiosError(error)) console.log(error);
   }
-  console.log("first");
 };
