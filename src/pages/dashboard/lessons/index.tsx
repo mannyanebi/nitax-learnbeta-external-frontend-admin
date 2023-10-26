@@ -51,7 +51,7 @@ const Lessons = () => {
   useEffect(() => {
     width > 1024 && closeMobile();
     activeSubject && width < 1024 && openMobile();
-  }, [width]);
+  }, [activeSubject, closeMobile, openMobile, width]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -68,9 +68,9 @@ const Lessons = () => {
           grade_level_name: "...",
           created_at: "",
           updated_at: "",
+          full_image_path: "",
         };
-
-        setActiveSubject(active);
+        if (active) setActiveSubject(active);
       }
     }
   }, [subjects.data]);
