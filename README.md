@@ -24,13 +24,14 @@ SSH into the production server , clone , run build and restart PM2:
   0 for Admin
   1 for Customer
 ```
+```bash
 ┌────┬───────────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
 │ id │ name                  │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
 ├────┼───────────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
 │ 1  │ learnbeta-admin       │ default     │ 0.39.0  │ fork    │ 2263     │ 41D    │ 0    │ online    │ 0%       │ 67.6mb   │ root     │ disabled │
 │ 0  │ learnbeta-customer    │ default     │ 0.39.0  │ fork    │ 606322   │ 17D    │ 1    │ online    │ 0%       │ 66.4mb   │ root     │ disabled │
 └────┴───────────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
-
+```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
